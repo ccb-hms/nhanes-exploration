@@ -757,65 +757,7 @@ We will work with this from now on. We can summarize this table by table
 tableSummary <- 
   xtabs(~ TableBase + Description + DataGroup, tableDesc) |> 
   as.data.frame.table() |> subset(Freq > 0)
-datatable(tableSummary)
-#> PhantomJS not found. You can install it with webshot::install_phantomjs(). If it is installed, please make sure the phantomjs executable can be found via the PATH variable.
-```
-
-<div id="htmlwidget-706082be08eefc960a4d" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-706082be08eefc960a4d">{"x":{"filter":"none","vertical":false,"data":[["42234","42660","225000","225421","225849","226280","226700","227128","227555","227983","228421","228837","229265","229690","230118","230549","230971","230973","231398","231400","231827","232254","256145","256572","372767","373621","373622","374049","374476","374903","375329","377036","377466","377895","378322","379171","386013","404336","414588","415015","415447","415865","416292","416719","417146","417573","418000","418427","418854","419281","419708","420135","420562","420989","421416","421843","422270","422697","423124","423551","423957","424384","428239","433791","465022","465445","465446","465873","475678","476100","479952","480379","481220","481647","482074","482075","482502","482503","482930","483357","483784","499556","499983","500410","514068","518761","520627","527760","527762","530360","542311","542469","542736","543470","544008","544196","544244","545287","545714","546137","546567","548157","548628","548702","549115","549542","550351","550798","551225","551631","552058","552275","552483","552910","554186","556687","557104","557423","560828","561069","561791","561947","562133","562507","562933","563360","563770","563885","564193","564257","564620","565163","565337","566052","566479","567759","567994","568420","568846","569329","569377","569518","569944","570370","570796","571215","571457","571506","571884","572509","572596","573433","573859","574026","574072","574285","574879","576434","576854","576977","577281","577706","578475","578902","579295","579981","580455","581393","581819","582244","582391","582827","583253","583950","594053","594057","594096","605882","605972","606308","606956","607162","607270","607271","607698","608015","608442","609296","609474","609939","610147","610575","611062","611644","611864","612498","612924","613135","613836","613988","614842","615268","615746","616121","616547","617183","618678","619105","619534","619588","619641","620015","620593","621019","622097","622523","622551","622950","622976","623401","623468","623803","624229","624655","625080","626132","626560","626786","627212","627638","628065","628491","629118","629355","629385","629438","629760","630187","630631","631057","631476","631902","631924","631989","632319","633801","634035","634543","634887","635314","635870","636164","636662","637020","637446","637871","638298","638367","638720","639341","640437","640885","641104","641248","641674","641781","643177","643495","643885","643933","644399","644825","645251","646928","647291","647340","647718","648716","650751","651083","651534","651751","651936","652380","652440","652604","652607","653031","653034","653274","653743","654085","655107","655538","655960","657239","657721","657954","658521","658884","659310","659797","661416","664766","664835","665261","665804","666567","666857","667542","667831","668258","668742","669111","669537","669601","670025","670389","670877","671302","671730","671913","672587","673116","673713","673714","673757","673911","674135","674231","674716","674995","675512","675938","676264","676358","676784","677210","677696","678061","678487","681777","681897","682157","682583","683064","683116","683661","684010","684370","684436","684647","685073","685714","686061","686152","686584","687101","687107","688606","689032","689142","689883","690524","690950","691376","692612","693039","693428","693912","698601","699028","699521","699715","700162","700568","700987","701998","702412","702700","702719","703280","703705","704135","704562","704800","705226","705823","706249","706685","707112","707525","707967","708810","709254","709685","710084","710512","711176","711222","711408","711832","711870","712261","712499","712685","712880","713108","713541","713968","714384","714811","715197","715623","716101","716274","716338","716700","717378","717803","718058","718657","719082","719507","719936","720361","720788","722499","724215","725062","725489","727612","728342","728344","733588","734868","738283","739994","740842","747671","753636","755762","756189","756616","760032","761414","765583","766011","766432","774958","775406","786078","798879","801875","802300","806126","813388","813805","820207","820634","822766","823194","828827","829465","829467","829914","830318","830746","830747","835221","840761","842467","846741","853582","853583","859523","859950","860377","862091","868071","868499","868775","870193","872329","872754","874949","875743","876172","876596","877022","877449","877877","878304","878772","881874","889009","891603","901839","902265","902692","903119"],["DEMO","DEMO","DRXIFF","DR1IFF","DR2IFF","DRXTOT","DR1TOT","DR2TOT","DRXFCD","DRXMCD","DTQ","DS1IDS","DS2IDS","DS1TOT","DS2TOT","DSQIDS","DSQ1","DSQFILE1","DSQ2","DSQFILE2","DSQIDS","DSQTOT","FFQDC","FFQRAW","ARX","AUX","AUX1","AUXAR","AUXTYM","AUXWBR","AUXWBR","BAX","BIX","BPX","BPXO","BMX","CVX","DEX","DXXAG","DXXFEM","DXXSPN","DXXAAC","DXXAG","DXXFEM","DXXFRX","DXXL1","DXXL2","DXXL3","DXXL4","DXXSPN","DXXT10","DXXT11","DXXT12","DXXT4","DXXT5","DXXT6","DXXT7","DXXT8","DXXT9","DXXVFA","DXX","DXX_2","ENX","FLXCLN","LUX","LEXAB","LEXABPI","LEXPN","MSX","MGX","OPXFDT","OPXRET","OHX","OHXADD","OHXDEN","OHXDENT","OHXPER","OHXPERIO","OHXPRL","OHXPRU","OHXREF","PAXDAY","PAXHD","PAXHR","SEQ","SPX","CSX","TB","TBX","VIX","AMDGYD","L06AGE","AMDGDS","SSAFB","ALB_CR","L16","LAB16","ALD","ALDS","AL_IGE","ALDUST","SSAMH","SSTOCA","APOB","AA","AAS","UADM","UTAS","UTASS","UAS","UASS","L06UAS","UAS","UASS","UAM","SSDFS","SSANA2","L34","L28PBE","BFRPOL","SSBFR","CRP","LAB11","L11","L11","L11_2","L06BMT","PBCD","L06","LAB06","L06_2","PBCD","CAFE","SSCA","SSCGA","SSCLTY","HDL","HDL","HDL","L13AM","LAB13AM","TRIGLY","TRIGLY","TRIGLY","TRIGLY","TCHOL","L13","LAB13","L13_2","UCM","CRCO","CBC","CBC","L25","LAB25","CBC","L25_2","CUSEZN","COT","L06COT","COTNAL","COT","UCOT","UCOTS","SSQFEV","L16_2","LAB17","SSCYST","SSCYST","SSCMV","CMV","DEET","DEET","SSDEET","L28DFP","L28POC","LAB28POC","EPH","L24EPH","EPH","SSEBV","EPP","L39","L39_2","L39EPP","ETHOX","ETHOXS","FASTQX","PH","SSFA","FAS","FERTIN","L06TFR","SSFLRT","FR","SSFR","SSFR","FLDEP","UFLDE","FLDEW","FOLATE","FOLATE","L06NB","FOLFMS","FOLFMS","SSFOL","FORMAL","FORMAS","GHB","L10","LAB10","L10_2","SSGLYP","SSGLYP","HEPA","HEPA","L02HPA","HEPB_S","L02HBS","L02","LAB02","HEPBD","HEPBD","HEPBD","HEPB_S","SSHCVR","SSHEPC","HEPC","HEPC","HEPC","HEPE","HEPE","SSHSV1","HSV","L09","LAB09","HCAA","HCAAS","HSCRP","HSCRP","HIV","HIV","L03","LAB03","HCY","SSHE4","HPVSER","L52SER","HPVSER","HPVSRM","ORHPV","HPVP","L37SWA","HPVSWR","HPVSWR","HPVSWC","HPVSWR","L37SWR","HPVP","SSHPV","INS","L06UIO","UIO","FETIB","FETIB","L40FE","SSKL","LAB07","L20","LAB20","PBCD","PBCD","PBCD","MMRV","L19","LAB19","L19_2","SSMEL","LAB22","IHG","L06UHG","UHG","IHGEM","L06HM","LAB06HM","UHM","UM","UHMS","UMS","L35","MMA","L06MH","SSMHHT","SSOL","SSMUMP","SSNEON","UNI","L28NPB","SSPCB","PCBPOL","PCBPOL","SSNORO","OGTT","L26OPD","OPD","OPD","UCOSMO","PTH","L04PER","WPIN","PERNT","PERNTS","SSNO3P","PFAS","PFAS","SSPFSU","SSPFAS","PFAS","SSPFAS","SSPFAC","SSPFC","EPHPP","SSPT","CARB","L26PP","L26UPP","LAB26PP","UPP","L24PP","PP","SSPST","L28OCP","PSTPOL","PSTPOL","L24PH","PHTHTE","PHTHTE","PHTHTE","SSPHTE","PHPYPA","PHPYPA","L06PHY","PHYTO","GLU","GLU","L10AM","LAB10AM","SSPOLI","PAH","L31PAH","PAH","DOXPOL","DOXPOL","PAH","L24PFC","PFC","POOLTF","UC","UCPREG","L11PSA","L11PSA","PSA","L11P_2","UPHOPM","UPHOPM","UPHOPM","SSSAL","SSSNFL","SSCHL","TST","UAS","UASS","BIOPRO","L40","LAB18","L40_2","L36","TELO","SSTERP","L40T4","LAB18T4","THYROD","TGEMA","TSNA","TST","L17","L17","SSTOXO","SSTOXO","TFA","TFR","SSTFR","TRICH","TB","UCFLOW","UCPREG","SSUSG","SSVARI","L06VIT","L45VIT","VITAEC","VIT_2","B12","VITB12","L43","VIT_B6","L06VIT","VIC","VNA","VNAS","UVOC","UVOCS","SSUVOC","SSUVOC","VOCWB","L04VOC","LAB04","L04VOC","VOCMWB","VOC","LAB21","VOCWB","VOCMWB","VOC","VOCWBS","VOCWB","VOCWBS","ACQ","AQQ","ALQ","ALQY","AGQ","RXQ_ANA","RXQANA","ARQ","AUQ","BAQ","BPQ","BHQ","CDQ","CFQ","CBQ","CBQPFA","CBQPFC","CKQ","HSQ","DEQ","DIQ","DBQ","DLQ","DUQ","ECQ","FSQ","HIQ","HEQ","HCQ","HUQ","HOQ","IMQ","INQ","KIQ","KIQ_U","MCQ","CIQDEP","CIQMDEP","DPQ","CIQGAD","CIQPAN","CIQPANIC","MPQ","OCQ","OHQ","OSQ","PUQ","PUQMEC","PAQ","PAQIAF","PAQY","PFQ","RXQ_RX","RXQASA","KIQ_P","PSQ","RHQ","RDQ","SXQ","SLQ","SMQMEC","SMQ","SMQ","SMQFAM","SMQRTU","SMQSHS","SSQ","CSQ","TBQ","VIQ","VTQ","VTQ","WHQ","WHQMEC"],["Demographic Variables &amp; Sample Weights","Demographic Variables and Sample Weights","Dietary Interview - Individual Foods","Dietary Interview - Individual Foods, First Day","Dietary Interview - Individual Foods, Second Day","Dietary Interview - Total Nutrient Intakes","Dietary Interview - Total Nutrient Intakes, First Day","Dietary Interview - Total Nutrient Intakes, Second Day","Dietary Interview Technical Support File - Food Codes","Dietary Interview Technical Support File - Modification Codes","Dietary Screener Questionnaire","Dietary Supplement Use 24-Hour - Individual Dietary Supplements, First Day","Dietary Supplement Use 24-Hour - Individual Dietary Supplements, Second Day","Dietary Supplement Use 24-Hour - Total Dietary Supplements, First Day","Dietary Supplement Use 24-Hour - Total Dietary Supplements, Second Day","Dietary Supplement Use 30 Day - Individual Dietary Supplements","Dietary Supplement Use 30-Day - File 1, Supplement Counts","Dietary Supplement Use 30-Day - File 1, Supplement Counts","Dietary Supplement Use 30-Day - File 2, Participant's Use of Supplements","Dietary Supplement Use 30-Day - File 2, Participant's Use of Supplements","Dietary Supplement Use 30-Day - Individual Dietary Supplements","Dietary Supplement Use 30-Day - Total Dietary Supplements","Food Frequency Questionnaire - Output from DietCalc Software","Food Frequency Questionnaire - Raw Questionnaire Responses","Arthritis Body Measures","Audiometry","Audiometry","Audiometry - Acoustic Reflex","Audiometry - Tympanometry","Audiometry - Wideband Reflectance","Audiometry GÇô Wideband Reflectance","Balance","Bioelectrical Impedance Analysis","Blood Pressure","Blood Pressure - Oscillometric Measurements","Body Measures","Cardiovascular Fitness","Dermatology","Dual Energy X-ray Absorptiometry - Android/Gynoid","Dual Energy X-ray Absorptiometry - Femur","Dual Energy X-ray Absorptiometry - Spine","Dual-Energy X-ray Absorptiometry - Abdominal Aortic Calcification","Dual-Energy X-ray Absorptiometry - Android/Gynoid Measurements","Dual-Energy X-ray Absorptiometry - Femur","Dual-Energy X-ray Absorptiometry - FRAX Score","Dual-Energy X-ray Absorptiometry - L1 Vertebrae Morphology","Dual-Energy X-ray Absorptiometry - L2 Vertebrae Morphology","Dual-Energy X-ray Absorptiometry - L3 Vertebrae Morphology","Dual-Energy X-ray Absorptiometry - L4 Vertebrae Morphology","Dual-Energy X-ray Absorptiometry - Spine","Dual-Energy X-ray Absorptiometry - T10 Vertebrae Morphology","Dual-Energy X-ray Absorptiometry - T11 Vertebrae Morphology","Dual-Energy X-ray Absorptiometry - T12 Vertebrae Morphology","Dual-Energy X-ray Absorptiometry - T4 Vertebrae Morphology","Dual-Energy X-ray Absorptiometry - T5 Vertebrae Morphology","Dual-Energy X-ray Absorptiometry - T6 Vertebrae Morphology","Dual-Energy X-ray Absorptiometry - T7 Vertebrae Morphology","Dual-Energy X-ray Absorptiometry - T8 Vertebrae Morphology","Dual-Energy X-ray Absorptiometry - T9 Vertebrae Morphology","Dual-Energy X-ray Absorptiometry - Vertebral Fracture Assessment","Dual-Energy X-ray Absorptiometry - Whole Body","Dual-Energy X-ray Absorptiometry - Whole Body, Second Exam","Exhaled Nitric Oxide","Fluorosis - Clinical","Liver Ultrasound Transient Elastography","Lower Extremity Disease - Ankle Brachial Blood Pressure Index","Lower Extremity Disease - Ankle Brachial Blood Pressure Index","Lower Extremity Disease - Peripheral Neuropathy","Muscle Strength","Muscle Strength - Grip Test","Ophthalmology - Frequency Doubling Technology","Ophthalmology - Retinal Imaging","Oral Health","Oral Health - Addendum","Oral Health - Dentition","Oral Health - Dentition","Oral Health - Periodontal","Oral Health - Periodontal","Oral Health - Periodontal/Lower","Oral Health - Periodontal/Upper","Oral Health - Recommendation of Care","Physical Activity Monitor - Day","Physical Activity Monitor - Header","Physical Activity Monitor - Hour","Shared Exclusion Questions","Spirometry - Pre and Post-Bronchodilator","Taste &amp; Smell","Tuberculosis","Tuberculosis","Vision","Acrylamide &amp; Glycidamide","Acrylamide &amp; Glycidamide","Acrylamide &amp; Glycidamide - Special Sample","Aflatoxin B1-lysine - Serum (Surplus)","Albumin &amp; Creatinine - Urine","Albumin &amp; Creatinine - Urine","Albumin &amp; Creatinine - Urine","Aldehydes - Serum","Aldehydes - Serum - Special Sample","Allergen Specific IgE(s) &amp; Total IgE - Serum","Allergens - Household Dust","Anti-Mullerian Hormone (AMH) &amp; Inhibin-B (Surplus)","Antibody to Toxocara spp. (Surplus)","Apolipoprotein B","Aromatic Amines - Urine","Aromatic Amines - Urine - Special Sample","Aromatic Diamines - Urine","Arsenic - Total - Urine","Arsenic - Total - Urine - Special Sample","Arsenics - Speciated - Urine","Arsenics - Speciated - Urine - Special Sample","Arsenics - Total &amp; Speciated - Urine","Arsenics - Total &amp; Speciated - Urine","Arsenics - Total &amp; Speciated - Urine - Special Sample","Atrazine and Metabolites","Autoantibodies - Anti-DFS70 Autoantibody Analyses (Surplus)","Autoantibodies - Immunofluorescence Analyses (Surplus)","Bacterial vaginosis (BV) &amp; Trichomonas vaginalis","Brominated Flame Retardants (BFRs)","Brominated Flame Retardants (BFRs) - Pooled Samples","Brominated Flame Retardants (BFRs) - Pooled Samples (Surplus)","C-Reactive Protein (CRP)","C-Reactive Protein (CRP)","C-Reactive Protein (CRP), Bone Alkaline Phosphatase (BAP) &amp; Parathyroid Hormone (PTH)","C-Reactive protein (CRP), Fibrinogen, Bone Alkaline Phosphatase &amp; Urinary N-telopeptides","C-Reactive Protein &amp; Others, Second Exam","Cadmium, Lead, &amp; Total Mercury - Blood","Cadmium, Lead, &amp; Total Mercury - Blood","Cadmium, Lead, Mercury, Cotinine &amp; Nutritional Biochemistries","Cadmium, Lead, Mercury, Cotinine &amp; Nutritional Biochemistries","Cadmium, Lead, Total Mercury, Ferritin, Serum Folate, RBC Folate, Vitamin B12, Homocysteine, Methylmalonic acid, Cotinine - Bloo","Cadmium, Lead, Total Mercury, Selenium, &amp; Manganese - Blood","Caffeine &amp; Caffeine Metabolites - Urine","Cancer antigen CA125 and CA15.3 - Serum (Surplus)","Cancer antigen CA125, CA15.3 and HE4 IgG antibodies - Serum (Surplus)","Chlorinated Tyrosine GÇô Serum (Surplus)","Cholesterol - HDL","Cholesterol - High - Density Lipoprotein (HDL)","Cholesterol - High-Density Lipoprotein (HDL)","Cholesterol - LDL &amp; Triglycerides","Cholesterol - LDL &amp; Triglycerides","Cholesterol - LDL &amp; Triglycerides","Cholesterol - LDL, Triglyceride &amp; Apoliprotein (ApoB)","Cholesterol - Low - Density Lipoprotein (LDL) &amp; Triglycerides","Cholesterol - Low-Density Lipoproteins (LDL) &amp; Triglycerides","Cholesterol - Total","Cholesterol - Total &amp; HDL","Cholesterol - Total &amp; HDL","Cholesterol - Total, HDL, LDL  &amp; Triglycerides, Second Exam","Chromium - Urine","Chromium &amp; Cobalt","Complete Blood Count with 5-Part Differential","Complete Blood Count with 5-part Differential - Whole Blood","Complete Blood Count with 5-part Differential - Whole Blood","Complete Blood Count with 5-part Differential - Whole Blood","Complete Blood Count with 5-Part Differential - Whole Blood","Complete Blood Count with 5-part Differential - Whole Blood, Second Exam","Copper, Selenium &amp; Zinc - Serum","Cotinine - Serum","Cotinine - Serum","Cotinine - Serum &amp; Total NNAL - Urine","Cotinine and Hydroxycotinine - Serum","Cotinine, Hydroxycotinine, &amp; Other Nicotine Metabolites and Analogs - Urine","Cotinine, Hydroxycotinine, &amp; Other Nicotine Metabolites and Analogs - Urine - Special Sample","Coxiella Burnetii (Q Fever) Antibodies - Serum (Surplus)","Creatinine &amp; Albumin - Urine, Second Exam","Cryptosporidum &amp; Toxoplasma","Cystatin C - Serum (Surplus)","Cystatin C (Surplus)","Cytomegalovirus Antibodies - Serum (Surplus)","Cytomegalovirus IgG &amp; IgM Antibodies - Serum","DEET and Metabolites","DEET Metabolite - Urine","DEET Metabolites - Urine - Surplus","Dioxins, Furans, &amp; Coplanar PCBs","Dioxins, Furans, &amp; Coplanar PCBs","Dioxins, Furans, &amp; Coplanar PCBs","Environmental Phenols","Environmental Phenols","Environmental Phenols &amp; Parabens","Epstein-Barr Virus (VCA IgG) - Serum (Surplus)","Erythrocyte Protoporphyrin","Erythrocyte Protoporphyrin","Erythrocyte Protoporphyrin","Erythrocyte Protoporphyrin &amp; Selenium","Ethylene Oxide","Ethylene Oxide - Special Sample","Fasting Questionnaire","Fasting Questionnaire","Fatty Acids - Plasma (Surplus)","Fatty Acids - Serum","Ferritin","Ferritin &amp; Transferrin Receptor","Flame Retardant Metabolites - Urine (Surplus)","Flame Retardants - Urine","Flame Retardants - Urine  (Surplus)","Flame Retardants - Urine (Surplus)","Fluoride - Plasma","Fluoride - Urine","Fluoride - Water","Folate - RBC","Folate - RBC &amp; Serum","Folate - RBC &amp; Serum, and Vitamin B12","Folate Forms - Individual - Serum","Folate Forms - Total &amp; Individual - Serum","Folic Acid - Unmetabolized (Surplus)","Formaldehyde","Formaldehyde - Special Sample","Glycohemoglobin","Glycohemoglobin","Glycohemoglobin","Glycohemoglobin, Plasma Glucose, Serum C-peptide, &amp; Insulin, Second Exam","Glyphosate (GLYP) - Urine","Glyphosate (GLYP) - Urine (Surplus)","Hepatitis A","Hepatitis A Antibody","Hepatitis A Antibody","Hepatitis B Surface Antibody","Hepatitis B Surface Antibody","Hepatitis B: Core Antibody &amp; Surface Antigen; Hepatitis C: Confirmed Antibody &amp; RNA (HCV-RNA); Hepatitis D Antibody","Hepatitis B: Core Antibody &amp; Surface Antigen; Hepatitis C: Confirmed Antibody &amp; RNA (HCV-RNA); Hepatitis D Antibody","Hepatitis B: core antibody, surface antigen, and Hepatitis D antibody","Hepatitis B: Core antibody, Surface antigen, and Hepatitis D antibody","Hepatitis B: Core Antibody, Surface Antigen; Hepatitis D Antibody","Hepatitis B: Surface Antibody","Hepatitis C RNA (HCV-RNA) &amp; HCV Genotype (Surplus)","Hepatitis C: Confirmed Antibody (INNO-LIA)","Hepatitis C: Confirmed Antibody, RNA (HCV-RNA), &amp; Genotype","Hepatitis C: RNA (HCV-RNA) and Hepatitis C Genotype","Hepatitis C: RNA (HCV-RNA), Confirmed Antibody (INNO-LIA), &amp; Genotype","Hepatitis E : IgG &amp; IgM Antibodies","Hepatitis E: IgG &amp; IgM Antibodies","Herpes Simplex Virus Type-1 (Surplus)","Herpes Simplex Virus Type-1 &amp; Type-2","Herpes Simplex Virus Type-1 &amp; Type-2","Herpes Simplex Virus Type-1 &amp; Type-2","Heterocyclic Aromatic Amines - Urine","Heterocyclic Aromatic Amines (HCAA) - Urine - Special Sample","High-Sensitivity C-Reactive Protein","High-Sensitivity C-Reactive Protein (hs-CRP)","HIV Antibody Test","HIV Antibody Test, CD4+ T Lymphocytes &amp; CD8+ T Cells","HIV Antibody Test, CD4+ T Lymphocytes &amp; CD8+ T Cells","HIV Antibody Test, CD4+ T Lymphocytes &amp; CD8+ T Cells","Homocysteine","Human epididymal secretory protein E4 (HE4) - Serum (Surplus)","Human Papillomavirus (HPV) - 6, 11, 16 &amp; 18 Antibody - Serum","Human Papillomavirus (HPV) - 6, 11, 16 &amp; 18 Antibody - Serum: 4-plex CLIA","Human Papillomavirus (HPV) - 6, 11, 16 &amp; 18 Antibody GÇô Serum: 4-plex CLIA","Human Papillomavirus (HPV) - Multiplexed 6, 11, 16, 18, 31, 33, 45, 52 &amp; 58 Antibody GÇô Serum: 9-plex CLIA","Human Papillomavirus (HPV) - Oral Rinse","Human Papillomavirus (HPV) DNA - Penile Swabs: Roche Linear Array","Human Papillomavirus (HPV) DNA - Vaginal Swab: Digene Hybrid Capture &amp; Prototype Line Blot Assay","Human Papillomavirus (HPV) DNA - Vaginal Swab: Digene Hybrid Capture &amp; Roche Linear Array","Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Cobas &amp; Roche Linear Array","Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Cobas High-Risk","Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array","Human Papillomavirus (HPV) DNA - Vaginal Swab: Roche Linear Array","Human Papillomavirus (HPV) DNA Results from Penile Swab Samples: Roche Linear Array","Human Papillomavirus (HPV) Viral Load - Oral Rinse - Oral High-Risk HPV Infections (Surplus)","Insulin","Iodine - Urine","Iodine - Urine","Iron Status - Serum","Iron, Total Iron Binding Capacity (TIBC), &amp; Transferrin Saturation","Iron, Total Iron Binding Capacity (TIBC), &amp; Transferrin Saturation","Klotho - Serum (Surplus)","Latex","Lead - Dust","Lead - Dust","Lead, Cadmium, Total Mercury, Selenium &amp; Manganese - Blood","Lead, Cadmium, Total Mercury, Selenium, &amp; Manganese - Blood","Lead, Cadmium, Total Mercury, Selenium, and Manganese - Blood","Measles, Mumps, Rubella &amp; Varicella","Measles, Rubella, &amp; Varicella","Measles, Rubella, &amp; Varicella","Measles, Rubella, &amp; Varicella, Second Exam","Melamine - Urine (Surplus)","Mercury - Hair","Mercury: Inorganic - Blood","Mercury: Inorganic - Urine","Mercury: Inorganic - Urine","Mercury: Inorganic, Ethyl and Methyl - Blood","Metals - Urine","Metals - Urine","Metals - Urine","Metals - Urine","Metals - Urine - Special Sample","Metals - Urine - Special Sample","Methicillin - Resistant Staphylococcus aureus (MRSA)","Methylmalonic Acid","Methylmalonic acid &amp; Homocysteine","Mono-2-ethyl-5-hydroxyhexyl terephthalate, mono-2-ethyl-5-carboxypentyl terephthalate, and monooxoisononyl phthalate - Urine (Su","Monoclonal gammopathy of undetermined significance (MGUS) (Surplus)","Mumps Antibody - Serum (Surplus)","Neonicotinoids - Urine - Surplus","Nickel - Urine","Non-dioxin-like Polychlorinated Biphenyls","Non-dioxin-like Polychlorinated Biphenyls - Pooled Samples (Surplus Sera)","Non-dioxin-like Polychlorinated Biphenyls &amp; Mono-ortho-substituted Polychlorinated Biphenyls - Pooled Samples","Non-dioxin-like Polychlorinated Biphenyls &amp; Mono-ortho-substituted Polychlorinated Biphenyls - Serum - Pooled Samples","Norovirus antibody - Serum","Oral Glucose Tolerance Test","Organophosphate Insecticides - Diakyl Phosphate Metabolites - Urine","Organophosphate Insecticides - Diakyl Phosphate Metabolites - Urine","Organophosphate Insecticides - Dialkyl Phosphate Metabolites - Urine","Osmolality - Urine","Parathyroid Hormone","Perchlorate - Urine","Perchlorate, Nitrate &amp; Iodide - Tap Water","Perchlorate, Nitrate &amp; Thiocyanate - Urine","Perchlorate, Nitrate &amp; Thiocyanate - Urine - Special Sample","Perchlorate, Nitrate &amp; Thiocyanate - Urine (Surplus)","Perfluoroalkyl and Polyfluoroalkyl","Perfluoroalkyl and Polyfluoroalkyl Substances","Perfluoroalkyl and Polyfluoroalkyl Substances","Perfluoroalkyl and Polyfluoroalkyl Substances - Linear and Branched PFOS and PFOA Isomers (Surplus)","Perfluoroalkyl and Polyfluoroalkyl Substances (formerly Polyfluoroalkyl Chemicals - PFC)","Perfluoroalkyl and Polyfluoroalkyl Substances (Surplus)","Perfluoroalkyl and Polyfluoroalkyl Substances in US children 3-11 Years of Age","Perfluoroalkyl Chemicals - Serum (Surplus)","Personal Care and Consumer Product Chemicals and Metabolites","Pertussis and tetanus GÇô Serum (Surplus)","Pesticides - Carbamates &amp; Organophosphorus Metabolites - Urine","Pesticides - Current Use - Urine (Formerly Priority Pesticides, Non-persistent Pesticide Metabolites)","Pesticides - Current Use - Urine (Formerly Priority Pesticides, Non-persistent Pesticide Metabolites)","Pesticides - Current Use - Urine (Formerly Priority Pesticides, Non-persistent Pesticide Metabolites)","Pesticides - Current Use - Urine (Formerly Priority Pesticides, Non-persistent Pesticide Metabolites)","Pesticides - Environmental - Urine","Pesticides - Environmental - Urine","Pesticides - Organochlorine Metabolites - Serum - Pooled Samples (Surplus)","Pesticides - Organochlorine Metabolites - Serum (Surplus)","Pesticides - Organochlorine Pesticides - Pooled Samples","Pesticides - Organochlorine Pesticides - Serum - Pooled Samples","Phthalates - Urine","Phthalates - Urine","Phthalates &amp; Plasticizers Metabolites - Urine","Phthalates and Plasticizers Metabolites - Urine","Phthalates and Plasticizers Metabolites - Urine (Surplus)","Phthalates, Phytoestrogens &amp; PAHs - Urine","Phthalates, Phytoestrogens &amp; PAHs - Urine PHPYPA Urinary Phthalates","Phytoestrogens - Urine","Phytoestrogens - Urine","Plasma Fasting Glucose","Plasma Fasting Glucose &amp; Insulin","Plasma Fasting Glucose, Serum C-peptide &amp; Insulin","Plasma Fasting Glucose, Serum C-peptide &amp; Insulin","Poliovirus Serotypes 1, 2, &amp; 3 Antibodies - Serum (Surplus)","Polyaromatic Hydrocarbons -Urine","Polyaromatic Hydrocarbons (PAHs) - Urine","Polyaromatic Hydrocarbons (PAHs) - Urine","Polychlorinated dibenzo-p-dioxins (PCDDs), Dibenzofurans (PCDFs) &amp; Coplanar Polychlorinated Biphenyls (cPCBs)  - Pooled Samples","Polychlorinated dibenzo-p-dioxins (PCDDs), Dibenzofurans (PCDFs) &amp; Coplanar Polychlorinated Biphenyls (cPCBs) - Pooled Samples","Polycyclic Aromatic Hydrocarbons (PAH) - Urine","Polyfluoroalkyl Chemicals","Polyfluoroalkyl Chemicals","Pooled-Sample Technical Support File","Pregnancy Test - Urine","Pregnancy Test - Urine","Prostate specific antigen (PSA)","Prostate Specific Antigen (PSA)","Prostate Specific Antigen (PSA)","Prostate-specific Antigen (PSA), Second Exam","Pyrethroids, Herbicides, &amp; OP Metabolites - Urine","Pyrethroids, Herbicides, &amp; Organophosphorus Metabolites","Pyrethroids, Herbicides, &amp; Organophosphorus Metabolites - Urine","Salmonella &amp; Campylobacter Antibodies (Surplus)","Serum Neurofilament Light Chain - Serum","Sex Steroid Hormone - Men (Surplus)","Sex Steroid Hormone - Serum","Speciated Arsenics - Urine","Speciated Arsenics - Urine - Special Sample","Standard Biochemistry Profile","Standard Biochemistry Profile","Standard Biochemistry Profile &amp; Hormones","Standard Biochemistry Profile, Follicle Stimulating Hormone &amp; Luteinizing Hormone, Second Exam","Syphilis-IgG, Syphilis Rapid Plasma Reagin (RPR) &amp; Treponema pallidum Particle Agglutination (TP-PA)","Telomere Mean and Standard Deviation (Surplus)","Terpenes GÇô Serum (Surplus)","Thyroid - Stimulating Hormone &amp; Thyroxine (TSH &amp; T4)","Thyroid - Stimulating Hormone &amp; Thyroxine (TSH &amp; T4)","Thyroid Profile","Tissue Transglutaminase Assay (IgA-TTG) &amp; IgA Endomyseal Antibody Assay (IgA EMA)","Tobacco-specific Nitrosamines (TSNAs) - Urine","Total Testosterone","Toxoplasma (IgG) &amp; Toxoplasma (IgM)","Toxoplasma (IgG), Toxoplasma (IgM),Toxoplasma (Dye),Toxoplasma Differential Agglutination, &amp; Toxoplasma (Avidity)","Toxoplasma gondii Antibody - Serum (Surplus)","Toxoplasma Gondii Antibody - Serum (Surplus)","Trans Fatty Acids","Transferrin Receptor","Transferrin Receptor - Pregnant Women (Surplus)","Trichomonas - Urine","Tuberculosis - Quantiferon_In_Gold","Urine Flow Rate","Urine Pregnancy Test","Urine Specific Gravity Measurement (Surplus)","Varicella-Zoster Virus Antibody (Surplus)","Vitamin A, Vitamin E &amp; Carotenoids","Vitamin A, Vitamin E &amp; Carotenoids","Vitamin A, Vitamin E &amp; Carotenoids","Vitamin A, Vitamin E, &amp; Carotenoids, Second Exam","Vitamin B12","Vitamin B12","Vitamin B6","Vitamin B6","Vitamin C","Vitamin C","Volatile N-Nitrosamine Compounds (VNAs) - Urine","Volatile N-Nitrosamine Compounds (VNAs) - Urine - Special Sample","Volatile Organic Compound (VOC) Metabolites - Urine","Volatile Organic Compound (VOC) Metabolites - Urine - Special Sample","Volatile Organic Compound (VOC) Metabolites - Urine (Surplus)","Volatile Organic Compound (VOC) Metabolites II - Urine (Surplus)","Volatile Organic Compounds - Blood &amp; Related Questionnaire Items","Volatile Organic Compounds - Blood &amp; Water","Volatile Organic Compounds - Blood &amp; Water","Volatile Organic Compounds - Blood, Water, &amp; Related Questionnaire Items","Volatile Organic Compounds - Trihalomethanes/MTBE/Nitromethane - Blood","Volatile Organic Compounds - Water &amp; Related Questionnaire Items","Volatile Organic Compounds (VOC) - Personal Exposure Badge","Volatile Organic Compounds (VOCs) - Blood","Volatile Organic Compounds (VOCs) - Trihalomethanes/MTBE/Nitromethane - Blood","Volatile Organic Compounds (VOCs) - Water","Volatile Organic Compounds (VOCs) and Trihalomethanes/MTBE - Blood - Special Sample","Volatile Organic Compounds and Trihalomethanes/MTBE - Blood","Volatile Organic Compounds and Trihalomethanes/MTBE GÇô Blood GÇô Special Sample","Acculturation","Air Quality","Alcohol Use","Alcohol Use (Ages 18-19)","Allergy","Analgesic Pain Relievers","Analgesic Pain Relievers","Arthritis","Audiometry","Balance","Blood Pressure &amp; Cholesterol","Bowel Health","Cardiovascular Health","Cognitive Functioning","Consumer Behavior","Consumer Behavior Phone Follow-up Module - Adult","Consumer Behavior Phone Follow-up Module - Child","Creatine Kinase","Current Health Status","Dermatology","Diabetes","Diet Behavior &amp; Nutrition","Disability","Drug Use","Early Childhood","Food Security","Health Insurance","Hepatitis","Hepatitis C Follow Up","Hospital Utilization &amp; Access to Care","Housing Characteristics","Immunization","Income","Kidney Conditions","Kidney Conditions - Urology","Medical Conditions","Mental Health - Depression","Mental Health - Depression","Mental Health - Depression Screener","Mental Health - Generalized Anxiety Disorder","Mental Health - Panic Disorder","Mental Health - Panic Disorder","Miscellaneous Pain","Occupation","Oral Health","Osteoporosis","Pesticide Use","Pesticide Use","Physical Activity","Physical Activity - Individual Activities","Physical Activity - Youth","Physical Functioning","Prescription Medications","Preventive Aspirin Use","Prostate Conditions","Prostate Specific Antigen Follow-up","Reproductive Health","Respiratory Health","Sexual Behavior","Sleep Disorders","Smoking - Adult Recent Tobacco Use &amp; Youth Cigarette/Tobacco Use","Smoking - Cigarette Use","Smoking - Cigarette/Tobacco Use - Adult","Smoking - Household Smokers","Smoking - Recent Tobacco Use","Smoking - Secondhand Smoke Exposure","Social Support","Taste &amp; Smell","Tuberculosis","Vision","Volatile Toxicant","Volatile Toxicant (Subsample)","Weight History","Weight History - Youth"],["Demographics","Demographics","Dietary","Dietary","Dietary","Dietary","Dietary","Dietary","Dietary","Dietary","Dietary","Dietary","Dietary","Dietary","Dietary","Dietary","Dietary","Dietary","Dietary","Dietary","Dietary","Dietary","Dietary","Dietary","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Examination","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Laboratory","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire","Questionnaire"],[7,3,2,8,8,2,8,8,6,5,1,6,6,6,6,3,3,1,3,1,3,6,2,2,1,8,1,9,9,1,1,3,3,10,1,10,3,1,2,3,3,1,4,2,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,1,4,1,3,4,1,2,1,3,2,2,2,2,2,1,7,1,3,1,2,2,8,2,2,2,1,3,1,1,1,5,3,1,1,1,7,2,1,1,1,1,1,3,2,5,1,1,1,3,2,2,1,1,4,1,1,1,1,2,1,6,1,3,1,1,1,1,1,3,1,1,1,1,3,1,1,1,5,1,1,2,1,4,1,1,1,7,2,1,1,1,2,1,4,2,1,2,1,3,1,1,3,3,3,2,1,1,1,1,1,3,2,4,1,1,1,1,1,2,1,2,4,1,1,1,1,3,1,7,3,1,2,5,1,1,1,1,2,2,1,2,4,3,1,1,4,1,2,1,7,2,1,1,1,1,3,4,3,4,3,2,1,1,2,4,3,1,1,4,2,1,2,3,2,6,2,1,1,1,1,1,6,1,2,1,1,1,1,1,2,1,4,1,1,4,1,1,1,1,1,1,3,2,7,1,1,2,5,1,2,1,1,1,1,1,2,1,1,1,1,3,1,7,4,2,1,4,3,1,2,2,2,1,1,3,3,1,1,1,1,5,1,2,6,1,2,3,2,1,1,1,7,3,1,1,1,1,1,1,1,1,1,2,1,2,1,1,1,2,1,4,1,1,5,1,1,3,1,3,1,1,1,1,3,3,4,2,1,1,1,1,3,1,3,2,1,4,4,3,6,1,1,3,1,2,1,2,1,1,3,2,1,1,7,2,1,1,2,2,1,1,1,3,3,1,1,1,1,2,1,2,5,2,2,1,5,1,1,3,1,1,2,1,1,2,1,3,1,2,1,1,4,3,1,1,2,1,1,1,1,2,1,2,2,1,1,3,1,10,2,10,1,1,1,2,1,9,3,10,3,10,4,6,3,3,2,10,9,10,10,3,10,10,10,10,3,6,10,10,10,6,1,9,10,2,1,7,3,2,1,3,10,10,8,3,7,10,4,1,10,10,4,4,2,10,7,9,7,3,7,3,10,7,3,5,2,2,5,2,3,10,7]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>TableBase<\/th>\n      <th>Description<\/th>\n      <th>DataGroup<\/th>\n      <th>Freq<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":4},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
-
-# Miscellaneous oddities
-
-There is a mismatch for tables with base name `SSDFS` (there may be
-others as well).
-
-``` r
-std_tables[startsWith(std_tables, "SSDFS")]
-#> [1] "SSDFS_A" "SSDFS_G"
-subset(tableDesc, startsWith(TableName, "SSDFS"))[1:5]
-#>                                                    Description TableName BeginYear EndYear
-#> 56 Autoantibodies - Anti-DFS70 Autoantibody Analyses (Surplus)   SSDFS_G      2011    2012
-#>     DataGroup
-#> 56 Laboratory
-```
-
-The `SSDFS_A` table does exist:
-
-``` r
-str(nhanes('SSDFS_A', translated = TRUE))
-#> 'data.frame':    148 obs. of  5 variables:
-#>  $ SEQN    : int  255 341 1227 1693 1825 2473 2484 3018 3098 3715 ...
-#>  $ WTANA6YR: num  7706 55179 102257 36033 8923 ...
-#>  $ SSDFSS  : num  1 1 1 1 1 1 1 1 1 1 ...
-#>  $ SSDFSE  : num  3.82 35.31 53.08 47.19 121.8 ...
-#>  $ SSDFSR  : num  0 1 1 1 1 0 1 1 1 0 ...
-```
-
-However, even though `SSDFS_G` is a legitimate table, there is no
-<https://wwwn.cdc.gov/Nchs/Nhanes/2011-2012/SSDFS_A.htm>, and the
-corresponding codebook naturally has no useful information. Where did
-the `SSDFS_A` table come from?
-
-What is the difference between `includelabels = TRUE` and `FALSE`?
-Neither version seems to include the SAS labels
-
-``` r
-nhanes('DEMO_G', includelabels = FALSE) |> attributes() |> str()
-#> List of 3
-#>  $ names    : chr [1:48] "SEQN" "SDDSRVYR" "RIDSTATR" "RIAGENDR" ...
-#>  $ class    : chr "data.frame"
-#>  $ row.names: int [1:9756] 1 2 3 4 5 6 7 8 9 10 ...
-nhanes('DEMO_G', includelabels = TRUE) |> attributes() |> str()
-#> List of 3
-#>  $ names    : chr [1:48] "SEQN" "SDDSRVYR" "RIDSTATR" "RIAGENDR" ...
-#>  $ class    : chr "data.frame"
-#>  $ row.names: int [1:9756] 1 2 3 4 5 6 7 8 9 10 ...
-```
-
-Consider tables whose description contains “cholesterol”.
-
-``` r
-subset(tableSummary, grepl("cholesterol", Description, ignore.case = TRUE)) |> kable()
+head(tableSummary, 20) |> kable() # use datatable() for html_output
 ```
 
 <table>
@@ -862,331 +804,25 @@ Freq
 
 <td style="text-align:left;">
 
-567994
+42234
 
 </td>
 
 <td style="text-align:left;">
 
-HDL
+DEMO
 
 </td>
 
 <td style="text-align:left;">
 
-Cholesterol - HDL
+Demographic Variables & Sample Weights
 
 </td>
 
 <td style="text-align:left;">
 
-Laboratory
-
-</td>
-
-<td style="text-align:right;">
-
-5
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-568420
-
-</td>
-
-<td style="text-align:left;">
-
-HDL
-
-</td>
-
-<td style="text-align:left;">
-
-Cholesterol - High - Density Lipoprotein (HDL)
-
-</td>
-
-<td style="text-align:left;">
-
-Laboratory
-
-</td>
-
-<td style="text-align:right;">
-
-1
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-568846
-
-</td>
-
-<td style="text-align:left;">
-
-HDL
-
-</td>
-
-<td style="text-align:left;">
-
-Cholesterol - High-Density Lipoprotein (HDL)
-
-</td>
-
-<td style="text-align:left;">
-
-Laboratory
-
-</td>
-
-<td style="text-align:right;">
-
-1
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-569329
-
-</td>
-
-<td style="text-align:left;">
-
-L13AM
-
-</td>
-
-<td style="text-align:left;">
-
-Cholesterol - LDL & Triglycerides
-
-</td>
-
-<td style="text-align:left;">
-
-Laboratory
-
-</td>
-
-<td style="text-align:right;">
-
-2
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-569377
-
-</td>
-
-<td style="text-align:left;">
-
-LAB13AM
-
-</td>
-
-<td style="text-align:left;">
-
-Cholesterol - LDL & Triglycerides
-
-</td>
-
-<td style="text-align:left;">
-
-Laboratory
-
-</td>
-
-<td style="text-align:right;">
-
-1
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-569518
-
-</td>
-
-<td style="text-align:left;">
-
-TRIGLY
-
-</td>
-
-<td style="text-align:left;">
-
-Cholesterol - LDL & Triglycerides
-
-</td>
-
-<td style="text-align:left;">
-
-Laboratory
-
-</td>
-
-<td style="text-align:right;">
-
-4
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-569944
-
-</td>
-
-<td style="text-align:left;">
-
-TRIGLY
-
-</td>
-
-<td style="text-align:left;">
-
-Cholesterol - LDL, Triglyceride & Apoliprotein (ApoB)
-
-</td>
-
-<td style="text-align:left;">
-
-Laboratory
-
-</td>
-
-<td style="text-align:right;">
-
-1
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-570370
-
-</td>
-
-<td style="text-align:left;">
-
-TRIGLY
-
-</td>
-
-<td style="text-align:left;">
-
-Cholesterol - Low - Density Lipoprotein (LDL) & Triglycerides
-
-</td>
-
-<td style="text-align:left;">
-
-Laboratory
-
-</td>
-
-<td style="text-align:right;">
-
-1
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-570796
-
-</td>
-
-<td style="text-align:left;">
-
-TRIGLY
-
-</td>
-
-<td style="text-align:left;">
-
-Cholesterol - Low-Density Lipoproteins (LDL) & Triglycerides
-
-</td>
-
-<td style="text-align:left;">
-
-Laboratory
-
-</td>
-
-<td style="text-align:right;">
-
-1
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-571215
-
-</td>
-
-<td style="text-align:left;">
-
-TCHOL
-
-</td>
-
-<td style="text-align:left;">
-
-Cholesterol - Total
-
-</td>
-
-<td style="text-align:left;">
-
-Laboratory
+Demographics
 
 </td>
 
@@ -1202,25 +838,59 @@ Laboratory
 
 <td style="text-align:left;">
 
-571457
+42660
 
 </td>
 
 <td style="text-align:left;">
 
-L13
+DEMO
 
 </td>
 
 <td style="text-align:left;">
 
-Cholesterol - Total & HDL
+Demographic Variables and Sample Weights
 
 </td>
 
 <td style="text-align:left;">
 
-Laboratory
+Demographics
+
+</td>
+
+<td style="text-align:right;">
+
+3
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+225000
+
+</td>
+
+<td style="text-align:left;">
+
+DRXIFF
+
+</td>
+
+<td style="text-align:left;">
+
+Dietary Interview - Individual Foods
+
+</td>
+
+<td style="text-align:left;">
+
+Dietary
 
 </td>
 
@@ -1236,25 +906,263 @@ Laboratory
 
 <td style="text-align:left;">
 
-571506
+225421
 
 </td>
 
 <td style="text-align:left;">
 
-LAB13
+DR1IFF
 
 </td>
 
 <td style="text-align:left;">
 
-Cholesterol - Total & HDL
+Dietary Interview - Individual Foods, First Day
 
 </td>
 
 <td style="text-align:left;">
 
-Laboratory
+Dietary
+
+</td>
+
+<td style="text-align:right;">
+
+8
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+225849
+
+</td>
+
+<td style="text-align:left;">
+
+DR2IFF
+
+</td>
+
+<td style="text-align:left;">
+
+Dietary Interview - Individual Foods, Second Day
+
+</td>
+
+<td style="text-align:left;">
+
+Dietary
+
+</td>
+
+<td style="text-align:right;">
+
+8
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+226280
+
+</td>
+
+<td style="text-align:left;">
+
+DRXTOT
+
+</td>
+
+<td style="text-align:left;">
+
+Dietary Interview - Total Nutrient Intakes
+
+</td>
+
+<td style="text-align:left;">
+
+Dietary
+
+</td>
+
+<td style="text-align:right;">
+
+2
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+226700
+
+</td>
+
+<td style="text-align:left;">
+
+DR1TOT
+
+</td>
+
+<td style="text-align:left;">
+
+Dietary Interview - Total Nutrient Intakes, First Day
+
+</td>
+
+<td style="text-align:left;">
+
+Dietary
+
+</td>
+
+<td style="text-align:right;">
+
+8
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+227128
+
+</td>
+
+<td style="text-align:left;">
+
+DR2TOT
+
+</td>
+
+<td style="text-align:left;">
+
+Dietary Interview - Total Nutrient Intakes, Second Day
+
+</td>
+
+<td style="text-align:left;">
+
+Dietary
+
+</td>
+
+<td style="text-align:right;">
+
+8
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+227555
+
+</td>
+
+<td style="text-align:left;">
+
+DRXFCD
+
+</td>
+
+<td style="text-align:left;">
+
+Dietary Interview Technical Support File - Food Codes
+
+</td>
+
+<td style="text-align:left;">
+
+Dietary
+
+</td>
+
+<td style="text-align:right;">
+
+6
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+227983
+
+</td>
+
+<td style="text-align:left;">
+
+DRXMCD
+
+</td>
+
+<td style="text-align:left;">
+
+Dietary Interview Technical Support File - Modification Codes
+
+</td>
+
+<td style="text-align:left;">
+
+Dietary
+
+</td>
+
+<td style="text-align:right;">
+
+5
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+228421
+
+</td>
+
+<td style="text-align:left;">
+
+DTQ
+
+</td>
+
+<td style="text-align:left;">
+
+Dietary Screener Questionnaire
+
+</td>
+
+<td style="text-align:left;">
+
+Dietary
 
 </td>
 
@@ -1270,25 +1178,231 @@ Laboratory
 
 <td style="text-align:left;">
 
-571884
+228837
 
 </td>
 
 <td style="text-align:left;">
 
-L13\_2
+DS1IDS
 
 </td>
 
 <td style="text-align:left;">
 
-Cholesterol - Total, HDL, LDL & Triglycerides, Second Exam
+Dietary Supplement Use 24-Hour - Individual Dietary Supplements, First
+Day
 
 </td>
 
 <td style="text-align:left;">
 
-Laboratory
+Dietary
+
+</td>
+
+<td style="text-align:right;">
+
+6
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+229265
+
+</td>
+
+<td style="text-align:left;">
+
+DS2IDS
+
+</td>
+
+<td style="text-align:left;">
+
+Dietary Supplement Use 24-Hour - Individual Dietary Supplements, Second
+Day
+
+</td>
+
+<td style="text-align:left;">
+
+Dietary
+
+</td>
+
+<td style="text-align:right;">
+
+6
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+229690
+
+</td>
+
+<td style="text-align:left;">
+
+DS1TOT
+
+</td>
+
+<td style="text-align:left;">
+
+Dietary Supplement Use 24-Hour - Total Dietary Supplements, First Day
+
+</td>
+
+<td style="text-align:left;">
+
+Dietary
+
+</td>
+
+<td style="text-align:right;">
+
+6
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+230118
+
+</td>
+
+<td style="text-align:left;">
+
+DS2TOT
+
+</td>
+
+<td style="text-align:left;">
+
+Dietary Supplement Use 24-Hour - Total Dietary Supplements, Second Day
+
+</td>
+
+<td style="text-align:left;">
+
+Dietary
+
+</td>
+
+<td style="text-align:right;">
+
+6
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+230549
+
+</td>
+
+<td style="text-align:left;">
+
+DSQIDS
+
+</td>
+
+<td style="text-align:left;">
+
+Dietary Supplement Use 30 Day - Individual Dietary Supplements
+
+</td>
+
+<td style="text-align:left;">
+
+Dietary
+
+</td>
+
+<td style="text-align:right;">
+
+3
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+230971
+
+</td>
+
+<td style="text-align:left;">
+
+DSQ1
+
+</td>
+
+<td style="text-align:left;">
+
+Dietary Supplement Use 30-Day - File 1, Supplement Counts
+
+</td>
+
+<td style="text-align:left;">
+
+Dietary
+
+</td>
+
+<td style="text-align:right;">
+
+3
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+230973
+
+</td>
+
+<td style="text-align:left;">
+
+DSQFILE1
+
+</td>
+
+<td style="text-align:left;">
+
+Dietary Supplement Use 30-Day - File 1, Supplement Counts
+
+</td>
+
+<td style="text-align:left;">
+
+Dietary
 
 </td>
 
@@ -1304,31 +1418,65 @@ Laboratory
 
 <td style="text-align:left;">
 
-739994
+231398
 
 </td>
 
 <td style="text-align:left;">
 
-BPQ
+DSQ2
 
 </td>
 
 <td style="text-align:left;">
 
-Blood Pressure & Cholesterol
+Dietary Supplement Use 30-Day - File 2, Participant’s Use of Supplements
 
 </td>
 
 <td style="text-align:left;">
 
-Questionnaire
+Dietary
 
 </td>
 
 <td style="text-align:right;">
 
-10
+3
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+231400
+
+</td>
+
+<td style="text-align:left;">
+
+DSQFILE2
+
+</td>
+
+<td style="text-align:left;">
+
+Dietary Supplement Use 30-Day - File 2, Participant’s Use of Supplements
+
+</td>
+
+<td style="text-align:left;">
+
+Dietary
+
+</td>
+
+<td style="text-align:right;">
+
+1
 
 </td>
 
@@ -1337,85 +1485,6 @@ Questionnaire
 </tbody>
 
 </table>
-
-Clearly, similar data is included in tables with different names, so our
-strategy of merging by table name may be fundamentally flawed. It may be
-more useful to decide on variable names of interest, and obtain all data
-for those variables regardless of which table they are in.
-
-``` r
-subset(tableDesc, TableBase == "TRIGLY")[1:4]
-#>                                                       Description TableName BeginYear EndYear
-#> 104                             Cholesterol - LDL & Triglycerides  TRIGLY_E      2007    2008
-#> 105                             Cholesterol - LDL & Triglycerides  TRIGLY_G      2011    2012
-#> 106 Cholesterol - Low - Density Lipoprotein (LDL) & Triglycerides  TRIGLY_I      2015    2016
-#> 803                             Cholesterol - LDL & Triglycerides  TRIGLY_F      2009    2010
-#> 804                             Cholesterol - LDL & Triglycerides  TRIGLY_H      2013    2014
-#> 805         Cholesterol - LDL, Triglyceride & Apoliprotein (ApoB)  TRIGLY_D      2005    2006
-#> 806  Cholesterol - Low-Density Lipoproteins (LDL) & Triglycerides  TRIGLY_J      2017    2018
-sapply(nhanesCodebook("TRIGLY_E"), "[[", "SAS Label:")
-#>                                  SEQN                              WTSAF2YR 
-#>          "Respondent sequence number" "Fasting Subsample 2 Year MEC Weight" 
-#>                                 LBXTR                               LBDTRSI 
-#>                "Triglyceride (mg/dL)"               "Triglyceride (mmol/L)" 
-#>                                LBDLDL                              LBDLDLSI 
-#>             "LDL-cholesterol (mg/dL)"            "LDL-cholesterol (mmol/L)"
-```
-
-So let’s search for the `LBDLDL` variable in all tables.
-
-``` r
-varDesc <- nhanesA:::.nhanesQuery("select * from Metadata.QuestionnaireVariables")
-subset(varDesc, Variable == "LBDLDL")
-#>       Variable TableName
-#> 27717   LBDLDL   L13AM_B
-#> 27723   LBDLDL   L13AM_C
-#> 29115   LBDLDL   LAB13AM
-#> 40307   LBDLDL  P_TRIGLY
-#> 47135   LBDLDL  TRIGLY_D
-#> 47143   LBDLDL  TRIGLY_E
-#> 47149   LBDLDL  TRIGLY_F
-#> 47155   LBDLDL  TRIGLY_G
-#> 47161   LBDLDL  TRIGLY_H
-#> 47167   LBDLDL  TRIGLY_I
-#> 47173   LBDLDL  TRIGLY_J
-#>                                                                                                                                                                                                                          Description
-#> 27717                                                                                                                                                                                                        LDL-cholesterol (mg/dL)
-#> 27723                                                                                                                                                                                                        LDL-cholesterol (mg/dL)
-#> 29115                                                                                                                                                                                                        LDL-cholesterol (mg/dL)
-#> 40307                                                                                                                                                                                                                           <NA>
-#> 47135                                                                                                                                                                                                        LDL-cholesterol (mg/dL)
-#> 47143                                                                                                                                                                                                        LDL-cholesterol (mg/dL)
-#> 47149                                                                                                                                                                                                        LDL-cholesterol (mg/dL)
-#> 47155                                                                                                                                                                                                        LDL-cholesterol (mg/dL)
-#> 47161                                                                                                                                                                                                        LDL-cholesterol (mg/dL)
-#> 47167                                                                                                                                                                                                        LDL-cholesterol (mg/dL)
-#> 47173 LDL-Cholesterol Friedewald equation (mg/dL).  LBDLDL = (LBXTC-(LBDHDD + LBXTR/5) round to 0 decimal places) for LBXTR less than 400 mg/dL and missing for LBXTR greater than 400 mg/dL.  LBDHDD from public release file HDL_J
-#>                                            Target                           SasLabel UseConstraints
-#> 27717  Both males and females 3 YEARS - 150 YEARS            LDL-cholesterol (mg/dL)           <NA>
-#> 27723  Both males and females 3 YEARS - 150 YEARS            LDL-cholesterol (mg/dL)           <NA>
-#> 29115  Both males and females 3 YEARS - 150 YEARS            LDL-cholesterol (mg/dL)           <NA>
-#> 40307                                        <NA>                               <NA>           <NA>
-#> 47135 Both males and females 12 YEARS - 150 YEARS            LDL-cholesterol (mg/dL)           <NA>
-#> 47143 Both males and females 12 YEARS - 150 YEARS            LDL-cholesterol (mg/dL)           <NA>
-#> 47149 Both males and females 12 YEARS - 150 YEARS            LDL-cholesterol (mg/dL)           <NA>
-#> 47155 Both males and females 12 YEARS - 150 YEARS            LDL-cholesterol (mg/dL)           <NA>
-#> 47161 Both males and females 12 YEARS - 150 YEARS            LDL-cholesterol (mg/dL)           <NA>
-#> 47167 Both males and females 12 YEARS - 150 YEARS            LDL-cholesterol (mg/dL)           <NA>
-#> 47173 Both males and females 12 YEARS - 150 YEARS LDL-Cholesterol Friedewald (mg/dL)           <NA>
-#>                            ProcessedText Tags      VariableID OntologyMapped
-#> 27717            LDL-cholesterol (mg/dL) <NA>  LBDLDL-L13AM_B            Yes
-#> 27723            LDL-cholesterol (mg/dL) <NA>  LBDLDL-L13AM_C            Yes
-#> 29115            LDL-cholesterol (mg/dL) <NA>  LBDLDL-LAB13AM            Yes
-#> 40307                               <NA> <NA>            <NA>           <NA>
-#> 47135            LDL-cholesterol (mg/dL) <NA> LBDLDL-TRIGLY_D            Yes
-#> 47143            LDL-cholesterol (mg/dL) <NA> LBDLDL-TRIGLY_E            Yes
-#> 47149            LDL-cholesterol (mg/dL) <NA> LBDLDL-TRIGLY_F            Yes
-#> 47155            LDL-cholesterol (mg/dL) <NA> LBDLDL-TRIGLY_G            Yes
-#> 47161            LDL-cholesterol (mg/dL) <NA> LBDLDL-TRIGLY_H            Yes
-#> 47167            LDL-cholesterol (mg/dL) <NA> LBDLDL-TRIGLY_I            Yes
-#> 47173 LDL-Cholesterol Friedewald (mg/dL) <NA> LBDLDL-TRIGLY_J             No
-```
 
 # Extracting table data
 
@@ -2881,3 +2950,957 @@ xyplot(BMXWT ~  RIDAGEYR | RIAGENDR, dcombined,
 
 
 ```
+
+# Miscellaneous oddities
+
+There is a mismatch for tables with base name `SSDFS` (there may be
+others as well).
+
+``` r
+std_tables[startsWith(std_tables, "SSDFS")]
+#> [1] "SSDFS_A" "SSDFS_G"
+subset(tableDesc, startsWith(TableName, "SSDFS"))[1:5]
+#>                                                    Description TableName BeginYear EndYear
+#> 56 Autoantibodies - Anti-DFS70 Autoantibody Analyses (Surplus)   SSDFS_G      2011    2012
+#>     DataGroup
+#> 56 Laboratory
+```
+
+The `SSDFS_A` table does exist:
+
+``` r
+str(nhanes('SSDFS_A', translated = TRUE))
+#> 'data.frame':    148 obs. of  5 variables:
+#>  $ SEQN    : int  255 341 1227 1693 1825 2473 2484 3018 3098 3715 ...
+#>  $ WTANA6YR: num  7706 55179 102257 36033 8923 ...
+#>  $ SSDFSS  : num  1 1 1 1 1 1 1 1 1 1 ...
+#>  $ SSDFSE  : num  3.82 35.31 53.08 47.19 121.8 ...
+#>  $ SSDFSR  : num  0 1 1 1 1 0 1 1 1 0 ...
+```
+
+However, even though `SSDFS_G` is a legitimate table, there is no
+<https://wwwn.cdc.gov/Nchs/Nhanes/2011-2012/SSDFS_A.htm>, and the
+corresponding codebook naturally has no useful information. Where did
+the `SSDFS_A` table come from?
+
+What is the difference between `includelabels = TRUE` and `FALSE`?
+Neither version seems to include the SAS labels
+
+``` r
+nhanes('DEMO_G', includelabels = FALSE) |> attributes() |> str()
+#> List of 3
+#>  $ names    : chr [1:48] "SEQN" "SDDSRVYR" "RIDSTATR" "RIAGENDR" ...
+#>  $ class    : chr "data.frame"
+#>  $ row.names: int [1:9756] 1 2 3 4 5 6 7 8 9 10 ...
+nhanes('DEMO_G', includelabels = TRUE) |> attributes() |> str()
+#> List of 3
+#>  $ names    : chr [1:48] "SEQN" "SDDSRVYR" "RIDSTATR" "RIAGENDR" ...
+#>  $ class    : chr "data.frame"
+#>  $ row.names: int [1:9756] 1 2 3 4 5 6 7 8 9 10 ...
+```
+
+Consider tables whose description contains “cholesterol”.
+
+``` r
+subset(tableSummary, grepl("cholesterol", Description, ignore.case = TRUE)) |> kable()
+```
+
+<table>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+</th>
+
+<th style="text-align:left;">
+
+TableBase
+
+</th>
+
+<th style="text-align:left;">
+
+Description
+
+</th>
+
+<th style="text-align:left;">
+
+DataGroup
+
+</th>
+
+<th style="text-align:right;">
+
+Freq
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+567994
+
+</td>
+
+<td style="text-align:left;">
+
+HDL
+
+</td>
+
+<td style="text-align:left;">
+
+Cholesterol - HDL
+
+</td>
+
+<td style="text-align:left;">
+
+Laboratory
+
+</td>
+
+<td style="text-align:right;">
+
+5
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+568420
+
+</td>
+
+<td style="text-align:left;">
+
+HDL
+
+</td>
+
+<td style="text-align:left;">
+
+Cholesterol - High - Density Lipoprotein (HDL)
+
+</td>
+
+<td style="text-align:left;">
+
+Laboratory
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+568846
+
+</td>
+
+<td style="text-align:left;">
+
+HDL
+
+</td>
+
+<td style="text-align:left;">
+
+Cholesterol - High-Density Lipoprotein (HDL)
+
+</td>
+
+<td style="text-align:left;">
+
+Laboratory
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+569329
+
+</td>
+
+<td style="text-align:left;">
+
+L13AM
+
+</td>
+
+<td style="text-align:left;">
+
+Cholesterol - LDL & Triglycerides
+
+</td>
+
+<td style="text-align:left;">
+
+Laboratory
+
+</td>
+
+<td style="text-align:right;">
+
+2
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+569377
+
+</td>
+
+<td style="text-align:left;">
+
+LAB13AM
+
+</td>
+
+<td style="text-align:left;">
+
+Cholesterol - LDL & Triglycerides
+
+</td>
+
+<td style="text-align:left;">
+
+Laboratory
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+569518
+
+</td>
+
+<td style="text-align:left;">
+
+TRIGLY
+
+</td>
+
+<td style="text-align:left;">
+
+Cholesterol - LDL & Triglycerides
+
+</td>
+
+<td style="text-align:left;">
+
+Laboratory
+
+</td>
+
+<td style="text-align:right;">
+
+4
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+569944
+
+</td>
+
+<td style="text-align:left;">
+
+TRIGLY
+
+</td>
+
+<td style="text-align:left;">
+
+Cholesterol - LDL, Triglyceride & Apoliprotein (ApoB)
+
+</td>
+
+<td style="text-align:left;">
+
+Laboratory
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+570370
+
+</td>
+
+<td style="text-align:left;">
+
+TRIGLY
+
+</td>
+
+<td style="text-align:left;">
+
+Cholesterol - Low - Density Lipoprotein (LDL) & Triglycerides
+
+</td>
+
+<td style="text-align:left;">
+
+Laboratory
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+570796
+
+</td>
+
+<td style="text-align:left;">
+
+TRIGLY
+
+</td>
+
+<td style="text-align:left;">
+
+Cholesterol - Low-Density Lipoproteins (LDL) & Triglycerides
+
+</td>
+
+<td style="text-align:left;">
+
+Laboratory
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+571215
+
+</td>
+
+<td style="text-align:left;">
+
+TCHOL
+
+</td>
+
+<td style="text-align:left;">
+
+Cholesterol - Total
+
+</td>
+
+<td style="text-align:left;">
+
+Laboratory
+
+</td>
+
+<td style="text-align:right;">
+
+7
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+571457
+
+</td>
+
+<td style="text-align:left;">
+
+L13
+
+</td>
+
+<td style="text-align:left;">
+
+Cholesterol - Total & HDL
+
+</td>
+
+<td style="text-align:left;">
+
+Laboratory
+
+</td>
+
+<td style="text-align:right;">
+
+2
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+571506
+
+</td>
+
+<td style="text-align:left;">
+
+LAB13
+
+</td>
+
+<td style="text-align:left;">
+
+Cholesterol - Total & HDL
+
+</td>
+
+<td style="text-align:left;">
+
+Laboratory
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+571884
+
+</td>
+
+<td style="text-align:left;">
+
+L13\_2
+
+</td>
+
+<td style="text-align:left;">
+
+Cholesterol - Total, HDL, LDL & Triglycerides, Second Exam
+
+</td>
+
+<td style="text-align:left;">
+
+Laboratory
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+739994
+
+</td>
+
+<td style="text-align:left;">
+
+BPQ
+
+</td>
+
+<td style="text-align:left;">
+
+Blood Pressure & Cholesterol
+
+</td>
+
+<td style="text-align:left;">
+
+Questionnaire
+
+</td>
+
+<td style="text-align:right;">
+
+10
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+Clearly, similar data is included in tables with different names, so our
+strategy of merging by table name may be fundamentally flawed. It may be
+more useful to decide on variable names of interest, and obtain all data
+for those variables regardless of which table they are in.
+
+``` r
+subset(tableDesc, TableBase == "TRIGLY")[1:4]
+#>                                                       Description TableName BeginYear EndYear
+#> 104                             Cholesterol - LDL & Triglycerides  TRIGLY_E      2007    2008
+#> 105                             Cholesterol - LDL & Triglycerides  TRIGLY_G      2011    2012
+#> 106 Cholesterol - Low - Density Lipoprotein (LDL) & Triglycerides  TRIGLY_I      2015    2016
+#> 803                             Cholesterol - LDL & Triglycerides  TRIGLY_F      2009    2010
+#> 804                             Cholesterol - LDL & Triglycerides  TRIGLY_H      2013    2014
+#> 805         Cholesterol - LDL, Triglyceride & Apoliprotein (ApoB)  TRIGLY_D      2005    2006
+#> 806  Cholesterol - Low-Density Lipoproteins (LDL) & Triglycerides  TRIGLY_J      2017    2018
+sapply(nhanesCodebook("TRIGLY_E"), "[[", "SAS Label:")
+#>                                  SEQN                              WTSAF2YR 
+#>          "Respondent sequence number" "Fasting Subsample 2 Year MEC Weight" 
+#>                                 LBXTR                               LBDTRSI 
+#>                "Triglyceride (mg/dL)"               "Triglyceride (mmol/L)" 
+#>                                LBDLDL                              LBDLDLSI 
+#>             "LDL-cholesterol (mg/dL)"            "LDL-cholesterol (mmol/L)"
+```
+
+So let’s search for the `LBDLDL` variable in all tables.
+
+``` r
+varDesc <- nhanesA:::.nhanesQuery("select * from Metadata.QuestionnaireVariables")
+subset(varDesc, Variable == "LBDLDL")[c(1, 2, 3)] |> kable()
+```
+
+<table>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+</th>
+
+<th style="text-align:left;">
+
+Variable
+
+</th>
+
+<th style="text-align:left;">
+
+TableName
+
+</th>
+
+<th style="text-align:left;">
+
+Description
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+27717
+
+</td>
+
+<td style="text-align:left;">
+
+LBDLDL
+
+</td>
+
+<td style="text-align:left;">
+
+L13AM\_B
+
+</td>
+
+<td style="text-align:left;">
+
+LDL-cholesterol (mg/dL)
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+27723
+
+</td>
+
+<td style="text-align:left;">
+
+LBDLDL
+
+</td>
+
+<td style="text-align:left;">
+
+L13AM\_C
+
+</td>
+
+<td style="text-align:left;">
+
+LDL-cholesterol (mg/dL)
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+29115
+
+</td>
+
+<td style="text-align:left;">
+
+LBDLDL
+
+</td>
+
+<td style="text-align:left;">
+
+LAB13AM
+
+</td>
+
+<td style="text-align:left;">
+
+LDL-cholesterol (mg/dL)
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+40307
+
+</td>
+
+<td style="text-align:left;">
+
+LBDLDL
+
+</td>
+
+<td style="text-align:left;">
+
+P\_TRIGLY
+
+</td>
+
+<td style="text-align:left;">
+
+NA
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+47135
+
+</td>
+
+<td style="text-align:left;">
+
+LBDLDL
+
+</td>
+
+<td style="text-align:left;">
+
+TRIGLY\_D
+
+</td>
+
+<td style="text-align:left;">
+
+LDL-cholesterol (mg/dL)
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+47143
+
+</td>
+
+<td style="text-align:left;">
+
+LBDLDL
+
+</td>
+
+<td style="text-align:left;">
+
+TRIGLY\_E
+
+</td>
+
+<td style="text-align:left;">
+
+LDL-cholesterol (mg/dL)
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+47149
+
+</td>
+
+<td style="text-align:left;">
+
+LBDLDL
+
+</td>
+
+<td style="text-align:left;">
+
+TRIGLY\_F
+
+</td>
+
+<td style="text-align:left;">
+
+LDL-cholesterol (mg/dL)
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+47155
+
+</td>
+
+<td style="text-align:left;">
+
+LBDLDL
+
+</td>
+
+<td style="text-align:left;">
+
+TRIGLY\_G
+
+</td>
+
+<td style="text-align:left;">
+
+LDL-cholesterol (mg/dL)
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+47161
+
+</td>
+
+<td style="text-align:left;">
+
+LBDLDL
+
+</td>
+
+<td style="text-align:left;">
+
+TRIGLY\_H
+
+</td>
+
+<td style="text-align:left;">
+
+LDL-cholesterol (mg/dL)
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+47167
+
+</td>
+
+<td style="text-align:left;">
+
+LBDLDL
+
+</td>
+
+<td style="text-align:left;">
+
+TRIGLY\_I
+
+</td>
+
+<td style="text-align:left;">
+
+LDL-cholesterol (mg/dL)
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+47173
+
+</td>
+
+<td style="text-align:left;">
+
+LBDLDL
+
+</td>
+
+<td style="text-align:left;">
+
+TRIGLY\_J
+
+</td>
+
+<td style="text-align:left;">
+
+LDL-Cholesterol Friedewald equation (mg/dL). LBDLDL = (LBXTC-(LBDHDD +
+LBXTR/5) round to 0 decimal places) for LBXTR less than 400 mg/dL and
+missing for LBXTR greater than 400 mg/dL. LBDHDD from public release
+file HDL\_J
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>

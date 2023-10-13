@@ -92,65 +92,8 @@ descriptions as follows.
 tableSummary <- 
   xtabs(~ TableBase + Description + DataGroup, tableDesc) |> 
   as.data.frame.table() |> subset(Freq > 0)
-datatable(tableSummary)
+head(tableSummary, 20) |> kable() # use datatable() for html_output
 ```
-
-
-
-# Miscellaneous oddities
-
-There is a mismatch for tables with base name `SSDFS` (there may be others as 
-well).
-
-```{r}
-std_tables[startsWith(std_tables, "SSDFS")]
-subset(tableDesc, startsWith(TableName, "SSDFS"))[1:5]
-```
-
-The `SSDFS_A` table does exist:
-```{r}
-str(nhanes('SSDFS_A', translated = TRUE))
-```
-However, even though `SSDFS_G` is a legitimate table, there is no <https://wwwn.cdc.gov/Nchs/Nhanes/2011-2012/SSDFS_A.htm>, and 
-the corresponding codebook naturally has no useful information. Where did 
-the `SSDFS_A` table come from?
-
-
-What is the difference between `includelabels = TRUE` and `FALSE`? Neither
-version seems to include the SAS labels
-
-
-```{r}
-nhanes('DEMO_G', includelabels = FALSE) |> attributes() |> str()
-nhanes('DEMO_G', includelabels = TRUE) |> attributes() |> str()
-```
-
-
-
-Consider tables whose description contains "cholesterol". 
-
-```{r}
-subset(tableSummary, grepl("cholesterol", Description, ignore.case = TRUE)) |> kable()
-```
-
-Clearly, similar data  is included in tables with different names, so our 
-strategy of merging by table name may be fundamentally flawed. It may be more 
-useful to decide on variable names of interest, and obtain all data for those 
-variables regardless of which table they are in.
-
-
-```{r}
-subset(tableDesc, TableBase == "TRIGLY")[1:4]
-sapply(nhanesCodebook("TRIGLY_E"), "[[", "SAS Label:")
-```
-
-So let's search for the `LBDLDL` variable in all tables.
-
-```{r}
-varDesc <- nhanesA:::.nhanesQuery("select * from Metadata.QuestionnaireVariables")
-subset(varDesc, Variable == "LBDLDL")[c(1, 2, 3)] |> kable()
-```
-
 
 
 
@@ -269,4 +212,63 @@ xyplot(BMXWT ~  RIDAGEYR | RIAGENDR, dcombined,
 
 
 ```
+
+
+
+
+
+# Miscellaneous oddities
+
+There is a mismatch for tables with base name `SSDFS` (there may be others as 
+well).
+
+```{r}
+std_tables[startsWith(std_tables, "SSDFS")]
+subset(tableDesc, startsWith(TableName, "SSDFS"))[1:5]
+```
+
+The `SSDFS_A` table does exist:
+```{r}
+str(nhanes('SSDFS_A', translated = TRUE))
+```
+However, even though `SSDFS_G` is a legitimate table, there is no <https://wwwn.cdc.gov/Nchs/Nhanes/2011-2012/SSDFS_A.htm>, and 
+the corresponding codebook naturally has no useful information. Where did 
+the `SSDFS_A` table come from?
+
+
+What is the difference between `includelabels = TRUE` and `FALSE`? Neither
+version seems to include the SAS labels
+
+
+```{r}
+nhanes('DEMO_G', includelabels = FALSE) |> attributes() |> str()
+nhanes('DEMO_G', includelabels = TRUE) |> attributes() |> str()
+```
+
+
+
+Consider tables whose description contains "cholesterol". 
+
+```{r}
+subset(tableSummary, grepl("cholesterol", Description, ignore.case = TRUE)) |> kable()
+```
+
+Clearly, similar data  is included in tables with different names, so our 
+strategy of merging by table name may be fundamentally flawed. It may be more 
+useful to decide on variable names of interest, and obtain all data for those 
+variables regardless of which table they are in.
+
+
+```{r}
+subset(tableDesc, TableBase == "TRIGLY")[1:4]
+sapply(nhanesCodebook("TRIGLY_E"), "[[", "SAS Label:")
+```
+
+So let's search for the `LBDLDL` variable in all tables.
+
+```{r}
+varDesc <- nhanesA:::.nhanesQuery("select * from Metadata.QuestionnaireVariables")
+subset(varDesc, Variable == "LBDLDL")[c(1, 2, 3)] |> kable()
+```
+
 
