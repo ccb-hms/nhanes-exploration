@@ -1,0 +1,191 @@
+---
+title: "Initial Data Exploration of the `nhanesA` Package"
+author: "Deepayan Sarkar"
+output: github_document
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE,
+                      comment = "#>",
+                      fig.path = "man/figures/",
+                      out.width = "100%",
+                      cache = TRUE,
+                      cache.path = "~/knitr-cache/readme/")
+library(lattice)
+source("R/utilities.R")
+```
+
+
+```{r}
+
+## list all available tables (phonto::nhanesQuery() is a public wrapper)
+
+library(nhanesA)
+alltables <- nhanesA:::.nhanesQuery("select * from information_schema.tables;")
+
+subset(alltables, TABLE_SCHEMA == "Translated")$TABLE_NAME |> sort() |> head()
+## subset(alltables, TABLE_SCHEMA == "Raw")$TABLE_NAME |> sort() |> head() # same
+
+## All 'translated' table names
+
+trtables <- subset(alltables, TABLE_SCHEMA == "Translated")$TABLE_NAME |> sort()
+
+str(trtables)
+
+
+## skip the ones starting with P_
+std_tables <- trtables[!grepl("^P_", trtables)]
+
+## Now make sure we have at most one underscore in each name, and split on it
+
+std_tables_split <- strsplit(std_tables, "_", fixed = TRUE)
+sapply(std_tables_split, length) |> table() # some 3
+
+std_tables[ which(sapply(std_tables_split, length) == 3)]
+
+## OK, that makes things a little tricky. Let's see what happens with the last part
+
+sapply(std_tables_split, tail, 1) |> table() |> sort()
+
+## So we should only care about LETTERS[1:10]
+
+sapply(std_tables_split, tail, 1) |> table() |> sort() |> tail(10)
+
+## Valid table names are then everything without the _[A-J] part
+
+valid_table_names <- drop_table_suffix(std_tables) |> table()
+valid_table_names  
+
+## some appear only once, some 2, 3 --- why? For example:
+
+std_tables[startsWith(std_tables, "AQQ")]
+nhanesCodebook('AQQ_E') |> str()
+
+## So these are probably newer questionnaires.
+
+
+## Alternative way to get tables with useful additional information. 
+## For some reason, these do not include the P_* tables. We will work with 
+## this from now on
+
+tableDesc <- nhanesA:::.nhanesQuery("select * from Metadata.QuestionnaireDescriptions")
+str(tableDesc)
+
+tableDesc <- within(tableDesc, TableBase <- drop_table_suffix(TableName))
+
+## Summary of tables with description
+
+tableSummary <- 
+  xtabs(~ TableBase + Description + DataGroup, tableDesc) |> 
+  as.data.frame.table() |> subset(Freq > 0)
+
+## weird one: 
+
+subset(tableDesc, startsWith(TableName, "SSDFS"))
+## But there exists
+str(nhanes('SSDFS_A', translated = TRUE))
+## But there is no <https://wwwn.cdc.gov/Nchs/Nhanes/2011-2012/SSDFS_A.htm> !!
+## 
+nhanesCodebook('SSDFS_A') |> str()
+## 
+nhanesCodebook('SSDFS_G') |> str()
+
+## OK, next we may be interested in knowing whether the codebook has 
+## changed for a particular table
+
+## FIXME: this just matches prefix, but maybe we should check only _[A-J] suffix 
+demotables <- get_table_names('DEMO', db = tableDesc)
+
+cb.demo <- 
+  lapply(demotables,
+         function(x) names(nhanesCodebook(x)))
+str(cb.demo)
+
+## So these keep changing, but we may want to get all common variables assuming 
+## their interpretations have not changed
+
+demovars <- get_common_vars(demotables)
+str(demovars)
+
+## Let's get a common data frame that combines all tables, keeping 
+## the common variables only
+demo.all <- merge_tables(demotables)
+
+library(lattice)
+
+qqmath(~ RIDAGEYR | SDDSRVYR, demo.all, plot.points = FALSE, distribution = qexp,
+       f.value = ppoints(500), pch = ".", cex = 2, as.table = TRUE, grid = TRUE)
+
+xtabs(~ SDDSRVYR + RIAGENDR + RIDRETH1, demo.all) |> 
+  dotplot(auto.key = list(columns = 2), type = "o", 
+          par.settings = simpleTheme(pch = 16))
+
+## Which tables / questionnaires have been recorded in most (at least 7) 
+## cycles? (DEMO does not appear here because it has two different 
+## descriptions 10 = 7 + 3, so we should really use 'TableBase' instead
+## of 'Description')
+
+xtabs(~ Description, tableDesc) |> sort(decreasing = TRUE) |> 
+  as.data.frame.table() |> subset(Freq > 7)
+
+## combine tables, say DEMO, WHQ (Weight history), 
+## BPX (Blood pressure) and BMX (Body measurements)
+
+sapply(nhanesCodebook('WHQ'), "[[", "SAS Label:")
+sapply(nhanesCodebook('BMX'), "[[", "SAS Label:")
+sapply(nhanesCodebook('BPX'), "[[", "SAS Label:")
+
+wtables <- c("DEMO", "WHQ", "BMX", "BPX")
+
+tablist <- lapply(wtables, function(x) merge_tables(get_table_names(x, tableDesc)))
+names(tablist) <- wtables
+
+sapply(tablist, nrow) # WHQ has fewer
+
+## Merge by first subsetting to common SEQN values (in same order)
+
+common_id <- Reduce(intersect, lapply(tablist, "[[", "SEQN"))
+tablist_common <- lapply(tablist, function(d) d[match(common_id, d$SEQN), ])
+dcombined <- Reduce(merge, tablist)
+
+## OK, so we are ready for some anaylsis. But variable names are still 
+## incomprehensible without referring to codebook
+
+variableDesc <- nhanesA:::.nhanesQuery("select * from Metadata.QuestionnaireVariables")
+## This one includes the P_* tables, which we will exclude (among other reasons, 
+## they have not been processed correctly), e.g.,
+subset(variableDesc, TableName |> startsWith("P_")) |> head()
+## despite https://wwwn.cdc.gov/Nchs/Nhanes/2017-2018/P_ACQ.htm#ACD011A having the info
+
+## so
+variableDesc <- subset(variableDesc, !startsWith(TableName, "P_"))
+str(variableDesc)
+
+uvarDesc <- subset(variableDesc, Variable %in% names(dcombined), select = c(Variable, SasLabel)) |> unique()
+
+## crude search (or use datatable)
+subset(uvarDesc, agrepl("weight", SasLabel, ignore.case = TRUE, fixed = TRUE))
+
+xyplot(I(WHD020 * 0.453592) ~ BMXWT, dcombined) # weird - special codes not mapped to NA
+
+nhanesCodebook("BMX")[["BMXWT"]][["BMXWT"]] # no issues - only missing
+subset(variableDesc, Variable == "WHD020")
+nhanesCodebook("WHQ")[["WHD020"]][["WHD020"]] # 77777 / 99999
+nhanesCodebook("WHQ_B")[["WHD020"]][["WHD020"]] # 7777 / 9999
+
+xyplot(I(WHD020 * 0.453592) ~ BMXWT | RIAGENDR, dcombined, subset = WHD020 < 1000, 
+       alpha = 0.5, abline = c(0, 1), smooth = "lm", type=c("p", "r"))
+
+xyplot(BMXWT ~  RIDAGEYR | RIAGENDR, dcombined,
+       alpha = 0.5, smooth = "lm", type=c("p", "smooth"), col.line = 1)
+
+
+
+
+## what is the difference between 
+
+nhanes('DEMO_G', includelabels = FALSE) |> attributes() |> str()
+nhanes('DEMO_G', includelabels = TRUE) |> attributes() |> str()
+
+```
+
