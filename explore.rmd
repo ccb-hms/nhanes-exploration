@@ -2,136 +2,221 @@
 title: "Initial Data Exploration of the `nhanesA` Package"
 author: "Deepayan Sarkar"
 output: github_document
+always_allow_html: true
 ---
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(collapse = TRUE,
                       comment = "#>",
-                      fig.path = "man/figures/",
+                      fig.path = "figures/",
                       out.width = "100%",
+                      fig.width = 12, fig.height = 5,
+                      dev = "svglite", dev.args = list(pointsize = 12),
                       cache = TRUE,
-                      cache.path = "~/knitr-cache/readme/")
+                      cache.path = "./knitr-cache/explore/")
+options(width = 100)
 library(lattice)
+library(kableExtra)
+library(DT)
 source("R/utilities.R")
 ```
 
 
+# Summary of available tables
+
+Data in the `nhanesA` package are stored in a SQL Server database. The 
+database can be queried using the (unexported) `.nhanesQuery()` function
+or its public wrapper `phonto::nhanesQuery()`.
+
 ```{r}
-
-## list all available tables (phonto::nhanesQuery() is a public wrapper)
-
 library(nhanesA)
 alltables <- nhanesA:::.nhanesQuery("select * from information_schema.tables;")
+dim(alltables)
+head(alltables) |> kable() |> kable_minimal()
+```
 
-subset(alltables, TABLE_SCHEMA == "Translated")$TABLE_NAME |> sort() |> head()
-## subset(alltables, TABLE_SCHEMA == "Raw")$TABLE_NAME |> sort() |> head() # same
+There are two versions of each table, the raw table with original codes, and 
+translated versions with codes translated into human-readable values. In 
+addition, there are some metadata and ontology tables.
 
-## All 'translated' table names
+```{r}
+subset(alltables, !(TABLE_SCHEMA %in% c("Raw", "Translated"))) |> 
+  kable() |> kable_minimal()
+```
 
+The translated table names can be extracted as follows.
+
+```{r}
 trtables <- subset(alltables, TABLE_SCHEMA == "Translated")$TABLE_NAME |> sort()
-
 str(trtables)
+```
 
+Many of these start with `P_`; we will skip them (they represent releases made 
+during the pandemic, and are inconsistent with previous releases). The remaining 
+tables often have suffixes (separated by underscore) that indicate cycle, but 
+may also have underscores in the main table name.
 
-## skip the ones starting with P_
+```{r}
 std_tables <- trtables[!grepl("^P_", trtables)]
-
-## Now make sure we have at most one underscore in each name, and split on it
-
 std_tables_split <- strsplit(std_tables, "_", fixed = TRUE)
-sapply(std_tables_split, length) |> table() # some 3
+std_tables[ sapply(std_tables_split, length) == 3 ]
+```
 
-std_tables[ which(sapply(std_tables_split, length) == 3)]
+We will assume that suffixes `_A`, `_B`, ..., `_J` indicate cycles. Then 
+valid table names are
+```{r}
+drop_table_suffix(std_tables) |> table() |> sort(decreasing = TRUE) |> head(100)
+```
 
-## OK, that makes things a little tricky. Let's see what happens with the last part
-
-sapply(std_tables_split, tail, 1) |> table() |> sort()
-
-## So we should only care about LETTERS[1:10]
-
-sapply(std_tables_split, tail, 1) |> table() |> sort() |> tail(10)
-
-## Valid table names are then everything without the _[A-J] part
-
-valid_table_names <- drop_table_suffix(std_tables) |> table()
-valid_table_names  
-
-## some appear only once, some 2, 3 --- why? For example:
-
+Some appear only once or twice. These are probably introduced later, and were not 
+necessarily continued; for example, the following two tables relate to air quality.
+```{r}
 std_tables[startsWith(std_tables, "AQQ")]
-nhanesCodebook('AQQ_E') |> str()
+nhanesCodebook('AQQ_E') |> lapply("[[", "SAS Label:") |> str()
+```
 
-## So these are probably newer questionnaires.
+# Using metadata tables to obtain table information
 
+Alternatively, we can get information about available tables from the metadata 
+tables, although for some reason, these do not include the `P_*` tables. 
 
-## Alternative way to get tables with useful additional information. 
-## For some reason, these do not include the P_* tables. We will work with 
-## this from now on
-
+```{r}
 tableDesc <- nhanesA:::.nhanesQuery("select * from Metadata.QuestionnaireDescriptions")
-str(tableDesc)
-
 tableDesc <- within(tableDesc, TableBase <- drop_table_suffix(TableName))
+str(tableDesc)
+```
 
-## Summary of tables with description
-
+We will work with  this from now on. We can summarize this table by table / questionnaire 
+descriptions as follows.
+```{r}
 tableSummary <- 
   xtabs(~ TableBase + Description + DataGroup, tableDesc) |> 
   as.data.frame.table() |> subset(Freq > 0)
+datatable(tableSummary)
+```
 
-## weird one: 
 
-subset(tableDesc, startsWith(TableName, "SSDFS"))
-## But there exists
+
+# Miscellaneous oddities
+
+There is a mismatch for tables with base name `SSDFS` (there may be others as 
+well).
+
+```{r}
+std_tables[startsWith(std_tables, "SSDFS")]
+subset(tableDesc, startsWith(TableName, "SSDFS"))[1:5]
+```
+
+The `SSDFS_A` table does exist:
+```{r}
 str(nhanes('SSDFS_A', translated = TRUE))
-## But there is no <https://wwwn.cdc.gov/Nchs/Nhanes/2011-2012/SSDFS_A.htm> !!
-## 
-nhanesCodebook('SSDFS_A') |> str()
-## 
-nhanesCodebook('SSDFS_G') |> str()
+```
+However, even though `SSDFS_G` is a legitimate table, there is no <https://wwwn.cdc.gov/Nchs/Nhanes/2011-2012/SSDFS_A.htm>, and 
+the corresponding codebook naturally has no useful information. Where did 
+the `SSDFS_A` table come from?
 
-## OK, next we may be interested in knowing whether the codebook has 
-## changed for a particular table
 
-## FIXME: this just matches prefix, but maybe we should check only _[A-J] suffix 
+What is the difference between `includelabels = TRUE` and `FALSE`? Neither
+version seems to include the SAS labels
+
+
+```{r}
+nhanes('DEMO_G', includelabels = FALSE) |> attributes() |> str()
+nhanes('DEMO_G', includelabels = TRUE) |> attributes() |> str()
+```
+
+
+
+Consider tables whose description contains "cholesterol". 
+
+```{r}
+subset(tableSummary, grepl("cholesterol", Description, ignore.case = TRUE)) |> kable()
+```
+
+Clearly, similar data  is included in tables with different names, so our 
+strategy of merging by table name may be fundamentally flawed. It may be more 
+useful to decide on variable names of interest, and obtain all data for those 
+variables regardless of which table they are in.
+
+
+```{r}
+subset(tableDesc, TableBase == "TRIGLY")[1:4]
+sapply(nhanesCodebook("TRIGLY_E"), "[[", "SAS Label:")
+```
+
+So let's search for the `LBDLDL` variable in all tables.
+
+```{r}
+varDesc <- nhanesA:::.nhanesQuery("select * from Metadata.QuestionnaireVariables")
+subset(varDesc, Variable == "LBDLDL")[c(1, 2, 3)] |> kable()
+```
+
+
+
+
+# Extracting table data
+
+Before trying to analyse any data, we may be interested in knowing whether the 
+codebook has changed for a particular table across different cycles. Let's try 
+this with the demographic tables.
+
+```{r}
 demotables <- get_table_names('DEMO', db = tableDesc)
-
-cb.demo <- 
-  lapply(demotables,
-         function(x) names(nhanesCodebook(x)))
+cb.demo <- lapply(demotables, function(x) names(nhanesCodebook(x)))
 str(cb.demo)
+```
 
-## So these keep changing, but we may want to get all common variables assuming 
-## their interpretations have not changed
+So the number of recorded variables keep changing. To combine across years, 
+we will get all common variables, assuming that their interpretations have 
+not changed over cycles.
 
+```{r}
 demovars <- get_common_vars(demotables)
 str(demovars)
+```
 
-## Let's get a common data frame that combines all tables, keeping 
-## the common variables only
+We can then merge all versions of a table by restricting to these common 
+variables.
+
+```{r}
 demo.all <- merge_tables(demotables)
+```
 
-library(lattice)
+Some elementary summaries of the demographic variables:
 
+```{r age_dist_yr}
 qqmath(~ RIDAGEYR | SDDSRVYR, demo.all, plot.points = FALSE, distribution = qexp,
        f.value = ppoints(500), pch = ".", cex = 2, as.table = TRUE, grid = TRUE)
+```
 
+```{r race_dist_yr}
 xtabs(~ SDDSRVYR + RIAGENDR + RIDRETH1, demo.all) |> 
   dotplot(auto.key = list(columns = 2), type = "o", 
           par.settings = simpleTheme(pch = 16))
+```
 
-## Which tables / questionnaires have been recorded in most (at least 7) 
-## cycles? (DEMO does not appear here because it has two different 
-## descriptions 10 = 7 + 3, so we should really use 'TableBase' instead
-## of 'Description')
 
-xtabs(~ Description, tableDesc) |> sort(decreasing = TRUE) |> 
-  as.data.frame.table() |> subset(Freq > 7)
+# Combining tables for analysis
 
+Suppose we want to combine demographic data with data from one or more other 
+tables to perform some analysis. Let's start by looking at which tables have
+been populated in most (at least 8) cycles. The `DEMO` table will not appear in 
+this list because it has two slightly different descriptions (with frequencies 
+7 and 3).
+
+```{r}
+subset(tableSummary, Freq > 7) |> kable() |> kable_minimal()
+```
+
+Let's say we now want to combine the tables DEMO, TCHOL (Weight history), 
+BPX (Blood pressure) and BMX (Body measurements)
+
+
+```r
 ## combine tables, say DEMO, WHQ (Weight history), 
 ## BPX (Blood pressure) and BMX (Body measurements)
 
-sapply(nhanesCodebook('WHQ'), "[[", "SAS Label:")
+sapply(nhanesCodebook('TCHOL_D'), "[[", "SAS Label:")
 sapply(nhanesCodebook('BMX'), "[[", "SAS Label:")
 sapply(nhanesCodebook('BPX'), "[[", "SAS Label:")
 
@@ -182,10 +267,6 @@ xyplot(BMXWT ~  RIDAGEYR | RIAGENDR, dcombined,
 
 
 
-## what is the difference between 
-
-nhanes('DEMO_G', includelabels = FALSE) |> attributes() |> str()
-nhanes('DEMO_G', includelabels = TRUE) |> attributes() |> str()
 
 ```
 
