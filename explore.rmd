@@ -16,8 +16,8 @@ knitr::opts_chunk$set(collapse = TRUE,
                       cache.path = "./knitr-cache/explore/")
 options(width = 100)
 library(lattice)
-library(kableExtra)
-library(DT)
+library(kableExtra) # for kable()
+## library(DT)
 source("R/utilities.R")
 ```
 
@@ -32,7 +32,7 @@ or its public wrapper `phonto::nhanesQuery()`.
 library(nhanesA)
 alltables <- nhanesA:::.nhanesQuery("select * from information_schema.tables;")
 dim(alltables)
-head(alltables) |> kable() |> kable_minimal()
+head(alltables) |> kable()
 ```
 
 There are two versions of each table, the raw table with original codes, and 
@@ -40,8 +40,7 @@ translated versions with codes translated into human-readable values. In
 addition, there are some metadata and ontology tables.
 
 ```{r}
-subset(alltables, !(TABLE_SCHEMA %in% c("Raw", "Translated"))) |> 
-  kable() |> kable_minimal()
+subset(alltables, !(TABLE_SCHEMA %in% c("Raw", "Translated"))) |> kable()
 ```
 
 The translated table names can be extracted as follows.
@@ -148,74 +147,134 @@ this list because it has two slightly different descriptions (with frequencies
 7 and 3).
 
 ```{r}
-subset(tableSummary, Freq > 7) |> kable() |> kable_minimal()
+subset(tableSummary, Freq > 7) |> kable()
 ```
 
-Let's say we now want to combine the tables DEMO, TCHOL (Weight history), 
-BPX (Blood pressure) and BMX (Body measurements)
+Let's say we now want to combine the tables DEMO, WHQ (Weight history), BPX (Blood pressure), 
+and BMX (Body measurements), which have the following variables.
 
-
-```r
-## combine tables, say DEMO, WHQ (Weight history), 
-## BPX (Blood pressure) and BMX (Body measurements)
-
-sapply(nhanesCodebook('TCHOL_D'), "[[", "SAS Label:")
+```{r}
+sapply(nhanesCodebook('WHQ'), "[[", "SAS Label:")
 sapply(nhanesCodebook('BMX'), "[[", "SAS Label:")
 sapply(nhanesCodebook('BPX'), "[[", "SAS Label:")
+```
 
+We can combine the tables individually as above.
+
+```{r}
 wtables <- c("DEMO", "WHQ", "BMX", "BPX")
-
 tablist <- lapply(wtables, function(x) merge_tables(get_table_names(x, tableDesc)))
 names(tablist) <- wtables
+sapply(tablist, nrow)
+```
 
-sapply(tablist, nrow) # WHQ has fewer
+We can now easily merge them by first subsetting to common `SEQN` values (in 
+the same order).
 
-## Merge by first subsetting to common SEQN values (in same order)
 
+```{r}
 common_id <- Reduce(intersect, lapply(tablist, "[[", "SEQN"))
 tablist_common <- lapply(tablist, function(d) d[match(common_id, d$SEQN), ])
 dcombined <- Reduce(merge, tablist)
+```
 
-## OK, so we are ready for some anaylsis. But variable names are still 
-## incomprehensible without referring to codebook
+We are ready for some anaylsis. But variable names are still incomprehensible 
+without referring to codebook. We can get variable descriptions from one of
+the metadata tables.
 
+```{r}
 variableDesc <- nhanesA:::.nhanesQuery("select * from Metadata.QuestionnaireVariables")
-## This one includes the P_* tables, which we will exclude (among other reasons, 
-## they have not been processed correctly), e.g.,
+```
+
+This table does include the `P_*` tables, which we will exclude; because among 
+other reasons, they have not been processed correctly, e.g.,
+
+```{r}
 subset(variableDesc, TableName |> startsWith("P_")) |> head()
-## despite https://wwwn.cdc.gov/Nchs/Nhanes/2017-2018/P_ACQ.htm#ACD011A having the info
+```
 
-## so
+even though <https://wwwn.cdc.gov/Nchs/Nhanes/2017-2018/P_ACQ.htm> has the 
+relevant information. So, 
+
+```{r}
 variableDesc <- subset(variableDesc, !startsWith(TableName, "P_"))
-str(variableDesc)
-
 uvarDesc <- subset(variableDesc, Variable %in% names(dcombined), select = c(Variable, SasLabel)) |> unique()
+```
 
-## crude search (or use datatable)
-subset(uvarDesc, agrepl("weight", SasLabel, ignore.case = TRUE, fixed = TRUE))
+We can do a crude search over the SAS labels using `agrepl()`.
 
-xyplot(I(WHD020 * 0.453592) ~ BMXWT, dcombined) # weird - special codes not mapped to NA
+```{r}
+subset(uvarDesc, agrepl("weight", SasLabel, ignore.case = TRUE, fixed = TRUE)) |> kable()
+```
 
+Now that we have a merged dataset, we can use it for standard data analysis.
+Let's start by looking at how self-reported weight compares with actual 
+measured weight.
+
+```{r wt_comparison_1}
+xyplot(WHD020 ~ BMXWT, dcombined)
+```
+
+The reason for the weird values on the y-axis is that special codes for `WHD020`
+have not been translated. 
+```{r}
 nhanesCodebook("BMX")[["BMXWT"]][["BMXWT"]] # no issues - only missing
-subset(variableDesc, Variable == "WHD020")
+subset(variableDesc, Variable == "WHD020", select = c(1, 2, 5)) |> kable()
 nhanesCodebook("WHQ")[["WHD020"]][["WHD020"]] # 77777 / 99999
 nhanesCodebook("WHQ_B")[["WHD020"]][["WHD020"]] # 7777 / 9999
+```
 
+It is not clear that there is a good solution to this problem, but translating
+these to `NA`s would probably be better than doing nothing.
+
+After dropping unrealistically high weights, we get a more reasonable plot.
+
+```{r wt_comparison_2}
 xyplot(I(WHD020 * 0.453592) ~ BMXWT | RIAGENDR, dcombined, subset = WHD020 < 1000, 
-       alpha = 0.5, abline = c(0, 1), smooth = "lm", type=c("p", "r"))
+       alpha = 0.25, pch = ".", cex = 3, 
+       abline = c(0, 1), smooth = "lm", grid = TRUE, aspect = "iso")
+```
 
+The next plot explores whether average (measured) weight varies with age.
+
+```{r wt_by_age}
 xyplot(BMXWT ~  RIDAGEYR | RIAGENDR, dcombined,
-       alpha = 0.5, smooth = "lm", type=c("p", "smooth"), col.line = 1)
-
-
-
-
-
+       alpha = 0.25, pch = ".", cex = 3, smooth = "loess", 
+       grid = TRUE, col.line = 1)
 ```
 
 
+# Variables and tables they belong to
 
+Unfortunately, this scheme of merging tables is fundamentally flawedp for one important 
+reason: the same variable may not be recorded in the same table in all cycles.
+Consider tables whose description contains "cholesterol". 
 
+```{r}
+subset(tableSummary, grepl("cholesterol", Description, ignore.case = TRUE)) |> kable()
+```
+
+Clearly, similar data  is included in tables with different names. This becomes 
+more obvious when we use another metadata table to look up a particular variable
+of interest. Let's first look at the variables in one of the `TRIGLY` datasets 
+to pick one that could be of interest.
+
+```{r}
+subset(tableDesc, TableBase == "TRIGLY")[1:4]
+sapply(nhanesCodebook("TRIGLY_E"), "[[", "SAS Label:")
+```
+
+`LBDLDL` seems interesting, so let's search for the  variable in all tables.
+
+```{r}
+varDesc <- nhanesA:::.nhanesQuery("select * from Metadata.QuestionnaireVariables")
+subset(varDesc, Variable == "LBDLDL")[c(1, 2, 3)] |> kable()
+```
+
+Upshot: To combine different variables of interest in preparation for data 
+analysis, combining datasets is not the correct approach. Instead, we will 
+need to select specific variables of interest, and then collect them from 
+whichever table they happen to be available in.
 
 # Miscellaneous oddities
 
@@ -245,30 +304,5 @@ nhanes('DEMO_G', includelabels = FALSE) |> attributes() |> str()
 nhanes('DEMO_G', includelabels = TRUE) |> attributes() |> str()
 ```
 
-
-
-Consider tables whose description contains "cholesterol". 
-
-```{r}
-subset(tableSummary, grepl("cholesterol", Description, ignore.case = TRUE)) |> kable()
-```
-
-Clearly, similar data  is included in tables with different names, so our 
-strategy of merging by table name may be fundamentally flawed. It may be more 
-useful to decide on variable names of interest, and obtain all data for those 
-variables regardless of which table they are in.
-
-
-```{r}
-subset(tableDesc, TableBase == "TRIGLY")[1:4]
-sapply(nhanesCodebook("TRIGLY_E"), "[[", "SAS Label:")
-```
-
-So let's search for the `LBDLDL` variable in all tables.
-
-```{r}
-varDesc <- nhanesA:::.nhanesQuery("select * from Metadata.QuestionnaireVariables")
-subset(varDesc, Variable == "LBDLDL")[c(1, 2, 3)] |> kable()
-```
 
 

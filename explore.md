@@ -13,10 +13,10 @@ library(nhanesA)
 alltables <- nhanesA:::.nhanesQuery("select * from information_schema.tables;")
 dim(alltables)
 #> [1] 2965    4
-head(alltables) |> kable() |> kable_minimal()
+head(alltables) |> kable()
 ```
 
-<table class=" lightable-minimal" style='font-family: "Trebuchet MS", verdana, sans-serif; margin-left: auto; margin-right: auto;'>
+<table>
 
 <thead>
 
@@ -229,11 +229,10 @@ and translated versions with codes translated into human-readable
 values. In addition, there are some metadata and ontology tables.
 
 ``` r
-subset(alltables, !(TABLE_SCHEMA %in% c("Raw", "Translated"))) |> 
-  kable() |> kable_minimal()
+subset(alltables, !(TABLE_SCHEMA %in% c("Raw", "Translated"))) |> kable()
 ```
 
-<table class=" lightable-minimal" style='font-family: "Trebuchet MS", verdana, sans-serif; margin-left: auto; margin-right: auto;'>
+<table>
 
 <thead>
 
@@ -1552,10 +1551,10 @@ will not appear in this list because it has two slightly different
 descriptions (with frequencies 7 and 3).
 
 ``` r
-subset(tableSummary, Freq > 7) |> kable() |> kable_minimal()
+subset(tableSummary, Freq > 7) |> kable()
 ```
 
-<table class=" lightable-minimal" style='font-family: "Trebuchet MS", verdana, sans-serif; margin-left: auto; margin-right: auto;'>
+<table>
 
 <thead>
 
@@ -2891,115 +2890,1202 @@ Questionnaire
 
 </table>
 
-Let’s say we now want to combine the tables DEMO, TCHOL (Weight
-history), BPX (Blood pressure) and BMX (Body measurements)
+Let’s say we now want to combine the tables DEMO, WHQ (Weight history),
+BPX (Blood pressure), and BMX (Body measurements), which have the
+following variables.
 
 ``` r
-## combine tables, say DEMO, WHQ (Weight history), 
-## BPX (Blood pressure) and BMX (Body measurements)
-
-sapply(nhanesCodebook('TCHOL_D'), "[[", "SAS Label:")
+sapply(nhanesCodebook('WHQ'), "[[", "SAS Label:")
+#>                                       SEQN                                     WHD010 
+#>               "Respondent sequence number"    "Current self-reported height (inches)" 
+#>                                     WHD020                                     WHQ030 
+#>    "Current self-reported weight (pounds)"          "How do you consider your weight" 
+#>                                     WHD040                                     WHD050 
+#>          "Like to weigh more less or same"   "Self-reported weight-1 yr ago (pounds)" 
+#>                                     WHD060                                     WHQ070 
+#>                "Weight change intentional"        "Tried to lose weight in past year" 
+#>                                    WHD080A                                    WHD080B 
+#>             "Ate less food to lose weight"          "Lowered calories to lose weight" 
+#>                                    WHQ080C                                    WHD080D 
+#>              "Ate less fat to lose weight"                 "Exercised to lose weight" 
+#>                                    WHQ080E                                    WHD080F 
+#>             "Skipped meals to lose weight"         "Ate diet products to lose weight" 
+#>                                    WHQ080G                                    WHQ080H 
+#>  "Used liquid diet formula to lose weight"            "Joined program to lose weight" 
+#>                                    WHQ080I                                    WHQ080J 
+#>        "Took RX diet pills to lose weight"        "Took non-RX suppl. to lose weight" 
+#>                                    WHQ080K                                    WHD080L 
+#>            "Took laxatives to lose weight"             "Other methods to lose weight" 
+#>                                    WHD080M                                    WHD080N 
+#>      "Drank a lot of water to lose weight"                  "Followed a special diet" 
+#>                                     WHQ090                                    WHQ100A 
+#>    "Tried not to gain weight in past year"              "Ate less to not gain weight" 
+#>                                    WHQ100B                                    WHD100C 
+#>      "Lowered calories to not gain weight"          "Ate less fat to not gain weight" 
+#>                                    WHD100D                                    WHQ100E 
+#>                                "Exercised"         "Skipped meals to not gain weight" 
+#>                                    WHD100F                                    WHQ100G 
+#>        "Ate diet foods to not gain weight"     "Used liquid diet formula to not gain" 
+#>                                    WHQ100H                                    WHQ100I 
+#>        "Joined program to not gain weight"           "Took RX diet pills to not gain" 
+#>                                    WHQ100J                                    WHQ100K 
+#>    "Took non-RX suppl. to not gain weight"        "Took laxatives to not gain weight" 
+#>                                    WHD100L                                    WHD100M 
+#>             "Other methods to lose weight"  "Drank a lot of water to not gain weight" 
+#>                                    WHD100N                                     WHD110 
+#>   "Followed a special diet to lose weight" "Self-reported weight-10 yrs ago (pounds)" 
+#>                                     WHD120                                     WHD130 
+#>   "Self-reported weight - age 25 (pounds)"   "Self-reported height - age 25 (inches)" 
+#>                                     WHD140                                     WHD150 
+#>   "Self-reported greatest weight (pounds)"                 "Age when heaviest weight" 
+#>                                     WHD160                                     WHD170 
+#> "Least self-reported weight since 18(lbs)"                 "Age when lightest weight"
 sapply(nhanesCodebook('BMX'), "[[", "SAS Label:")
+#>                                    SEQN                                BMAEXLEN 
+#>            "Respondent sequence number"            "Length of a MEC exam (sec)" 
+#>                                BMAEXSTS                                BMAEXCMT 
+#>                  "Status of a MEC exam"              "Comment code for an exam" 
+#>                                   BMXWT                                   BMIWT 
+#>                           "Weight (kg)"                        "Weight Comment" 
+#>                                BMXRECUM                                BMIRECUM 
+#>                 "Recumbent Length (cm)"              "Recumbent Length Comment" 
+#>                                 BMXHEAD                                 BMIHEAD 
+#>               "Head Circumference (cm)"            "Head Circumference Comment" 
+#>                                   BMXHT                                   BMIHT 
+#>                  "Standing Height (cm)"               "Standing Height Comment" 
+#>                                  BMXBMI                                  BMXLEG 
+#>             "Body Mass Index (kg/m**2)"                 "Upper Leg Length (cm)" 
+#>                                  BMILEG                                 BMXCALF 
+#>              "Upper Leg Length Comment"       "Maximal Calf Circumference (cm)" 
+#>                                 BMICALF                                 BMXARML 
+#>                  "Maximal Calf Comment"                 "Upper Arm Length (cm)" 
+#>                                 BMIARML                                 BMXARMC 
+#>              "Upper Arm Length Comment"                "Arm Circumference (cm)" 
+#>                                 BMIARMC                                BMXWAIST 
+#>             "Arm Circumference Comment"              "Waist Circumference (cm)" 
+#>                                BMIWAIST                                BMXTHICR 
+#>           "Waist Circumference Comment"              "Thigh Circumference (cm)" 
+#>                                BMITHICR                                  BMXTRI 
+#>           "Thigh Circumference Comment"                 "Triceps Skinfold (mm)" 
+#>                                  BMITRI                                  BMXSUB 
+#>              "Triceps Skinfold Comment"             "Subscapular Skinfold (mm)" 
+#>                                  BMISUB                                  BMAAMP 
+#>          "Subscapular Skinfold Comment"                          "Amputations?" 
+#>                                BMAUREXT                                BMAUPREL 
+#>   "Amputations: Upper Right Extremity?" "Amputations: UR Above or Below Elbow?" 
+#>                                BMAULEXT                                BMAUPLEL 
+#>    "Amputations: Upper Left Extremity?" "Amputations: UL Above or Below Elbow?" 
+#>                                BMALOREX                                BMALORKN 
+#>   "Amputations: Lower Right Extremity?"  "Amputations: LR Above or Below Knee?" 
+#>                                BMALLEXT                                BMALLKNE 
+#>    "Amputations: Lower Left Extremity?"  "Amputations: LL Above or Below Knee?"
 sapply(nhanesCodebook('BPX'), "[[", "SAS Label:")
+#>                                     SEQN                                 PEASCST1 
+#>             "Respondent sequence number"                  "Blood Pressure Status" 
+#>                                 PEASCTM1                                 PEASCCT1 
+#>         "Blood Pressure Time in Seconds"                 "Blood Pressure Comment" 
+#>                                   BPXCHR                                  BPQ150A 
+#>              "60 sec HR (30 sec HR * 2)"       "Had food in the past 30 minutes?" 
+#>                                  BPQ150B                                  BPQ150C 
+#>    "Had alcohol in the past 30 minutes?"     "Had coffee in the past 30 minutes?" 
+#>                                  BPQ150D                                   BPAARM 
+#> "Had cigarettes in the past 30 minutes?"                          "Arm selected:" 
+#>                                   BPACSZ                                   BPXPLS 
+#>                        "Coded cuff size"     "60 sec. pulse (30 sec. pulse * 2):" 
+#>                                    BPXDB                                  BPXPULS 
+#>       "# of dropped beats in 30 seconds"            "Pulse regular or irregular?" 
+#>                                   BPXPTY                                   BPXML1 
+#>                            "Pulse type:"  "MIL: maximum inflation levels (mm Hg)" 
+#>                                   BPXSY1                                   BPXDI1 
+#>   "Systolic: Blood pres (1st rdg) mm Hg"  "Diastolic: Blood pres (1st rdg) mm Hg" 
+#>                                   BPAEN1                                   BPXSY2 
+#>         "Enhancement used first reading"   "Systolic: Blood pres (2nd rdg) mm Hg" 
+#>                                   BPXDI2                                   BPAEN2 
+#>  "Diastolic: Blood pres (2nd rdg) mm Hg"        "Enhancement used second reading" 
+#>                                   BPXSY3                                   BPXDI3 
+#>   "Systolic: Blood pres (3rd rdg) mm Hg"  "Diastolic: Blood pres (3rd rdg) mm Hg" 
+#>                                   BPAEN3                                   BPXSY4 
+#>         "Enhancement used third reading"   "Systolic: Blood pres (4th rdg) mm Hg" 
+#>                                   BPXDI4                                   BPAEN4 
+#>  "Diastolic: Blood pres (4th rdg) mm Hg"        "Enhancement used fourth reading" 
+#>                                   BPXSAR                                   BPXDAR 
+#>       "SBP average reported to examinee"       "DBP average reported to examinee"
+```
 
+We can combine the tables individually as above.
+
+``` r
 wtables <- c("DEMO", "WHQ", "BMX", "BPX")
-
 tablist <- lapply(wtables, function(x) merge_tables(get_table_names(x, tableDesc)))
 names(tablist) <- wtables
+sapply(tablist, nrow)
+#>   DEMO    WHQ    BMX    BPX 
+#> 101316  63592  96766  96766
+```
 
-sapply(tablist, nrow) # WHQ has fewer
+We can now easily merge them by first subsetting to common `SEQN` values
+(in the same order).
 
-## Merge by first subsetting to common SEQN values (in same order)
-
+``` r
 common_id <- Reduce(intersect, lapply(tablist, "[[", "SEQN"))
 tablist_common <- lapply(tablist, function(d) d[match(common_id, d$SEQN), ])
 dcombined <- Reduce(merge, tablist)
+```
 
-## OK, so we are ready for some anaylsis. But variable names are still 
-## incomprehensible without referring to codebook
+We are ready for some anaylsis. But variable names are still
+incomprehensible without referring to codebook. We can get variable
+descriptions from one of the metadata tables.
 
+``` r
 variableDesc <- nhanesA:::.nhanesQuery("select * from Metadata.QuestionnaireVariables")
-## This one includes the P_* tables, which we will exclude (among other reasons, 
-## they have not been processed correctly), e.g.,
+```
+
+This table does include the `P_*` tables, which we will exclude; because
+among other reasons, they have not been processed correctly, e.g.,
+
+``` r
 subset(variableDesc, TableName |> startsWith("P_")) |> head()
-## despite https://wwwn.cdc.gov/Nchs/Nhanes/2017-2018/P_ACQ.htm#ACD011A having the info
+#>       Variable TableName                Description Target                   SasLabel
+#> 36989     SEQN     P_ACQ Respondent sequence number   <NA> Respondent sequence number
+#> 36990  ACD011A     P_ACQ                       <NA>   <NA>                       <NA>
+#> 36991  ACD011B     P_ACQ                       <NA>   <NA>                       <NA>
+#> 36992  ACD011C     P_ACQ                       <NA>   <NA>                       <NA>
+#> 36993   ACD040     P_ACQ                       <NA>   <NA>                       <NA>
+#> 36994   ACD110     P_ACQ                       <NA>   <NA>                       <NA>
+#>       UseConstraints ProcessedText Tags VariableID OntologyMapped
+#> 36989           <NA>          <NA> <NA>       <NA>           <NA>
+#> 36990           <NA>          <NA> <NA>       <NA>           <NA>
+#> 36991           <NA>          <NA> <NA>       <NA>           <NA>
+#> 36992           <NA>          <NA> <NA>       <NA>           <NA>
+#> 36993           <NA>          <NA> <NA>       <NA>           <NA>
+#> 36994           <NA>          <NA> <NA>       <NA>           <NA>
+```
 
-## so
+even though <https://wwwn.cdc.gov/Nchs/Nhanes/2017-2018/P_ACQ.htm> has
+the relevant information. So,
+
+``` r
 variableDesc <- subset(variableDesc, !startsWith(TableName, "P_"))
-str(variableDesc)
-
 uvarDesc <- subset(variableDesc, Variable %in% names(dcombined), select = c(Variable, SasLabel)) |> unique()
+```
 
-## crude search (or use datatable)
-subset(uvarDesc, agrepl("weight", SasLabel, ignore.case = TRUE, fixed = TRUE))
+We can do a crude search over the SAS labels using `agrepl()`.
 
-xyplot(I(WHD020 * 0.453592) ~ BMXWT, dcombined) # weird - special codes not mapped to NA
+``` r
+subset(uvarDesc, agrepl("weight", SasLabel, ignore.case = TRUE, fixed = TRUE)) |> kable()
+```
 
+<table>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+</th>
+
+<th style="text-align:left;">
+
+Variable
+
+</th>
+
+<th style="text-align:left;">
+
+SasLabel
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+8556
+
+</td>
+
+<td style="text-align:left;">
+
+BMXWT
+
+</td>
+
+<td style="text-align:left;">
+
+Weight (kg)
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+8557
+
+</td>
+
+<td style="text-align:left;">
+
+BMIWT
+
+</td>
+
+<td style="text-align:left;">
+
+Weight Comment
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+8562
+
+</td>
+
+<td style="text-align:left;">
+
+BMXHT
+
+</td>
+
+<td style="text-align:left;">
+
+Standing Height (cm)
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+8563
+
+</td>
+
+<td style="text-align:left;">
+
+BMIHT
+
+</td>
+
+<td style="text-align:left;">
+
+Standing Height Comment
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+12443
+
+</td>
+
+<td style="text-align:left;">
+
+WTINT2YR
+
+</td>
+
+<td style="text-align:left;">
+
+Full Sample 2 Year Interview Weight
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+12445
+
+</td>
+
+<td style="text-align:left;">
+
+WTMEC2YR
+
+</td>
+
+<td style="text-align:left;">
+
+Full Sample 2 Year MEC Exam Weight
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+12797
+
+</td>
+
+<td style="text-align:left;">
+
+WTINT2YR
+
+</td>
+
+<td style="text-align:left;">
+
+Full sample 2 year interview weight
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+12798
+
+</td>
+
+<td style="text-align:left;">
+
+WTMEC2YR
+
+</td>
+
+<td style="text-align:left;">
+
+Full sample 2 year MEC exam weight
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+50012
+
+</td>
+
+<td style="text-align:left;">
+
+WHD010
+
+</td>
+
+<td style="text-align:left;">
+
+Current self-reported height (inches)
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+50013
+
+</td>
+
+<td style="text-align:left;">
+
+WHD020
+
+</td>
+
+<td style="text-align:left;">
+
+Current self-reported weight (pounds)
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+50014
+
+</td>
+
+<td style="text-align:left;">
+
+WHQ030
+
+</td>
+
+<td style="text-align:left;">
+
+How do you consider your weight
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+50016
+
+</td>
+
+<td style="text-align:left;">
+
+WHD050
+
+</td>
+
+<td style="text-align:left;">
+
+Self-reported weight-1 yr ago (pounds)
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+50018
+
+</td>
+
+<td style="text-align:left;">
+
+WHQ070
+
+</td>
+
+<td style="text-align:left;">
+
+Tried to lose weight in past year
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+50019
+
+</td>
+
+<td style="text-align:left;">
+
+WHD080A
+
+</td>
+
+<td style="text-align:left;">
+
+Ate less food to lose weight
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+50020
+
+</td>
+
+<td style="text-align:left;">
+
+WHD080B
+
+</td>
+
+<td style="text-align:left;">
+
+Lowered calories to lose weight
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+50022
+
+</td>
+
+<td style="text-align:left;">
+
+WHD080D
+
+</td>
+
+<td style="text-align:left;">
+
+Exercised to lose weight
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+50024
+
+</td>
+
+<td style="text-align:left;">
+
+WHD080F
+
+</td>
+
+<td style="text-align:left;">
+
+Ate diet products to lose weight
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+50030
+
+</td>
+
+<td style="text-align:left;">
+
+WHD080L
+
+</td>
+
+<td style="text-align:left;">
+
+Other methods to lose weight
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+50031
+
+</td>
+
+<td style="text-align:left;">
+
+WHD080M
+
+</td>
+
+<td style="text-align:left;">
+
+Drank a lot of water to lose weight
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+50048
+
+</td>
+
+<td style="text-align:left;">
+
+WHD110
+
+</td>
+
+<td style="text-align:left;">
+
+Self-reported weight-10 yrs ago (pounds)
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+50049
+
+</td>
+
+<td style="text-align:left;">
+
+WHD120
+
+</td>
+
+<td style="text-align:left;">
+
+Self-reported weight - age 25 (pounds)
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+50050
+
+</td>
+
+<td style="text-align:left;">
+
+WHD130
+
+</td>
+
+<td style="text-align:left;">
+
+Self-reported height - age 25 (inches)
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+50051
+
+</td>
+
+<td style="text-align:left;">
+
+WHD140
+
+</td>
+
+<td style="text-align:left;">
+
+Self-reported greatest weight (pounds)
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+50095
+
+</td>
+
+<td style="text-align:left;">
+
+WHD140
+
+</td>
+
+<td style="text-align:left;">
+
+Self-reported greatest weight(pounds)
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+50144
+
+</td>
+
+<td style="text-align:left;">
+
+WHD050
+
+</td>
+
+<td style="text-align:left;">
+
+Self-reported weight - 1 yr ago (pounds)
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+50147
+
+</td>
+
+<td style="text-align:left;">
+
+WHD080A
+
+</td>
+
+<td style="text-align:left;">
+
+Ate less to lose weight
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+50195
+
+</td>
+
+<td style="text-align:left;">
+
+WHD120
+
+</td>
+
+<td style="text-align:left;">
+
+Self-reported weight-age 25 (pounds)
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+Now that we have a merged dataset, we can use it for standard data
+analysis. Let’s start by looking at how self-reported weight compares
+with actual measured weight.
+
+``` r
+xyplot(WHD020 ~ BMXWT, dcombined)
+```
+
+<img src="figures/wt_comparison_1-1.svg" width="100%" />
+
+The reason for the weird values on the y-axis is that special codes for
+`WHD020` have not been translated.
+
+``` r
 nhanesCodebook("BMX")[["BMXWT"]][["BMXWT"]] # no issues - only missing
-subset(variableDesc, Variable == "WHD020")
+#>   Code.or.Value Value.Description Count Cumulative Skip.to.Item
+#> 1  3.1 to 193.3   Range of Values  9197       9197         <NA>
+#> 2             .           Missing    85       9282         <NA>
+subset(variableDesc, Variable == "WHD020", select = c(1, 2, 5)) |> kable()
+```
+
+<table>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+</th>
+
+<th style="text-align:left;">
+
+Variable
+
+</th>
+
+<th style="text-align:left;">
+
+TableName
+
+</th>
+
+<th style="text-align:left;">
+
+SasLabel
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+50013
+
+</td>
+
+<td style="text-align:left;">
+
+WHD020
+
+</td>
+
+<td style="text-align:left;">
+
+WHQ
+
+</td>
+
+<td style="text-align:left;">
+
+Current self-reported weight (pounds)
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+50057
+
+</td>
+
+<td style="text-align:left;">
+
+WHD020
+
+</td>
+
+<td style="text-align:left;">
+
+WHQ\_B
+
+</td>
+
+<td style="text-align:left;">
+
+Current self-reported weight (pounds)
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+50099
+
+</td>
+
+<td style="text-align:left;">
+
+WHD020
+
+</td>
+
+<td style="text-align:left;">
+
+WHQ\_C
+
+</td>
+
+<td style="text-align:left;">
+
+Current self-reported weight (pounds)
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+50141
+
+</td>
+
+<td style="text-align:left;">
+
+WHD020
+
+</td>
+
+<td style="text-align:left;">
+
+WHQ\_D
+
+</td>
+
+<td style="text-align:left;">
+
+Current self-reported weight (pounds)
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+50201
+
+</td>
+
+<td style="text-align:left;">
+
+WHD020
+
+</td>
+
+<td style="text-align:left;">
+
+WHQ\_E
+
+</td>
+
+<td style="text-align:left;">
+
+Current self-reported weight (pounds)
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+50259
+
+</td>
+
+<td style="text-align:left;">
+
+WHD020
+
+</td>
+
+<td style="text-align:left;">
+
+WHQ\_F
+
+</td>
+
+<td style="text-align:left;">
+
+Current self-reported weight (pounds)
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+50322
+
+</td>
+
+<td style="text-align:left;">
+
+WHD020
+
+</td>
+
+<td style="text-align:left;">
+
+WHQ\_G
+
+</td>
+
+<td style="text-align:left;">
+
+Current self-reported weight (pounds)
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+50385
+
+</td>
+
+<td style="text-align:left;">
+
+WHD020
+
+</td>
+
+<td style="text-align:left;">
+
+WHQ\_H
+
+</td>
+
+<td style="text-align:left;">
+
+Current self-reported weight (pounds)
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+50419
+
+</td>
+
+<td style="text-align:left;">
+
+WHD020
+
+</td>
+
+<td style="text-align:left;">
+
+WHQ\_I
+
+</td>
+
+<td style="text-align:left;">
+
+Current self-reported weight (pounds)
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+50456
+
+</td>
+
+<td style="text-align:left;">
+
+WHD020
+
+</td>
+
+<td style="text-align:left;">
+
+WHQ\_J
+
+</td>
+
+<td style="text-align:left;">
+
+Current self-reported weight (pounds)
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+``` r
 nhanesCodebook("WHQ")[["WHD020"]][["WHD020"]] # 77777 / 99999
+#>   Code.or.Value Value.Description Count Cumulative Skip.to.Item
+#> 1     60 to 420   Range of Values  5902       5902         <NA>
+#> 2         77777           Refused     7       5909         <NA>
+#> 3         99999        Don't know   130       6039         <NA>
+#> 4             .           Missing     5       6044         <NA>
 nhanesCodebook("WHQ_B")[["WHD020"]][["WHD020"]] # 7777 / 9999
+#>   Code.or.Value Value.Description Count Cumulative Skip.to.Item
+#> 1     50 to 450   Range of Values  6524       6524         <NA>
+#> 2          7777           Refused    14       6538         <NA>
+#> 3          9999        Don't know    92       6630         <NA>
+#> 4             .           Missing     4       6634         <NA>
+```
 
+It is not clear that there is a good solution to this problem, but
+translating these to `NA`s would probably be better than doing nothing.
+
+After dropping unrealistically high weights, we get a more reasonable
+plot.
+
+``` r
 xyplot(I(WHD020 * 0.453592) ~ BMXWT | RIAGENDR, dcombined, subset = WHD020 < 1000, 
-       alpha = 0.5, abline = c(0, 1), smooth = "lm", type=c("p", "r"))
+       alpha = 0.25, pch = ".", cex = 3, 
+       abline = c(0, 1), smooth = "lm", grid = TRUE, aspect = "iso")
+```
 
+<img src="figures/wt_comparison_2-1.svg" width="100%" />
+
+The next plot explores whether average (measured) weight varies with
+age.
+
+``` r
 xyplot(BMXWT ~  RIDAGEYR | RIAGENDR, dcombined,
-       alpha = 0.5, smooth = "lm", type=c("p", "smooth"), col.line = 1)
-
-
-
-
+       alpha = 0.25, pch = ".", cex = 3, smooth = "loess", 
+       grid = TRUE, col.line = 1)
 ```
 
-# Miscellaneous oddities
+<img src="figures/wt_by_age-1.svg" width="100%" />
 
-There is a mismatch for tables with base name `SSDFS` (there may be
-others as well).
+# Variables and tables they belong to
 
-``` r
-std_tables[startsWith(std_tables, "SSDFS")]
-#> [1] "SSDFS_A" "SSDFS_G"
-subset(tableDesc, startsWith(TableName, "SSDFS"))[1:5]
-#>                                                    Description TableName BeginYear EndYear
-#> 56 Autoantibodies - Anti-DFS70 Autoantibody Analyses (Surplus)   SSDFS_G      2011    2012
-#>     DataGroup
-#> 56 Laboratory
-```
-
-The `SSDFS_A` table does exist:
-
-``` r
-str(nhanes('SSDFS_A', translated = TRUE))
-#> 'data.frame':    148 obs. of  5 variables:
-#>  $ SEQN    : int  255 341 1227 1693 1825 2473 2484 3018 3098 3715 ...
-#>  $ WTANA6YR: num  7706 55179 102257 36033 8923 ...
-#>  $ SSDFSS  : num  1 1 1 1 1 1 1 1 1 1 ...
-#>  $ SSDFSE  : num  3.82 35.31 53.08 47.19 121.8 ...
-#>  $ SSDFSR  : num  0 1 1 1 1 0 1 1 1 0 ...
-```
-
-However, even though `SSDFS_G` is a legitimate table, there is no
-<https://wwwn.cdc.gov/Nchs/Nhanes/2011-2012/SSDFS_A.htm>, and the
-corresponding codebook naturally has no useful information. Where did
-the `SSDFS_A` table come from?
-
-What is the difference between `includelabels = TRUE` and `FALSE`?
-Neither version seems to include the SAS labels
-
-``` r
-nhanes('DEMO_G', includelabels = FALSE) |> attributes() |> str()
-#> List of 3
-#>  $ names    : chr [1:48] "SEQN" "SDDSRVYR" "RIDSTATR" "RIAGENDR" ...
-#>  $ class    : chr "data.frame"
-#>  $ row.names: int [1:9756] 1 2 3 4 5 6 7 8 9 10 ...
-nhanes('DEMO_G', includelabels = TRUE) |> attributes() |> str()
-#> List of 3
-#>  $ names    : chr [1:48] "SEQN" "SDDSRVYR" "RIDSTATR" "RIAGENDR" ...
-#>  $ class    : chr "data.frame"
-#>  $ row.names: int [1:9756] 1 2 3 4 5 6 7 8 9 10 ...
-```
-
-Consider tables whose description contains “cholesterol”.
+Unfortunately, this scheme of merging tables is fundamentally flawedp
+for one important reason: the same variable may not be recorded in the
+same table in all cycles. Consider tables whose description contains
+“cholesterol”.
 
 ``` r
 subset(tableSummary, grepl("cholesterol", Description, ignore.case = TRUE)) |> kable()
@@ -3525,10 +4611,10 @@ Questionnaire
 
 </table>
 
-Clearly, similar data is included in tables with different names, so our
-strategy of merging by table name may be fundamentally flawed. It may be
-more useful to decide on variable names of interest, and obtain all data
-for those variables regardless of which table they are in.
+Clearly, similar data is included in tables with different names. This
+becomes more obvious when we use another metadata table to look up a
+particular variable of interest. Let’s first look at the variables in
+one of the `TRIGLY` datasets to pick one that could be of interest.
 
 ``` r
 subset(tableDesc, TableBase == "TRIGLY")[1:4]
@@ -3549,7 +4635,8 @@ sapply(nhanesCodebook("TRIGLY_E"), "[[", "SAS Label:")
 #>             "LDL-cholesterol (mg/dL)"            "LDL-cholesterol (mmol/L)"
 ```
 
-So let’s search for the `LBDLDL` variable in all tables.
+`LBDLDL` seems interesting, so let’s search for the variable in all
+tables.
 
 ``` r
 varDesc <- nhanesA:::.nhanesQuery("select * from Metadata.QuestionnaireVariables")
@@ -3904,3 +4991,56 @@ file HDL\_J
 </tbody>
 
 </table>
+
+Upshot: To combine different variables of interest in preparation for
+data analysis, combining datasets is not the correct approach. Instead,
+we will need to select specific variables of interest, and then collect
+them from whichever table they happen to be available in.
+
+# Miscellaneous oddities
+
+There is a mismatch for tables with base name `SSDFS` (there may be
+others as well).
+
+``` r
+std_tables[startsWith(std_tables, "SSDFS")]
+#> [1] "SSDFS_A" "SSDFS_G"
+subset(tableDesc, startsWith(TableName, "SSDFS"))[1:5]
+#>                                                    Description TableName BeginYear EndYear
+#> 56 Autoantibodies - Anti-DFS70 Autoantibody Analyses (Surplus)   SSDFS_G      2011    2012
+#>     DataGroup
+#> 56 Laboratory
+```
+
+The `SSDFS_A` table does exist:
+
+``` r
+str(nhanes('SSDFS_A', translated = TRUE))
+#> 'data.frame':    148 obs. of  5 variables:
+#>  $ SEQN    : int  255 341 1227 1693 1825 2473 2484 3018 3098 3715 ...
+#>  $ WTANA6YR: num  7706 55179 102257 36033 8923 ...
+#>  $ SSDFSS  : num  1 1 1 1 1 1 1 1 1 1 ...
+#>  $ SSDFSE  : num  3.82 35.31 53.08 47.19 121.8 ...
+#>  $ SSDFSR  : num  0 1 1 1 1 0 1 1 1 0 ...
+```
+
+However, even though `SSDFS_G` is a legitimate table, there is no
+<https://wwwn.cdc.gov/Nchs/Nhanes/2011-2012/SSDFS_A.htm>, and the
+corresponding codebook naturally has no useful information. Where did
+the `SSDFS_A` table come from?
+
+What is the difference between `includelabels = TRUE` and `FALSE`?
+Neither version seems to include the SAS labels
+
+``` r
+nhanes('DEMO_G', includelabels = FALSE) |> attributes() |> str()
+#> List of 3
+#>  $ names    : chr [1:48] "SEQN" "SDDSRVYR" "RIDSTATR" "RIAGENDR" ...
+#>  $ class    : chr "data.frame"
+#>  $ row.names: int [1:9756] 1 2 3 4 5 6 7 8 9 10 ...
+nhanes('DEMO_G', includelabels = TRUE) |> attributes() |> str()
+#> List of 3
+#>  $ names    : chr [1:48] "SEQN" "SDDSRVYR" "RIDSTATR" "RIAGENDR" ...
+#>  $ class    : chr "data.frame"
+#>  $ row.names: int [1:9756] 1 2 3 4 5 6 7 8 9 10 ...
+```
