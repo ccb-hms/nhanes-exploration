@@ -1,0 +1,166 @@
+---
+title: "Variables in NHANES"
+author: "Deepayan Sarkar"
+output: github_document
+always_allow_html: true
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE,
+                      comment = "#>",
+                      fig.path = "figures/",
+                      out.width = "100%",
+                      fig.width = 12, fig.height = 5,
+                      dev = "svglite", dev.args = list(pointsize = 12),
+                      cache = TRUE,
+                      cache.path = "./knitr-cache/variables/")
+options(width = 100)
+library(kableExtra) # for kable()
+## library(DT)
+source("R/utilities.R")
+sort.data.frame <- function(x, by, decreasing = FALSE, ...) {
+  f <- eval(attr(stats::terms(by), "variables"), x, environment(by))
+  o <- do.call(order, c(f, list(decreasing = decreasing, ...)))
+  x[o, , drop = FALSE]
+}
+```
+
+
+# Summary of available variables
+
+We can get information about available variables from the metadata 
+table `Metadata.QuestionnaireVariables`. 
+
+```{r}
+library(nhanesA)
+variableDesc <- nhanesA:::.nhanesQuery("select * from Metadata.QuestionnaireVariables")
+dim(variableDesc)
+```
+
+There are not actually these many variables, because every occurrence in every 
+table is recorded separately.
+
+```{r}
+length(unique(variableDesc$Variable))
+```
+
+Let's start by dropping the `P_*` tables for now.
+
+```{r}
+variableDesc <- subset(variableDesc, !startsWith(TableName, "P_"))
+dim(variableDesc)
+```
+
+Most "useful" variables would be recorded in most (if not all) cycles; so let's 
+see how many appear in at least 7 tables.
+
+```{r}
+table(variableDesc$Variable) |> sort(decreasing = TRUE) |> table()
+```
+
+What does it mean for a variable to appear in more than 10 tables? This makes 
+sense for `SEQN`:
+
+```{r}
+sum(variableDesc$Variable == "SEQN")
+```
+
+But what are the other ones?
+
+```{r}
+variableFreq <- table(variableDesc$Variable) |> sort(decreasing = TRUE)
+variableFreq[variableFreq > 13]
+```
+
+Let's look at one of these.
+
+```{r}
+subset(variableDesc, Variable == "PHAFSTMN", select = c(1, 2, 5)) #|> kable()
+```
+
+This raises the obvious question: Are these measuring the same thing? Let's 
+look at actual data in `FASTQX_D`, `GLU_D`, and `OGTT_D`.
+
+```{r}
+wtables <- c("FASTQX_D", "GLU_D", "OGTT_D")
+tablist <- sapply(wtables, 
+                  function(name) nhanes(name)[c("SEQN", "PHAFSTMN")], 
+                  simplify = FALSE)
+str(tablist)
+```
+
+Let's check if they are idential for every common `SEQN`:
+
+```{r}
+str(with(tablist, sort(intersect(FASTQX_D$SEQN, GLU_D$SEQN))))
+str(with(tablist, sort(intersect(FASTQX_D$SEQN, OGTT_D$SEQN))))
+str(with(tablist, sort(intersect(GLU_D$SEQN, OGTT_D$SEQN))))
+keep <- with(tablist, 
+             FASTQX_D$SEQN |> intersect(GLU_D$SEQN) |> intersect(OGTT_D$SEQN))
+keep <- sort(keep) # SEQN to get from each table
+keep.index <- lapply(tablist, function(d) match(keep, d$SEQN) )
+sublist <- sapply(wtables, 
+                  function(name) tablist[[name]][keep.index[[name]] , ],
+                  simplify = FALSE)
+all.equal(sublist$FASTQX_D, sublist$GLU_D, check.attributes = FALSE)
+all.equal(sublist$FASTQX_D, sublist$OGTT_D, check.attributes = FALSE)
+```
+
+So at least there seems to be some consistency.
+
+# Variable names and descriptions
+
+Ideally, each variable should have the same description and SAS Label whenever
+it appears. Let's look at unique combinations.
+
+```{r}
+unique(variableDesc$Variable) |> length()
+unique(variableDesc[c("Variable", "Description", "SasLabel")]) |> dim()
+unique(variableDesc[c("Variable", "Description")]) |> dim()
+unique(variableDesc[c("Variable", "SasLabel")]) |> dim()
+```
+
+So not too bad. Let's look at the variables that have multiple `SasLabels` first.
+
+```{r}
+multLabels <- subset(unique(variableDesc[c("Variable", "SasLabel")]),
+                     Variable %in% names(which(table(Variable) > 1)))
+sort(multLabels, by = ~ Variable) |> head(100) |> kable()
+```
+
+This is mostly OK. But we need to look into some variables which have potentially
+different units of measurement.
+
+```{r}
+subset(multLabels, endsWith(SasLabel, "g)")) |>
+  subset(Variable %in% names(which(table(Variable) > 1))) |>
+  sort(by = ~ Variable) |> kable()
+```
+
+Similarly those with multiple descriptions.
+
+```{r}
+multDesc <- subset(unique(variableDesc[c("Variable", "Description")]),
+                   Variable %in% names(which(table(Variable) > 1)))
+sort(multDesc, by = ~ Variable) |> head(100) |> kable()
+```
+
+# Summary
+
+Subject to some caveats (consistency in units, potentially conflicting data in 
+different tables for same participant), a variable centric workflow seems 
+feasible, once we have a good way to select relevant variables and deal with 
+missing data.
+
+The following exports the unique combinations of variable names, labels, and 
+descriptions for exploration using other tools.
+
+```{r}
+write.csv(unique(variableDesc[c("Variable", "Description", "SasLabel")]) |> 
+            sort(by = ~ Variable),
+          file = "nhanes-variables.csv", row.names = FALSE)
+```
+
+

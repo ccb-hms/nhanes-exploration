@@ -1,5 +1,5 @@
 
-all: explore.md
+all: explore.md variables.md
 
-explore.md: explore.rmd
-	Rscript -e 'rmarkdown::render("explore.rmd")'
+%.md: %.rmd
+	Rscript -e "rmarkdown::render('$<')"
