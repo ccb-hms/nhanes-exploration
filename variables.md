@@ -96,6 +96,9 @@ subset(variableDesc, Variable == "PHAFSTMN", select = c(1, 2, 5)) #|> kable()
 ```
 
 This raises the obvious question: Are these measuring the same thing?
+
+# Variables defined in multiple tables
+
 Let’s look at actual data in `FASTQX_D`, `GLU_D`, and `OGTT_D`.
 
 ``` r
@@ -116,7 +119,7 @@ str(tablist)
 #>   ..$ PHAFSTMN: num [1:3352] NA NA NA NA NA NA NA NA NA NA ...
 ```
 
-Let’s check if they are idential for every common `SEQN`:
+Let’s check if they are identical for every common `SEQN`:
 
 ``` r
 str(with(tablist, sort(intersect(FASTQX_D$SEQN, GLU_D$SEQN))))
