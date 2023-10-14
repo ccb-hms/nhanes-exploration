@@ -383,3 +383,23 @@ nhanes('DEMO_G', includelabels = TRUE) |> attributes() |> str()
 ```
 
 
+## Potentially missing tables
+
+Finally, just a sanity check to verify that all tables that should be are 
+in fact included in the metadata table.
+
+```{r}
+all_tables_in_db <- 
+  subset(nhanesA:::.nhanesQuery("select * from information_schema.tables;"),
+         TABLE_SCHEMA == "Translated")$TABLE_NAME
+all_tables_in_metadata <- 
+  nhanesA:::.nhanesQuery("select * from Metadata.QuestionnaireDescriptions")$TableName
+anyDuplicated(all_tables_in_db)         # none
+anyDuplicated(all_tables_in_metadata)   # none
+setdiff(all_tables_in_metadata, all_tables_in_db) # none
+setdiff(all_tables_in_db, all_tables_in_metadata) |> 
+  grep(pattern = "^P_", invert = TRUE, value = TRUE)
+setdiff(all_tables_in_db, all_tables_in_metadata) |> 
+  grep(pattern = "^P_", invert = FALSE, value = TRUE)
+```
+

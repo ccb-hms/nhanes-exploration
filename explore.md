@@ -5395,3 +5395,43 @@ nhanes('DEMO_G', includelabels = TRUE) |> attributes() |> str()
 #>  $ class    : chr "data.frame"
 #>  $ row.names: int [1:9756] 1 2 3 4 5 6 7 8 9 10 ...
 ```
+
+## Potentially missing tables
+
+Finally, just a sanity check to verify that all tables that should be
+are in fact included in the metadata table.
+
+``` r
+all_tables_in_db <- 
+  subset(nhanesA:::.nhanesQuery("select * from information_schema.tables;"),
+         TABLE_SCHEMA == "Translated")$TABLE_NAME
+all_tables_in_metadata <- 
+  nhanesA:::.nhanesQuery("select * from Metadata.QuestionnaireDescriptions")$TableName
+anyDuplicated(all_tables_in_db)         # none
+#> [1] 0
+anyDuplicated(all_tables_in_metadata)   # none
+#> [1] 0
+setdiff(all_tables_in_metadata, all_tables_in_db) # none
+#> character(0)
+setdiff(all_tables_in_db, all_tables_in_metadata) |> 
+  grep(pattern = "^P_", invert = TRUE, value = TRUE)
+#>  [1] "RXQ_DRUG" "DRXFMT_B" "DRXFMT"   "DRXFCD_J" "DRXFCD_I" "SSNH4THY" "SSHCV_E"  "SSDFS_A" 
+#>  [9] "POOLTF_E" "POOLTF_D" "SSCMVG_A" "SSCARD_A" "SSBNP_A"  "SSANA2_A" "SSANA_A"  "SSAGP_J" 
+#> [17] "SSAGP_I"  "PFC_POOL" "DSPI"     "FOODLK_D" "DSII"     "FOODLK_C" "DSBI"     "VARLK_D" 
+#> [25] "VARLK_C"  "SSUCSH_A" "SSTROP_A"
+setdiff(all_tables_in_db, all_tables_in_metadata) |> 
+  grep(pattern = "^P_", invert = FALSE, value = TRUE)
+#>   [1] "P_WHQMEC" "P_WHQ"    "P_VTQ"    "P_VOCWB"  "P_UVOC2"  "P_UVOC"   "P_UTAS"   "P_UNI"   
+#>   [9] "P_UM"     "P_UIO"    "P_UHG"    "P_UCPREG" "P_UCM"    "P_UCFLOW" "P_UAS"    "P_TRIGLY"
+#>  [17] "P_TFR"    "P_TCHOL"  "P_SMQSHS" "P_SMQRTU" "P_SMQFAM" "P_SMQ"    "P_SLQ"    "P_RXQASA"
+#>  [25] "P_RXQ_RX" "P_RHQ"    "P_PUQMEC" "P_PERNT"  "P_PBCD"   "P_PAQY"   "P_PAQ"    "P_OSQ"   
+#>  [33] "P_OHXREF" "P_OHXDEN" "P_OHQ"    "P_OCQ"    "P_MCQ"    "P_LUX"    "P_KIQ_U"  "P_INS"   
+#>  [41] "P_INQ"    "P_IMQ"    "P_IHGEM"  "P_HUQ"    "P_HSQ"    "P_HSCRP"  "P_HIQ"    "P_HEQ"   
+#>  [49] "P_HEPE"   "P_HEPC"   "P_HEPBD"  "P_HEPB_S" "P_HEPA"   "P_HDL"    "P_GLU"    "P_GHB"   
+#>  [57] "P_FSQ"    "P_FR"     "P_FOLFMS" "P_FOLATE" "P_FETIB"  "P_FERTIN" "P_FASTQX" "P_ETHOX" 
+#>  [65] "P_ECQ"    "P_DXXSPN" "P_DXXFEM" "P_DSQTOT" "P_DSQIDS" "P_DS2TOT" "P_DS2IDS" "P_DS1TOT"
+#>  [73] "P_DS1IDS" "P_DRXFCD" "P_DR2TOT" "P_DR2IFF" "P_DR1TOT" "P_DR1IFF" "P_DPQ"    "P_DIQ"   
+#>  [81] "P_DEQ"    "P_DEMO"   "P_DBQ"    "P_CRCO"   "P_COT"    "P_CMV"    "P_CDQ"    "P_CBQPFC"
+#>  [89] "P_CBQPFA" "P_CBC"    "P_BPXO"   "P_BPQ"    "P_BMX"    "P_BIOPRO" "P_AUXWBR" "P_AUXTYM"
+#>  [97] "P_AUXAR"  "P_AUX"    "P_AUQ"    "P_ALQ"    "P_ALB_CR" "P_ACQ"
+```

@@ -8342,3 +8342,1201 @@ write.csv(unique(variableDesc[c("Variable", "Description", "SasLabel")]) |>
             sort(by = ~ Variable),
           file = "nhanes-variables.csv", row.names = FALSE)
 ```
+
+# Participant ID
+
+Participants in different tables are matched by `SEQN`. However, not all
+tables have a `SEQN` variable. Some tables report pooled data, and have
+a `SAMPLEID` variable identifying the pooled sample. We can check which
+tables have which variable using the following code, but it takes a
+while to run, so we will not run it.
+
+``` r
+all_tables_in_metadata <- 
+  nhanesA:::.nhanesQuery("select * from Metadata.QuestionnaireDescriptions")$TableName
+idvars <- 
+  sapply(all_tables_in_metadata,
+         function(tab) { 
+           cat("\r", tab, ".....")
+           c("SEQN", "SAMPLEID") %in% names(nhanes(tab))
+         })
+rownames(idvars) <- c("SEQN", "SAMPLEID")
+```
+
+Of these, the ones potentially of interest are those that do *not* have
+`SEQN`, as well as those that have `SAMPLEID`. These are given by
+
+``` r
+unusual_tables <- subset(as.data.frame(t(idvars)), !SEQN | SAMPLEID)
+```
+
+which we will define manually:
+
+``` r
+unusual_tables <- 
+  structure(list(
+    SEQN = c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, 
+             FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, 
+             FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, 
+             TRUE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, 
+             FALSE, FALSE, FALSE, FALSE, FALSE, TRUE), 
+    SAMPLEID = c(TRUE, TRUE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, 
+                 FALSE, FALSE, TRUE, TRUE, TRUE, TRUE, FALSE, FALSE, TRUE, TRUE, 
+                 TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, FALSE, FALSE, 
+                 FALSE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE)
+    ), 
+    row.names = c("BFRPOL_E", "BFRPOL_F", "BFRPOL_G", "BFRPOL_H", "DRXFCD_C", "DRXFCD_D", "DRXFCD_F", 
+                  "DRXFCD_G", "DRXFCD_H", "DRXMCD_C", "DRXMCD_D", "DRXMCD_E", "DRXMCD_F", 
+                  "PCBPOL_D", "PCBPOL_E", "PCBPOL_G", "PCBPOL_I", "SSPCB_B", "SSPST_B", 
+                  "PSTPOL_E", "PSTPOL_F", "PSTPOL_I", "PSTPOL_H", "DOXPOL_E", "POOLTF_G", 
+                  "POOLTF_H", "POOLTF_I", "BFRPOL_D", "BFRPOL_I", "SSBFR_B", "DRXFCD_E", 
+                  "DRXMCD_G", "PCBPOL_F", "PCBPOL_H", "PSTPOL_D", "PSTPOL_G", "DOXPOL_D", 
+                  "DOXPOL_F", "DOXPOL_G", "POOLTF_F"), class = "data.frame")
+```
+
+The following tables have both:
+
+``` r
+subset(unusual_tables, SEQN & SAMPLEID) |> kable()
+```
+
+<table>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+</th>
+
+<th style="text-align:left;">
+
+SEQN
+
+</th>
+
+<th style="text-align:left;">
+
+SAMPLEID
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+POOLTF\_G
+
+</td>
+
+<td style="text-align:left;">
+
+TRUE
+
+</td>
+
+<td style="text-align:left;">
+
+TRUE
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+POOLTF\_H
+
+</td>
+
+<td style="text-align:left;">
+
+TRUE
+
+</td>
+
+<td style="text-align:left;">
+
+TRUE
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+POOLTF\_I
+
+</td>
+
+<td style="text-align:left;">
+
+TRUE
+
+</td>
+
+<td style="text-align:left;">
+
+TRUE
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+POOLTF\_F
+
+</td>
+
+<td style="text-align:left;">
+
+TRUE
+
+</td>
+
+<td style="text-align:left;">
+
+TRUE
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+These define how individuals are pooled into samples, e.g., see
+<https://wwwn.cdc.gov/Nchs/Nhanes/2011-2012/POOLTF_G.htm>.
+
+The following tables have `SAMPLEID` but not `SEQN`; these are
+presumably the results of analysis done on pooled samples.
+
+``` r
+subset(unusual_tables, !SEQN & SAMPLEID) |> kable()
+```
+
+<table>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+</th>
+
+<th style="text-align:left;">
+
+SEQN
+
+</th>
+
+<th style="text-align:left;">
+
+SAMPLEID
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+BFRPOL\_E
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+<td style="text-align:left;">
+
+TRUE
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+BFRPOL\_F
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+<td style="text-align:left;">
+
+TRUE
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+BFRPOL\_G
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+<td style="text-align:left;">
+
+TRUE
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+BFRPOL\_H
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+<td style="text-align:left;">
+
+TRUE
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+PCBPOL\_D
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+<td style="text-align:left;">
+
+TRUE
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+PCBPOL\_E
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+<td style="text-align:left;">
+
+TRUE
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+PCBPOL\_G
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+<td style="text-align:left;">
+
+TRUE
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+PCBPOL\_I
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+<td style="text-align:left;">
+
+TRUE
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+PSTPOL\_E
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+<td style="text-align:left;">
+
+TRUE
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+PSTPOL\_F
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+<td style="text-align:left;">
+
+TRUE
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+PSTPOL\_I
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+<td style="text-align:left;">
+
+TRUE
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+PSTPOL\_H
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+<td style="text-align:left;">
+
+TRUE
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+DOXPOL\_E
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+<td style="text-align:left;">
+
+TRUE
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+BFRPOL\_D
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+<td style="text-align:left;">
+
+TRUE
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+BFRPOL\_I
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+<td style="text-align:left;">
+
+TRUE
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+PCBPOL\_F
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+<td style="text-align:left;">
+
+TRUE
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+PCBPOL\_H
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+<td style="text-align:left;">
+
+TRUE
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+PSTPOL\_D
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+<td style="text-align:left;">
+
+TRUE
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+PSTPOL\_G
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+<td style="text-align:left;">
+
+TRUE
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+DOXPOL\_D
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+<td style="text-align:left;">
+
+TRUE
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+DOXPOL\_F
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+<td style="text-align:left;">
+
+TRUE
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+DOXPOL\_G
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+<td style="text-align:left;">
+
+TRUE
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+This are in fact all the tables that have the string `POL_` in them:
+
+``` r
+all_tables_in_metadata <- 
+  nhanesA:::.nhanesQuery("select * from Metadata.QuestionnaireDescriptions")$TableName
+identical(sort(grep("POL_", all_tables_in_metadata, value = TRUE)),
+          sort(rownames(subset(unusual_tables, !SEQN & SAMPLEID))))
+#> [1] TRUE
+```
+
+Finally, the following tables have neither `SAMPLEID` nor `SEQN`.
+
+``` r
+subset(unusual_tables, !SEQN & !SAMPLEID) |> kable()
+```
+
+<table>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+</th>
+
+<th style="text-align:left;">
+
+SEQN
+
+</th>
+
+<th style="text-align:left;">
+
+SAMPLEID
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+DRXFCD\_C
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+DRXFCD\_D
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+DRXFCD\_F
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+DRXFCD\_G
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+DRXFCD\_H
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+DRXMCD\_C
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+DRXMCD\_D
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+DRXMCD\_E
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+DRXMCD\_F
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+SSPCB\_B
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+SSPST\_B
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+SSBFR\_B
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+DRXFCD\_E
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+DRXMCD\_G
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+These appear to be
+
+  - `DRXFCD` : Dietary Interview Technical Support File - Food Codes
+  - `DRXMCD` : Dietary Interview Technical Support File - Modification
+    Codes
+
+`SS(PCB|PST|BFR)_B` seem to refer to a different set of pooling; see
+<https://wwwn.cdc.gov/nchs/nhanes/2001-2002/SSPCB_B.htm>. Here the ID
+variable is `POOLID`. This variable only appears in these three tables.
+
+``` r
+subset(variableDesc, Variable == "POOLID")[c(1, 2, 5)] |> kable()
+```
+
+<table>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+</th>
+
+<th style="text-align:left;">
+
+Variable
+
+</th>
+
+<th style="text-align:left;">
+
+TableName
+
+</th>
+
+<th style="text-align:left;">
+
+SasLabel
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+45752
+
+</td>
+
+<td style="text-align:left;">
+
+POOLID
+
+</td>
+
+<td style="text-align:left;">
+
+SSBFR\_B
+
+</td>
+
+<td style="text-align:left;">
+
+Pool ID number
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+46238
+
+</td>
+
+<td style="text-align:left;">
+
+POOLID
+
+</td>
+
+<td style="text-align:left;">
+
+SSPCB\_B
+
+</td>
+
+<td style="text-align:left;">
+
+Pool ID number
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+46395
+
+</td>
+
+<td style="text-align:left;">
+
+POOLID
+
+</td>
+
+<td style="text-align:left;">
+
+SSPST\_B
+
+</td>
+
+<td style="text-align:left;">
+
+Pool ID number
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+So these three may be analysed together, but most likely cannot be
+combined with any others.
