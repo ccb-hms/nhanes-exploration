@@ -4082,9 +4082,9 @@ xyplot(BMXWT ~  RIDAGEYR | RIAGENDR, dcombined,
 
 # Variables and tables they belong to
 
-Unfortunately, this scheme of merging tables is fundamentally flawedp
-for one important reason: the same variable may not be recorded in the
-same table in all cycles. Consider tables whose description contains
+Unfortunately, this scheme of merging tables is fundamentally flawed for
+one important reason: the same variable may not be recorded in the same
+table in all cycles. Consider tables whose description contains
 “cholesterol”.
 
 ``` r
@@ -4612,20 +4612,297 @@ Questionnaire
 </table>
 
 Clearly, similar data is included in tables with different names. This
-becomes more obvious when we use another metadata table to look up a
-particular variable of interest. Let’s first look at the variables in
+becomes more obvious when we use the variable metadata table to look up
+a particular variable of interest. Let’s first look at the variables in
 one of the `TRIGLY` datasets to pick one that could be of interest.
 
 ``` r
-subset(tableDesc, TableBase == "TRIGLY")[1:4]
-#>                                                       Description TableName BeginYear EndYear
-#> 104                             Cholesterol - LDL & Triglycerides  TRIGLY_E      2007    2008
-#> 105                             Cholesterol - LDL & Triglycerides  TRIGLY_G      2011    2012
-#> 106 Cholesterol - Low - Density Lipoprotein (LDL) & Triglycerides  TRIGLY_I      2015    2016
-#> 803                             Cholesterol - LDL & Triglycerides  TRIGLY_F      2009    2010
-#> 804                             Cholesterol - LDL & Triglycerides  TRIGLY_H      2013    2014
-#> 805         Cholesterol - LDL, Triglyceride & Apoliprotein (ApoB)  TRIGLY_D      2005    2006
-#> 806  Cholesterol - Low-Density Lipoproteins (LDL) & Triglycerides  TRIGLY_J      2017    2018
+subset(tableDesc, TableBase == "TRIGLY")[1:4] |> kable()
+```
+
+<table>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+</th>
+
+<th style="text-align:left;">
+
+Description
+
+</th>
+
+<th style="text-align:left;">
+
+TableName
+
+</th>
+
+<th style="text-align:right;">
+
+BeginYear
+
+</th>
+
+<th style="text-align:right;">
+
+EndYear
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+104
+
+</td>
+
+<td style="text-align:left;">
+
+Cholesterol - LDL & Triglycerides
+
+</td>
+
+<td style="text-align:left;">
+
+TRIGLY\_E
+
+</td>
+
+<td style="text-align:right;">
+
+2007
+
+</td>
+
+<td style="text-align:right;">
+
+2008
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+105
+
+</td>
+
+<td style="text-align:left;">
+
+Cholesterol - LDL & Triglycerides
+
+</td>
+
+<td style="text-align:left;">
+
+TRIGLY\_G
+
+</td>
+
+<td style="text-align:right;">
+
+2011
+
+</td>
+
+<td style="text-align:right;">
+
+2012
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+106
+
+</td>
+
+<td style="text-align:left;">
+
+Cholesterol - Low - Density Lipoprotein (LDL) & Triglycerides
+
+</td>
+
+<td style="text-align:left;">
+
+TRIGLY\_I
+
+</td>
+
+<td style="text-align:right;">
+
+2015
+
+</td>
+
+<td style="text-align:right;">
+
+2016
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+803
+
+</td>
+
+<td style="text-align:left;">
+
+Cholesterol - LDL & Triglycerides
+
+</td>
+
+<td style="text-align:left;">
+
+TRIGLY\_F
+
+</td>
+
+<td style="text-align:right;">
+
+2009
+
+</td>
+
+<td style="text-align:right;">
+
+2010
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+804
+
+</td>
+
+<td style="text-align:left;">
+
+Cholesterol - LDL & Triglycerides
+
+</td>
+
+<td style="text-align:left;">
+
+TRIGLY\_H
+
+</td>
+
+<td style="text-align:right;">
+
+2013
+
+</td>
+
+<td style="text-align:right;">
+
+2014
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+805
+
+</td>
+
+<td style="text-align:left;">
+
+Cholesterol - LDL, Triglyceride & Apoliprotein (ApoB)
+
+</td>
+
+<td style="text-align:left;">
+
+TRIGLY\_D
+
+</td>
+
+<td style="text-align:right;">
+
+2005
+
+</td>
+
+<td style="text-align:right;">
+
+2006
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+806
+
+</td>
+
+<td style="text-align:left;">
+
+Cholesterol - Low-Density Lipoproteins (LDL) & Triglycerides
+
+</td>
+
+<td style="text-align:left;">
+
+TRIGLY\_J
+
+</td>
+
+<td style="text-align:right;">
+
+2017
+
+</td>
+
+<td style="text-align:right;">
+
+2018
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+``` r
 sapply(nhanesCodebook("TRIGLY_E"), "[[", "SAS Label:")
 #>                                  SEQN                              WTSAF2YR 
 #>          "Respondent sequence number" "Fasting Subsample 2 Year MEC Weight" 
@@ -4639,8 +4916,7 @@ sapply(nhanesCodebook("TRIGLY_E"), "[[", "SAS Label:")
 tables.
 
 ``` r
-varDesc <- nhanesA:::.nhanesQuery("select * from Metadata.QuestionnaireVariables")
-subset(varDesc, Variable == "LBDLDL")[c(1, 2, 3)] |> kable()
+subset(variableDesc, Variable == "LBDLDL")[c(1, 2, 3)] |> kable()
 ```
 
 <table>
@@ -4756,34 +5032,6 @@ LAB13AM
 <td style="text-align:left;">
 
 LDL-cholesterol (mg/dL)
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-40307
-
-</td>
-
-<td style="text-align:left;">
-
-LBDLDL
-
-</td>
-
-<td style="text-align:left;">
-
-P\_TRIGLY
-
-</td>
-
-<td style="text-align:left;">
-
-NA
 
 </td>
 

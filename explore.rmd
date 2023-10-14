@@ -246,7 +246,7 @@ xyplot(BMXWT ~  RIDAGEYR | RIAGENDR, dcombined,
 
 # Variables and tables they belong to
 
-Unfortunately, this scheme of merging tables is fundamentally flawedp for one important 
+Unfortunately, this scheme of merging tables is fundamentally flawed for one important 
 reason: the same variable may not be recorded in the same table in all cycles.
 Consider tables whose description contains "cholesterol". 
 
@@ -255,20 +255,19 @@ subset(tableSummary, grepl("cholesterol", Description, ignore.case = TRUE)) |> k
 ```
 
 Clearly, similar data  is included in tables with different names. This becomes 
-more obvious when we use another metadata table to look up a particular variable
+more obvious when we use the variable metadata table to look up a particular variable
 of interest. Let's first look at the variables in one of the `TRIGLY` datasets 
 to pick one that could be of interest.
 
 ```{r}
-subset(tableDesc, TableBase == "TRIGLY")[1:4]
+subset(tableDesc, TableBase == "TRIGLY")[1:4] |> kable()
 sapply(nhanesCodebook("TRIGLY_E"), "[[", "SAS Label:")
 ```
 
 `LBDLDL` seems interesting, so let's search for the  variable in all tables.
 
 ```{r}
-varDesc <- nhanesA:::.nhanesQuery("select * from Metadata.QuestionnaireVariables")
-subset(varDesc, Variable == "LBDLDL")[c(1, 2, 3)] |> kable()
+subset(variableDesc, Variable == "LBDLDL")[c(1, 2, 3)] |> kable()
 ```
 
 Upshot: To combine different variables of interest in preparation for data 
