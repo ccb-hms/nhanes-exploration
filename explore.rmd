@@ -3,6 +3,8 @@ title: "Initial Data Exploration of the `nhanesA` Package"
 author: "Deepayan Sarkar"
 output: github_document
 always_allow_html: true
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r, include = FALSE}
@@ -61,8 +63,15 @@ std_tables_split <- strsplit(std_tables, "_", fixed = TRUE)
 std_tables[ sapply(std_tables_split, length) == 3 ]
 ```
 
-We will assume that suffixes `_A`, `_B`, ..., `_J` indicate cycles. Then 
-valid table names are
+We will assume that suffixes `_A`, `_B`, ..., `_J` indicate cycles. The number 
+of times these prefixes appear are
+```{r}
+sapply(paste0("_", LETTERS[1:10]),
+       function(s) sum(endsWith(std_tables, s)))
+```
+
+
+Removing these, we can get valid table names as follows.
 ```{r}
 drop_table_suffix(std_tables) |> table() |> sort(decreasing = TRUE) |> head(100)
 ```
@@ -73,6 +82,8 @@ necessarily continued; for example, the following two tables relate to air quali
 std_tables[startsWith(std_tables, "AQQ")]
 nhanesCodebook('AQQ_E') |> lapply("[[", "SAS Label:") |> str()
 ```
+
+
 
 # Using metadata tables to obtain table information
 
@@ -277,6 +288,8 @@ whichever table they happen to be available in.
 
 # Miscellaneous oddities
 
+## Table name mismatch
+
 There is a mismatch for tables with base name `SSDFS` (there may be others as 
 well).
 
@@ -294,6 +307,72 @@ the corresponding codebook naturally has no useful information. Where did
 the `SSDFS_A` table come from?
 
 
+
+## Should any tables end with `_A`?
+
+Somewhat related to the above: The following tables end with `_A`, but there 
+should not be any, because tables in the first did not have any cycle suffix.
+
+```{r}
+(tables_with_A <- std_tables[ endsWith(std_tables, "_A") ])
+```
+
+Let's check if they are available:
+
+```{r}
+sapply(tables_with_A, nhanes) |> sapply(FUN = nrow)
+```
+
+Let's check if the version without the suffix are available:
+
+```{r}
+sapply(gsub("_A$", "", tables_with_A), 
+       function(x) {
+         e <- try(nhanes(x), silent = TRUE)
+         if (inherits(e, "try-error")) NA_real_ else nrow(e)
+       })
+```
+
+So all these seem legitimate. In fact, they do have websites, but with some
+unexpected twists, e.g.
+
+- <https://wwwn.cdc.gov/Nchs/Nhanes/1999-2000/L02HPA_A.htm> 
+  (Hepatitis-A, which may or may not be where the A suffix comes from)
+
+- <https://wwwn.cdc.gov/Nchs/Nhanes/1999-2000/SSAFB_A.htm>
+  (originally published 2012, but revised 2022 to correct for some procedural 
+  errors. This seems to be a common theme in most of these examples)
+
+- <https://wwwn.cdc.gov/Nchs/Nhanes/1999-2000/SSDFS_A.htm>
+  (this one uses lefotver sera from participants in the first cycle, but
+  was actually published later in 2022)
+
+Someone should look at these systematically, but apart from the first one 
+(L02HPA), these seem legitimate.
+
+For the first one, we have
+
+```{r}
+std_tables[ startsWith(std_tables, "L02HPA")]
+```
+
+Looking more closely, the actual filename for the first cycle is `L02HPA_a.xpt`, 
+with the lowercase `_a` suffix. The subsequent cycles should have been 
+`L02HPA_a_B.xpt`, `L02HPA_a_C.xpt`, etc., but of course there were not.
+
+Anyway, so all this looks OK. _However_, the metadata table doesn't always 
+track these consistently, e.g.,
+
+```{r}
+subset(tableDesc, startsWith(TableName, "L02HPA"))
+```
+
+has missing documentation / file links for the first one (because of the 
+lowercase `_a`?).
+
+
+## Bug? `includelabels = TRUE` does not seem to do anything
+
 What is the difference between `includelabels = TRUE` and `FALSE`? Neither
 version seems to include the SAS labels
 
@@ -302,6 +381,5 @@ version seems to include the SAS labels
 nhanes('DEMO_G', includelabels = FALSE) |> attributes() |> str()
 nhanes('DEMO_G', includelabels = TRUE) |> attributes() |> str()
 ```
-
 
 

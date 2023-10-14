@@ -677,8 +677,17 @@ std_tables[ sapply(std_tables_split, length) == 3 ]
 #> [49] "VIT_2_B"  "VIT_B6_D" "VIT_B6_E" "VIT_B6_F"
 ```
 
-We will assume that suffixes `_A`, `_B`, …, `_J` indicate cycles. Then
-valid table names are
+We will assume that suffixes `_A`, `_B`, …, `_J` indicate cycles. The
+number of times these prefixes appear are
+
+``` r
+sapply(paste0("_", LETTERS[1:10]),
+       function(s) sum(endsWith(std_tables, s)))
+#>  _A  _B  _C  _D  _E  _F  _G  _H  _I  _J 
+#>  24 128 141 132 130 137 143 178 143 120
+```
+
+Removing these, we can get valid table names as follows.
 
 ``` r
 drop_table_suffix(std_tables) |> table() |> sort(decreasing = TRUE) |> head(100)
@@ -5247,6 +5256,8 @@ them from whichever table they happen to be available in.
 
 # Miscellaneous oddities
 
+## Table name mismatch
+
 There is a mismatch for tables with base name `SSDFS` (there may be
 others as well).
 
@@ -5276,6 +5287,98 @@ However, even though `SSDFS_G` is a legitimate table, there is no
 <https://wwwn.cdc.gov/Nchs/Nhanes/2011-2012/SSDFS_A.htm>, and the
 corresponding codebook naturally has no useful information. Where did
 the `SSDFS_A` table come from?
+
+## Should any tables end with `_A`?
+
+Somewhat related to the above: The following tables end with `_A`, but
+there should not be any, because tables in the first did not have any
+cycle suffix.
+
+``` r
+(tables_with_A <- std_tables[ endsWith(std_tables, "_A") ])
+#>  [1] "L02HPA_A" "SSAFB_A"  "SSAMH_A"  "SSANA_A"  "SSANA2_A" "SSBNP_A"  "SSCARD_A" "SSCHL_A" 
+#>  [9] "SSCMV_A"  "SSCMVG_A" "SSCYST_A" "SSDFS_A"  "SSFOL_A"  "SSHSV1_A" "SSMUMP_A" "SSNORO_A"
+#> [17] "SSOL_A"   "SSPFC_A"  "SSTFR_A"  "SSTROP_A" "SSUCSH_A" "SSVARI_A" "TELO_A"   "TFA_A"
+```
+
+Let’s check if they are available:
+
+``` r
+sapply(tables_with_A, nhanes) |> sapply(FUN = nrow)
+#> L02HPA_A  SSAFB_A  SSAMH_A  SSANA_A SSANA2_A  SSBNP_A SSCARD_A  SSCHL_A  SSCMV_A SSCMVG_A SSCYST_A 
+#>     8587     1894      407     4532     4532    21206    21890      414     4128      537     2508 
+#>  SSDFS_A  SSFOL_A SSHSV1_A SSMUMP_A SSNORO_A   SSOL_A  SSPFC_A  SSTFR_A SSTROP_A SSUCSH_A SSVARI_A 
+#>      148     1253     1211     4139      946     1717     1456      248    21743     6854      226 
+#>   TELO_A    TFA_A 
+#>     3570     4259
+```
+
+Let’s check if the version without the suffix are available:
+
+``` r
+sapply(gsub("_A$", "", tables_with_A), 
+       function(x) {
+         e <- try(nhanes(x), silent = TRUE)
+         if (inherits(e, "try-error")) NA_real_ else nrow(e)
+       })
+#> L02HPA  SSAFB  SSAMH  SSANA SSANA2  SSBNP SSCARD  SSCHL  SSCMV SSCMVG SSCYST  SSDFS  SSFOL SSHSV1 
+#>     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA 
+#> SSMUMP SSNORO   SSOL  SSPFC  SSTFR SSTROP SSUCSH SSVARI   TELO    TFA 
+#>     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA
+```
+
+So all these seem legitimate. In fact, they do have websites, but with
+some unexpected twists, e.g.
+
+  - <https://wwwn.cdc.gov/Nchs/Nhanes/1999-2000/L02HPA_A.htm>
+    (Hepatitis-A, which may or may not be where the A suffix comes from)
+
+  - <https://wwwn.cdc.gov/Nchs/Nhanes/1999-2000/SSAFB_A.htm> (originally
+    published 2012, but revised 2022 to correct for some procedural
+    errors. This seems to be a common theme in most of these examples)
+
+  - <https://wwwn.cdc.gov/Nchs/Nhanes/1999-2000/SSDFS_A.htm> (this one
+    uses lefotver sera from participants in the first cycle, but was
+    actually published later in 2022)
+
+Someone should look at these systematically, but apart from the first
+one (L02HPA), these seem legitimate.
+
+For the first one, we have
+
+``` r
+std_tables[ startsWith(std_tables, "L02HPA")]
+#> [1] "L02HPA_A" "L02HPA_B" "L02HPA_C"
+```
+
+Looking more closely, the actual filename for the first cycle is
+`L02HPA_a.xpt`, with the lowercase `_a` suffix. The subsequent cycles
+should have been `L02HPA_a_B.xpt`, `L02HPA_a_C.xpt`, etc., but of course
+there were not.
+
+Anyway, so all this looks OK. *However*, the metadata table doesn’t
+always track these consistently, e.g.,
+
+``` r
+subset(tableDesc, startsWith(TableName, "L02HPA"))
+#>              Description TableName BeginYear EndYear  DataGroup UseConstraints
+#> 301 Hepatitis A Antibody  L02HPA_A      1999    2000 Laboratory           None
+#> 302 Hepatitis A Antibody  L02HPA_B      2001    2002 Laboratory           None
+#> 303 Hepatitis A Antibody  L02HPA_C      2003    2004 Laboratory           None
+#>                                                     DocFile
+#> 301                                                        
+#> 302 https://wwwn.cdc.gov/Nchs/Nhanes/2001-2002/L02HPA_B.htm
+#> 303 https://wwwn.cdc.gov/Nchs/Nhanes/2003-2004/L02HPA_C.htm
+#>                                                    DataFile DatePublished TableBase
+#> 301                                                                          L02HPA
+#> 302 https://wwwn.cdc.gov/Nchs/Nhanes/2001-2002/L02HPA_B.XPT    March 2008    L02HPA
+#> 303 https://wwwn.cdc.gov/Nchs/Nhanes/2003-2004/L02HPA_C.XPT    March 2008    L02HPA
+```
+
+has missing documentation / file links for the first one (because of the
+lowercase `_a`?).
+
+## Bug? `includelabels = TRUE` does not seem to do anything
 
 What is the difference between `includelabels = TRUE` and `FALSE`?
 Neither version seems to include the SAS labels
