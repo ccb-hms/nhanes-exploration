@@ -5939,7 +5939,331 @@ Right keratometry axis (deg)
 
 </table>
 
-Similarly those with multiple descriptions.
+This is a real issue in at least one example, where the data are from
+pooled samples, hence identified by `SAMPLEID`, not `SEQN` (see below).
+
+``` r
+source("R/variable-extraction.R")
+db <- nhanesA:::.nhanesQuery("select * from Metadata.QuestionnaireVariables")
+lbc028 <- get_variable_data("LBC028", db, idvar = "SAMPLEID", verbose = FALSE)
+```
+
+``` r
+with(lbc028, tapply(LBC028, TABLE, quantile, na.rm = TRUE)) |> do.call(what = rbind) |> kable()
+```
+
+<table>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+</th>
+
+<th style="text-align:right;">
+
+0%
+
+</th>
+
+<th style="text-align:right;">
+
+25%
+
+</th>
+
+<th style="text-align:right;">
+
+50%
+
+</th>
+
+<th style="text-align:right;">
+
+75%
+
+</th>
+
+<th style="text-align:right;">
+
+100%
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+PCBPOL\_D
+
+</td>
+
+<td style="text-align:right;">
+
+0.0070
+
+</td>
+
+<td style="text-align:right;">
+
+0.007500
+
+</td>
+
+<td style="text-align:right;">
+
+0.00770
+
+</td>
+
+<td style="text-align:right;">
+
+0.01500
+
+</td>
+
+<td style="text-align:right;">
+
+0.2318
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+PCBPOL\_E
+
+</td>
+
+<td style="text-align:right;">
+
+0.0022
+
+</td>
+
+<td style="text-align:right;">
+
+0.004075
+
+</td>
+
+<td style="text-align:right;">
+
+0.00635
+
+</td>
+
+<td style="text-align:right;">
+
+0.01040
+
+</td>
+
+<td style="text-align:right;">
+
+0.1485
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+PCBPOL\_F
+
+</td>
+
+<td style="text-align:right;">
+
+1.4140
+
+</td>
+
+<td style="text-align:right;">
+
+3.418500
+
+</td>
+
+<td style="text-align:right;">
+
+4.99600
+
+</td>
+
+<td style="text-align:right;">
+
+8.55950
+
+</td>
+
+<td style="text-align:right;">
+
+43.6500
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+PCBPOL\_G
+
+</td>
+
+<td style="text-align:right;">
+
+1.9800
+
+</td>
+
+<td style="text-align:right;">
+
+3.154000
+
+</td>
+
+<td style="text-align:right;">
+
+4.94800
+
+</td>
+
+<td style="text-align:right;">
+
+7.39000
+
+</td>
+
+<td style="text-align:right;">
+
+85.5900
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+PCBPOL\_H
+
+</td>
+
+<td style="text-align:right;">
+
+0.7071
+
+</td>
+
+<td style="text-align:right;">
+
+2.730000
+
+</td>
+
+<td style="text-align:right;">
+
+4.15200
+
+</td>
+
+<td style="text-align:right;">
+
+6.51025
+
+</td>
+
+<td style="text-align:right;">
+
+63.3300
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+PCBPOL\_I
+
+</td>
+
+<td style="text-align:right;">
+
+2.4040
+
+</td>
+
+<td style="text-align:right;">
+
+2.404000
+
+</td>
+
+<td style="text-align:right;">
+
+3.41100
+
+</td>
+
+<td style="text-align:right;">
+
+5.47800
+
+</td>
+
+<td style="text-align:right;">
+
+33.9000
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+This one seems fine:
+
+``` r
+lbxsossi <- get_variable_data("LBXSOSSI", db, idvar = "SEQN", verbose = FALSE)
+```
+
+``` r
+with(lbxsossi, tapply(LBXSOSSI, TABLE, quantile, na.rm = TRUE)) |> do.call(what = rbind)# |> kable()
+#>           0% 25% 50% 75% 100%
+#> BIOPRO_D 201 274 277 280  307
+#> BIOPRO_E 228 275 278 281  321
+#> BIOPRO_F 246 275 278 281  306
+#> BIOPRO_G 207 275 277 280  315
+#> BIOPRO_H 237 276 279 282  323
+#> BIOPRO_I 250 274 277 280  322
+#> BIOPRO_J 246 277 281 284  314
+#> L40_B    201 273 277 280  312
+#> L40_C    250 274 277 280  306
+#> LAB18    245 275 278 282  307
+```
+
+Similarly, the following are variables with multiple descriptions.
 
 ``` r
 multDesc <- subset(unique(variableDesc[c("Variable", "Description")]),
@@ -8343,6 +8667,11 @@ write.csv(unique(variableDesc[c("Variable", "Description", "SasLabel")]) |>
           file = "nhanes-variables.csv", row.names = FALSE)
 ```
 
+Actually, to be useful, this also needs to record how many unique
+participants each variable has records for, because many variables are
+very similar, but with substantially different coverage. This will
+require actually loading and inspecting the relevant datasets.
+
 # Participant ID
 
 Participants in different tables are matched by `SEQN`. However, not all
@@ -8522,6 +8851,9 @@ TRUE
 
 These define how individuals are pooled into samples, e.g., see
 <https://wwwn.cdc.gov/Nchs/Nhanes/2011-2012/POOLTF_G.htm>.
+
+*NOTE* however that `SAMPLEID` is only unique within a cycle, unlike
+`SEQN`, so they must be matched to participants in their own cycle.
 
 The following tables have `SAMPLEID` but not `SEQN`; these are
 presumably the results of analysis done on pooled samples.
@@ -9540,3 +9872,43 @@ Pool ID number
 
 So these three may be analysed together, but most likely cannot be
 combined with any others.
+
+# Tables where participant ID is repeated
+
+It would be convenient to assume that `SEQN` is unique (for the majority
+of tables where it is present), but this is not true for all tables;
+e.g., see
+
+<https://wwwn.cdc.gov/Nchs/Nhanes/2003-2004/dr2iff_c.htm>
+
+We can check which tables have duplicated `SEQN` as follow, but again we
+will not run this code as it is slow.
+
+``` r
+id_repeated <- 
+  sapply(sort(all_tables_in_metadata),
+         function(tab) {
+           cat("\r", tab, ".......")
+           d <- nhanes(tab)
+           !is.null(d[["SEQN"]]) && !(anyDuplicated(d[["SEQN"]]) == 0)
+         })
+which_repeated <- names(id_repeated)[id_repeated]
+```
+
+The result is
+
+``` r
+which_repeated <- 
+  c("AUXAR_I",  "AUXAR_J",  "AUXTYM_I", "AUXTYM_J", "AUXWBR_I", "AUXWBR_J", 
+    "DR1IFF_C", "DR1IFF_D", "DR1IFF_E", "DR1IFF_F", "DR1IFF_G", "DR1IFF_H", 
+    "DR1IFF_I", "DR1IFF_J", "DR2IFF_C", "DR2IFF_D", "DR2IFF_E", "DR2IFF_F", 
+    "DR2IFF_G", "DR2IFF_H", "DR2IFF_I", "DR2IFF_J", "DRXIFF", "DRXIFF_B", 
+    "DS1IDS_E", "DS1IDS_F", "DS1IDS_G", "DS1IDS_H", "DS1IDS_I", "DS1IDS_J", 
+    "DS2IDS_E", "DS2IDS_F", "DS2IDS_G", "DS2IDS_H", "DS2IDS_I", "DS2IDS_J", 
+    "DSQ2_B",   "DSQ2_C",   "DSQ2_D",   "DSQFILE2", "DSQIDS_E", "DSQIDS_F", 
+    "DSQIDS_G", "DSQIDS_H", "DSQIDS_I", "DSQIDS_J", "FFQDC_C", "FFQDC_D", 
+    "PAQIAF",   "PAQIAF_B", "PAQIAF_C", "PAQIAF_D", "PAXDAY_G", "PAXDAY_H", 
+    "PAXHR_G",  "PAXHR_H",  "RXQ_ANA",  "RXQ_RX",   "RXQ_RX_B", "RXQ_RX_C", 
+    "RXQ_RX_D", "RXQ_RX_E", "RXQ_RX_F", "RXQ_RX_G", "RXQ_RX_H", "RXQ_RX_I", 
+    "RXQ_RX_J", "RXQANA_B", "RXQANA_C", "SSHPV_F")
+```

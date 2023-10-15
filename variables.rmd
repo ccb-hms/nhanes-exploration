@@ -147,6 +147,7 @@ This is a real issue in at least one example, where the data are from pooled
 samples, hence identified by `SAMPLEID`, not `SEQN` (see below).
 ```{r}
 source("R/variable-extraction.R")
+db <- nhanesA:::.nhanesQuery("select * from Metadata.QuestionnaireVariables")
 lbc028 <- get_variable_data("LBC028", db, idvar = "SAMPLEID", verbose = FALSE)
 with(lbc028, tapply(LBC028, TABLE, quantile, na.rm = TRUE)) |> do.call(what = rbind) |> kable()
 ```
