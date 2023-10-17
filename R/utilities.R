@@ -33,3 +33,18 @@ merge_tables <- function(tables, vars = get_common_vars(tables))
   do.call(rbind, tablist)
 }
 
+nhanes_url <- function (nh_table = NULL) 
+{
+  if (!is.null(nh_table)) {
+    if (toupper(nh_table) == "DXA") {
+      "https://wwwn.cdc.gov/nchs/nhanes/dxa/dxa.aspx"
+    }
+    else {
+      ## FIXME check whether nh_table is a valid table name
+      nh_year <- nhanesA:::.get_year_from_nh_table(nh_table)
+      paste0(nhanesA:::nhanesURL, nh_year, "/", nh_table, ".htm")
+    }
+  }
+  else "https://wwwn.cdc.gov/nchs/nhanes/Default.aspx"
+}
+
