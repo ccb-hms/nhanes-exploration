@@ -252,6 +252,10 @@ nhanesAttr("BPQ_J") |> str()
 #    ..- attr(*, "names")= chr [1:11] "SEQN" "BPQ020" "BPQ030" "BPD035" ...
 ```
 
+  - `nhanesAttr()` is potentially very useful, but it does not (yet?)
+    have a database interface, so it it very slow. I *think* it can be
+    refactored to use `nhanesCodebook()`.
+
   - Searchable table of NHANES tables (using datatable maybe). Something
     better than <https://wwwn.cdc.gov/nchs/nhanes/search/DataPage.aspx>.
     Either have pre-built versions, or generate on-the-fly, depending on
@@ -316,6 +320,14 @@ nhanes('DEMO_G', includelabels = TRUE) |> attributes() |> str()
 #   $ class    : chr "data.frame"
 #   $ row.names: int [1:9756] 1 2 3 4 5 6 7 8 9 10 ...
 ```
+
+This is because the `includelabel = TRUE` branch doesn’t get run when
+reading from the database; see
+
+<https://github.com/cjendres1/nhanes/blob/master/R/nhanes.R#L59>
+
+This is in any case very fragile because most subsetting operations will
+lose the labels.
 
 # Some curiosities
 

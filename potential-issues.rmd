@@ -146,6 +146,9 @@ meaning was subsequently dropped.
 nhanesAttr("BPQ_J") |> str()
 ```
 
+- `nhanesAttr()` is potentially very useful, but it does not (yet?) have 
+  a database interface, so it it very slow. I _think_ it can be refactored to 
+  use `nhanesCodebook()`.
 
 - Searchable table of NHANES tables (using datatable maybe). Something better than 
   <https://wwwn.cdc.gov/nchs/nhanes/search/DataPage.aspx>. Either have 
@@ -190,7 +193,13 @@ nhanes('DEMO_G', includelabels = FALSE) |> attributes() |> str()
 nhanes('DEMO_G', includelabels = TRUE) |> attributes() |> str()
 ```
 
+This is because the `includelabel = TRUE` branch doesn't get run when reading 
+from the database; see
 
+<https://github.com/cjendres1/nhanes/blob/master/R/nhanes.R#L59>
+
+This is in any case very fragile because most subsetting operations will lose 
+the labels.
 
 # Some curiosities
 
