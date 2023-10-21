@@ -1,0 +1,311 @@
+---
+title: "NHANES database build-time checks"
+author: "Deepayan Sarkar"
+date: "`r Sys.Date()`"
+output: github_document
+editor_options: 
+  chunk_output_type: console
+---
+
+
+## Tables missing from table metadata
+
+The following tables are in the database but not in the metadata stored in the DB.
+
+
+```{r}
+## code to generate list
+nhanes_url <- function (nh_table) {
+  nh_year <- nhanesA:::.get_year_from_nh_table(nh_table)
+  paste0(nhanesA:::nhanesURL, nh_year, "/", nh_table, ".htm")
+}
+library(nhanesA) # mainly for querying database
+all_tables_in_db <- 
+  subset(nhanesA:::.nhanesQuery("select * from information_schema.tables;"),
+         TABLE_SCHEMA == "Translated")$TABLE_NAME
+all_tables_in_metadata <- 
+  nhanesA:::.nhanesQuery("select * from Metadata.QuestionnaireDescriptions")$TableName
+URLs <- 
+  (setdiff(all_tables_in_db, all_tables_in_metadata) 
+   |> grep(pattern = "^P_", invert = TRUE, value = TRUE) 
+   |> sapply(FUN = nhanes_url))
+```
+
+```{r results="asis", comment = ""}
+cat("", sprintf("- [%s](%s)", names(URLs), URLs), sep = "\n")
+```
+
+This needs to be looked at manually (many, but not all, are due to obvious bugs 
+in the NHANES documentation pages).
+
+
+## Cross check tables with NHANES master list
+
+The NHANES website has a master list of all tables at
+
+<https://wwwn.cdc.gov/Nchs/Nhanes/search/DataPage.aspx>
+
+Let's download this and save it in a CSV file using Python...
+
+
+```{python, results='hide'}
+from bs4 import BeautifulSoup
+import requests
+
+## extraction functions for td elements
+def etext(obj): return obj.get_text().strip()
+def eurl(obj): return obj.find('a').get_attribute_list('href')[0]
+
+url = 'https://wwwn.cdc.gov/Nchs/Nhanes/search/DataPage.aspx'
+
+source_html = requests.get(url).content.decode('utf-8')
+soup = BeautifulSoup(source_html, 'html.parser')
+
+_table = soup.find('table', {'id' : 'GridView1'}) 
+
+f = open('table_manifest.csv', 'w')
+f.write("Table,Years,PubDate,DocURL,DataURL\n")
+
+for row in _table.tbody.find_all('tr'):
+    [year, docfile, datafile, pubdate] = row.find_all('td')
+    if etext(pubdate) != 'Withdrawn':
+        f.write("%s,%s,%s,https://wwwn.cdc.gov%s,https://wwwn.cdc.gov%s\n" % 
+                    (etext(docfile).split()[0], 
+                     etext(year), 
+                     etext(pubdate),
+                     eurl(docfile),
+                     eurl(datafile)))
+f.close()
+```
+
+...and then read this file in using R.
+
+```{r}
+manifest <- read.csv("table_manifest.csv")
+## fixup some weird URLs
+manifest <- within(manifest, {
+  DocURL <- gsub("cdc.gov../", "cdc.gov/Nchs/Nhanes/", DocURL, fixed = TRUE)
+  DataURL <- gsub("cdc.gov../", "cdc.gov/Nchs/Nhanes/", DataURL, fixed = TRUE)
+})
+```
+
+Sanity checks:
+
+```{r}
+with(manifest, table(tools::file_ext(DocURL)))   # doc file extensions
+with(manifest, table(tools::file_ext(DataURL)))  # data file extensions
+with(manifest, Table[duplicated(Table)])         # uniqueness of table names
+```
+
+The `aspx` files and duplicated table name comes from additional details 
+specific to missingness in DXA and OMB tables (see links). Note that 
+`nhanesA` handles "DXA" specially, e.g., `nhanesA::nhanesDXA()`, but not OMB.
+
+
+```{r}
+subset(manifest, Table == "All")
+```
+
+We will simply skip these two entries.
+
+```{r}
+manifest <- subset(manifest, Table != "All")
+```
+
+
+The ZIP extensions are from
+
+```{r}
+subset(manifest, tolower(tools::file_ext(DataURL)) == "zip")
+```
+
+These are very large files, with multiple entries per subject storing 
+minute-by-minute results recorded in a physical activity monitoring device. 
+These data are not included in the database (and probably should not be), but 
+we will retain these rows to remind us that the tables exist.
+
+OK, let's now see if any of these are missing either from the list of tables
+in the database, or from the table metadata.
+
+
+```{r}
+setdiff(manifest$Table, all_tables_in_db) # missing from DB
+```
+
+Links for exploration:
+
+```{r results='asis'}
+paste0("- <", 
+       subset(manifest, Table %in% setdiff(manifest$Table, all_tables_in_db))$DocURL,
+       ">") |>
+  cat(sep = "\n")
+```
+
+Tables missing from metadata:
+
+```{r}
+setdiff(manifest$Table, all_tables_in_metadata) # missing from metadata
+```
+
+Links for exploration (excluding `P_*` tables for now): [Note that these should
+be a superset of the earlier list of tables missing from the metadata]
+
+```{r results='asis'}
+paste0("- <", 
+       subset(manifest, !startsWith(Table, "P_") & 
+                Table %in% setdiff(manifest$Table, all_tables_in_metadata))$DocURL,
+       ">") |>
+  cat(sep = "\n")
+```
+
+Although there should not be, let's also make sure that no table in the DB is 
+missing from the manifest.
+
+```{r}
+setdiff(all_tables_in_db, manifest$Table)
+```
+
+
+## Missing documentation
+
+For some reason, many tables in the current metadata do not have a URL. 
+
+```{r}
+table_metadata <- nhanesA:::.nhanesQuery("select * from Metadata.QuestionnaireDescriptions")
+subset(table_metadata, !startsWith(DocFile, "https"))[-1]
+```
+
+For now, we will not try to conjecture why these have failed.
+
+Let's check a few other things regarding the URLs:
+
+```{r}
+manifest_doc_url <- with(manifest, structure(DocURL, names = Table))
+manifest_data_url <- with(manifest, structure(DataURL, names = Table))
+metadata_doc_url <- with(subset(table_metadata, DocFile != ""), structure(DocFile, names = TableName))
+metadata_data_url <- with(subset(table_metadata, DataFile != ""), structure(DataFile, names = TableName))
+```
+
+- If not missing, doc / data URLs in the metadata should match those in the manifest.
+
+```{r}
+all(metadata_doc_url == manifest_doc_url[names(metadata_doc_url)])
+all(metadata_data_url == manifest_data_url[names(metadata_data_url)])
+```
+
+- Auto-generated Doc URLs should match the ones in the manifest
+
+```{r}
+generated_urls <- sapply(names(manifest_doc_url), nhanes_url)
+subset(data.frame(table = names(manifest_doc_url), 
+                  generated_urls, 
+                  manifest_doc_url), 
+       generated_urls != manifest_doc_url)
+```
+
+At the time of writing, `PFC_POOL` and `SSNH4THY` give mismatches because they 
+are from cycle 2 but do not have the `_B` suffix, so the auto-generated URLs 
+have the wrong year. These should probably be special-cased in `nhanesA`.
+
+The others are legitimate differences. For these tables, the master table on 
+the NHANES website links to a note, but the underlying URLs are still valid.
+
+
+## Translation
+
+Do we want to (optionally) translate special codes in numeric values?
+
+```{r}
+varcb <- nhanesA:::.nhanesQuery("select * from Metadata.VariableCodebook")
+dim(varcb)
+head(varcb)
+```
+
+First of all, is there a way to "know" that a variable is supposed to be 
+numeric? 
+
+```{r}
+(num_variables <- with(varcb, length(unique(Variable)))) # total number of variables
+with(varcb, xtabs(~ ValueDescription)) |> sort(decreasing = TRUE) |> head(20)
+```
+
+So hopefully the presence of `"Range of Values"` as an option for a variable 
+should indicate that it is a continuous variable. Let's check for any typos just 
+in case:
+
+```{r}
+with(varcb,
+     grep("range", ValueDescription, ignore.case = TRUE, value = TRUE)
+     |> table()
+     |> sort(decreasing = TRUE))
+```
+
+(suggests other problems, but not in what we care about), and
+
+```{r}
+with(varcb,
+     grep("values", ValueDescription, ignore.case = TRUE, value = TRUE)
+     |> table()
+     |> sort(decreasing = TRUE))
+```
+
+OK, so let's now see what other values appear for these 'numeric' variables.
+
+```{r}
+numeric_variables <- 
+  unique(subset(varcb, 
+                ValueDescription == "Range of Values")[["Variable"]])
+length(numeric_variables)
+numeric_descriptions <- 
+  subset(varcb, 
+         Variable %in% numeric_variables, 
+         select = c(Variable, ValueDescription, CodeOrValue))
+combinations <- (
+  xtabs(~ ValueDescription + CodeOrValue, numeric_descriptions, 
+        subset = ValueDescription != "Range of Values") 
+  |> as.data.frame.table() 
+  |> subset(Freq > 0)
+)
+dim(combinations)
+options(width = 120)
+print(combinations, max = 2000)
+```
+
+OK, so why is "English and Spanish" included here?
+
+```{r}
+which_vars <- 
+  unique(subset(numeric_descriptions, 
+                ValueDescription == "English and Spanish")$Variable)
+subset(varcb, Variable %in% which_vars & 
+         ValueDescription == "Range of Values")
+```
+
+These seem to be bugs in the NHANES data.
+
+```{r}
+nhanes("DS1IDS_G")$DR1LANG |> table()
+```
+
+For comparison,
+
+```{r}
+nhanes("DS1IDS_E")$DR1LANG |> table()
+```
+
+Can't see an easy way to automate this. 
+
+But in general, for numeric variables, there seem to be mainly two types of 
+records we need to worry about:
+
+- Missing values with a specific reason for being missing
+
+- Left or right censored values (less than or greater than something)
+
+Also, 0 codes are somewhat tricky.
+
+
+
+
+
+
