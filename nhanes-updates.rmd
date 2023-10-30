@@ -1,0 +1,97 @@
+---
+title: "Frequency of NHANES releases"
+author: "Deepayan Sarkar"
+output: github_document
+always_allow_html: true
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE,
+                      comment = "#>",
+                      fig.path = "figures/release-freq-",
+                      out.width = "100%",
+                      fig.width = 12, fig.height = 8,
+                      dev = "svglite", dev.args = list(pointsize = 12),
+                      cache = TRUE,
+                      cache.path = "./knitr-cache/relfreq/")
+options(width = 100)
+library(lattice)
+```
+
+
+# How often are NHANES data released / updated
+
+```{r}
+library(nhanesA)
+manifest <- nhanesManifest()
+```
+
+We want to tabulate when NHANES releases data. We expect that bulk
+releases of tables happen all together, while some tables may be
+released or updated on a as-needed basis.
+
+The release information is available in the manifest as the
+`Date.Published` field:
+```r
+xtabs(~ Date.Published, manifest) |> sort() |> tail(20)
+```
+
+So let's try to parse this systematically.
+
+```{r}
+pubdate <- manifest$Date.Published
+updates <- startsWith(pubdate, "Updated")
+datesplit <- strsplit(pubdate, split = "[[:space:]]")
+mismatch <- (sapply(datesplit, length) - updates) != 2L
+if (any(mismatch)) {
+    cat("Unexpected format:\n")
+    print(manifest[mismatch, , drop = FALSE])
+}
+```
+This currently flags one withdrawn table (PAHS_H). We will just skip this and proceed.
+
+```{r}
+pubdate <- pubdate[!mismatch]
+updates <- updates[!mismatch]
+datesplit <- datesplit[!mismatch]
+datesplit[updates] <- lapply(datesplit[updates], "[", -1)
+print(table(sapply(datesplit, length))) # should be all 2
+pub_summary <-
+    data.frame(updated = updates,
+               year = sapply(datesplit, "[[", 2) |> as.numeric(),
+               month = sapply(datesplit, "[[", 1) |> factor(levels = month.name))
+```
+
+Plot frequency by year:
+
+```{r, byyear}
+xtabs(~ year + updated, pub_summary) |>
+    barchart(horizontal = FALSE, ylab = "Number of tables",
+             auto.key = list(text = c("Original", "Update"), columns = 2),
+             scales = list(x = list(rot = 45)))
+```
+
+
+Table of frequency by month:
+
+```{r}
+pubfreq <- xtabs(~ interaction(month, year, sep = "-") + updated, pub_summary)
+pubfreq0 <- pubfreq[rowSums(pubfreq) > 0, , drop = FALSE]
+pubfreq0
+```
+
+There are a bit too many months to plot nicely, but approximately:
+
+```{r, bymonth}
+npub <- rowSums(pubfreq)
+npub.date <- as.Date(paste0("01", "-", names(npub)), format = "%d-%B-%Y")
+xyplot(npub ~ npub.date, type = "h", grid = TRUE,
+       xlab = "Month", ylab = "Number of tables published / updated") +
+    latticeExtra::layer(panel.text(x[y > 30], y[y > 30],
+                                   format(x[y > 30], "%Y-%m"),
+                                   pos = 3, cex = 0.75))
+```
+
+

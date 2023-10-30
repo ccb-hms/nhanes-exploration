@@ -12,7 +12,7 @@ knitr::opts_chunk$set(collapse = TRUE,
                       comment = "#>",
                       fig.path = "figures/",
                       out.width = "100%",
-                      fig.width = 12, fig.height = 5,
+                      fig.width = 12, fig.height = 8,
                       dev = "svglite", dev.args = list(pointsize = 12),
                       cache = TRUE,
                       cache.path = "./knitr-cache/explore/")
