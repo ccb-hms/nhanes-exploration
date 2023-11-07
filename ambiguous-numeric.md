@@ -111,7 +111,8 @@ List of 7
 [1] 403
 ```
 
-These are too many tables to list, though we could do so as follows:
+These are too many tables to list (many with multiple variables), though
+we could do so as follows:
 
 ``` r
 for (t in tables[!exec_error & !no_codebook]) {
@@ -129,8 +130,8 @@ Instead, we will just list the labels that will need to be handled.
 > labels_df <- labels_df[1:2]
 ```
 
-Next, we count the number of tables each description occurs in, and sort
-by frequency.
+Next, we count the number of variables each description occurs in, and
+sort by frequency.
 
 ``` r
 > labels_df <- subset(labels_df, Value.Description != "Range of Values")
