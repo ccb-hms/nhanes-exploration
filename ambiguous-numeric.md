@@ -5,19 +5,6 @@ Deepayan Sarkar
 Goal: identify tables where conversion to numeric may have problems.
 
 ``` r
-> ## some common variants
-> acceptable <-
-+     c("Range of Values", "Missing", "No response", "Refused",
-+       "SP refused", "Could not obtain",
-+       "Don't know", "Don't  Know", "Cannot be assessed",
-+       "Calculation cannot be determined")
-> agelimits <-
-+     c("80 years or older", "85 years or older",
-+       ">= 80 years of age", ">= 85 years of age", "80 years of age and over",
-+       "9 or younger", "9 years or younger",
-+       "12 years or younger ", "14 years or younger",
-+       "45 years or older", "14 years or under",
-+       "60 years or older")
 > find_conversion_problems <- function(nh_table)
 + {
 +     cb <- nhanesCodebook(nh_table)
