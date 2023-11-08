@@ -149,6 +149,7 @@ sort by frequency.
 ```
 
 ``` r
+> saveRDS(labels_summary, file = "labels.rds")
 > rownames(labels_summary) <- NULL
 > labels_summary[order(labels_summary$Count, decreasing = TRUE), ]
                                              Desc Count                          Codes

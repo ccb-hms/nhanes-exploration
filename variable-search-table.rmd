@@ -1,0 +1,204 @@
+---
+title: "Creating a Searchable Table of Variables in NHANES"
+author: "Deepayan Sarkar"
+output: github_document
+always_allow_html: true
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE,
+                      comment = "#>",
+                      out.width = "100%",
+                      cache = TRUE,
+                      cache.path = "./knitr-cache/variable-search/")
+options(width = 100)
+library(kableExtra) # for kable()
+library(DT)
+sort.data.frame <- function(x, decreasing = FALSE, by = NULL, ...)
+{
+    if (!inherits(by, "formula")) stop("'by' must be a formula")
+    f <- .formula2varlist(by, x)
+    o <- do.call(order, c(unname(f), list(decreasing = decreasing, ...)))
+    x[o, , drop = FALSE]
+}
+```
+
+# Summary of available variables
+
+The NHANES data consist of multiple tables over multiple cycles, each
+with a set of recorded variables. The variable names themselves are
+fairly cryptic, and not useful as search terms. Fortunately, the
+NHANES website also provides descriptions of these variables in
+comprehensive tables (grouped by components such as
+[Demographics](https://wwwn.cdc.gov/nchs/nhanes/search/variablelist.aspx?Component=Demographics),
+[Laboratory](https://wwwn.cdc.gov/nchs/nhanes/search/variablelist.aspx?Component=Laboratory),
+etc.), along with a search interface.
+
+
+The nhanesA package can download these tables and make the information
+contained in them available as a data frame using the
+`nhanesManifest()` function.
+
+```{r}
+library(nhanesA)
+varmf <- nhanesManifest("variables")
+```
+
+This downloads and combined several large web pages, so it may take a
+little time to run. Add `verbose = TRUE` to see some indication of
+what is happening. 
+
+The first few rows of the resulting data frame are given by
+
+```{r}
+head(varmf)
+```
+
+and it dimensions are
+
+```{r}
+dim(varmf)
+```
+
+If we drop the pandemic (`P_*`) tables and limited access tables, we get
+```{r}
+varmf <- subset(varmf, !startsWith(Table, "P_") & UseConstraints == "None")
+dim(varmf)
+```
+
+There are not actually these many distinct variables, because every
+occurrence in every table is recorded separately.
+
+```{r}
+length(unique(varmf$VarName))
+```
+
+We may be more interested in variables that are recorded in most (if
+not all) cycles. Let's see how frequently variables appear.
+
+```{r}
+table(varmf$VarName) |> sort(decreasing = TRUE) |> table()
+```
+
+What does it mean for a variable to appear in more than 10 tables? This makes 
+sense for `SEQN`:
+
+```{r}
+sum(varmf$VarName == "SEQN")
+```
+
+The other ones are typically variables that are recorded in multiple tables; for example,
+
+```{r}
+subset(varmf, VarName == "PHAFSTMN", select = c(Table, TableDesc, BeginYear, EndYear)) |> kable()
+```
+
+It is not immediately obvious whether these are these measuring the
+same thing. If we include the variable descriptions in the above
+table, we see that they are sometimes different.
+
+```{r}
+subset(varmf, VarName == "PHAFSTMN", select = c(Table, TableDesc, VarDesc)) |>
+    sort(by = ~ Table) |> kable()
+```
+
+
+# Aggregation strategy
+
+To make a searchable table that is more concise that the full table
+but retains potentially different interpretations of the same variable
+name, we will create a table with one row for each distinct
+combination of `VarName` and `VarDesc`, and alongside them, list all
+tables where this combination appears.
+
+
+```{r}
+
+summarizeTable <- function(d) {
+    with(d, sprintf("[%s]<br>(%s)",
+                    paste(sort(Table), collapse = ", "),
+                    paste(sort(unique(TableDesc)), collapse = "<br> ")))
+}
+aggTable <- unique(varmf[c("VarName", "VarDesc", "Component")]) |>
+    sort(by = ~ Component + VarName + VarDesc)
+aggTable$Details <- ""
+aggTable <- subset(aggTable, VarName != "SEQN") # not useful
+for (i in seq_len(nrow(aggTable))) {
+    if (interactive() && i %% 100 == 0) cat("\r", i, " / ", nrow(aggTable), "      ")
+    aggTable$Details[[i]] <-
+        summarizeTable(subset(varmf,
+                              VarName == aggTable$VarName[[i]] &
+                              VarDesc == aggTable$VarDesc[[i]]))
+}
+```
+
+We can now either save this is a CSV file for further processing, e.g.,
+
+```r
+write.csv(aggTable, file = "nhanes-variables.csv", row.names = FALSE)
+```
+
+or use the `DT` package to create a searchable HTML table using the
+DataTables Javascript library.
+
+```{r}
+library(DT)
+dt <- datatable(aggTable,
+                rownames = FALSE,
+                colnames = c("Variable", "Description", "Component", "Source"),
+                escape = FALSE, editable = FALSE,
+                options = list(columnDefs = list(
+                                   list("searchable" = FALSE,
+                                        "targets" = c(2, 3))
+                               )))
+saveWidget(dt, file = "nhanes-variables.html", selfcontained = TRUE)
+```
+
+Both of these will create fairly large files, so they are not actually
+created here. For demonstration the following gives the table only for
+the Demographics component, which is the smallest.
+
+```{r}
+demo <-
+    DT::datatable(subset(aggTable, Component == "Demographics"),
+                  rownames = FALSE,
+                  colnames = c("Variable", "Description", "Component", "Source"),
+                  escape = FALSE, editable = FALSE,
+                  options = list(columnDefs = list(
+                                     list("searchable" = FALSE,
+                                          "targets" = c(2, 3))
+                                 )))
+saveWidget(demo, file = "nhanes-variables-demographic.html", selfcontained = TRUE)
+```
+
+The result is available [here](nhanes-variables-demographic.html).
+
+
+
+# Enhancements
+
+Though useful, the information available in the variable manifest is
+limited. More useful information is available in the per-table
+codebooks (which can be accessed using the `nhanesCodebook()`
+function), including a usually shorter description of each variable
+referred to as the "SAS Label", along with information about possible
+response values and their counts, including the number of missing
+values. 
+
+Such information can be easily incorporated into the aggregate table
+created above, but requires processing the codebooks for all available
+tables, which involves downloading a large number of files. Even more
+useful information (such as how many unique non-missing values are
+actually available for a given variable) involves inspecting the
+actual data files, which again involves downloading and processing a
+large number of files. These steps are less time-consuming if one uses
+the dockerized version of the package where both the codebooks and
+datasets are available through a local database.
+
+
+
+
+
+

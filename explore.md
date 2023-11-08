@@ -17,211 +17,108 @@ head(alltables) |> kable()
 ```
 
 <table>
-
 <thead>
-
 <tr>
-
 <th style="text-align:left;">
-
-TABLE\_CATALOG
-
+TABLE_CATALOG
 </th>
-
 <th style="text-align:left;">
-
-TABLE\_SCHEMA
-
+TABLE_SCHEMA
 </th>
-
 <th style="text-align:left;">
-
-TABLE\_NAME
-
+TABLE_NAME
 </th>
-
 <th style="text-align:left;">
-
-TABLE\_TYPE
-
+TABLE_TYPE
 </th>
-
 </tr>
-
 </thead>
-
 <tbody>
-
 <tr>
-
 <td style="text-align:left;">
-
 NhanesLandingZone
-
 </td>
-
 <td style="text-align:left;">
-
 Raw
-
 </td>
-
 <td style="text-align:left;">
-
 LAB03
-
 </td>
-
 <td style="text-align:left;">
-
 BASE TABLE
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 NhanesLandingZone
-
 </td>
-
 <td style="text-align:left;">
-
 Raw
-
 </td>
-
 <td style="text-align:left;">
-
-BFRPOL\_I
-
+BFRPOL_I
 </td>
-
 <td style="text-align:left;">
-
 BASE TABLE
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 NhanesLandingZone
-
 </td>
-
 <td style="text-align:left;">
-
 Raw
-
 </td>
-
 <td style="text-align:left;">
-
-TCHOL\_J
-
+TCHOL_J
 </td>
-
 <td style="text-align:left;">
-
 BASE TABLE
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 NhanesLandingZone
-
 </td>
-
 <td style="text-align:left;">
-
 Raw
-
 </td>
-
 <td style="text-align:left;">
-
-IHG\_E
-
+IHG_E
 </td>
-
 <td style="text-align:left;">
-
 BASE TABLE
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 NhanesLandingZone
-
 </td>
-
 <td style="text-align:left;">
-
 Raw
-
 </td>
-
 <td style="text-align:left;">
-
 SMQMEC
-
 </td>
-
 <td style="text-align:left;">
-
 BASE TABLE
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 NhanesLandingZone
-
 </td>
-
 <td style="text-align:left;">
-
 Raw
-
 </td>
-
 <td style="text-align:left;">
-
-GHB\_E
-
+GHB_E
 </td>
-
 <td style="text-align:left;">
-
 BASE TABLE
-
 </td>
-
 </tr>
-
 </tbody>
-
 </table>
 
 There are two versions of each table, the raw table with original codes,
@@ -233,421 +130,213 @@ subset(alltables, !(TABLE_SCHEMA %in% c("Raw", "Translated"))) |> kable()
 ```
 
 <table>
-
 <thead>
-
 <tr>
-
 <th style="text-align:left;">
-
 </th>
-
 <th style="text-align:left;">
-
-TABLE\_CATALOG
-
+TABLE_CATALOG
 </th>
-
 <th style="text-align:left;">
-
-TABLE\_SCHEMA
-
+TABLE_SCHEMA
 </th>
-
 <th style="text-align:left;">
-
-TABLE\_NAME
-
+TABLE_NAME
 </th>
-
 <th style="text-align:left;">
-
-TABLE\_TYPE
-
+TABLE_TYPE
 </th>
-
 </tr>
-
 </thead>
-
 <tbody>
-
 <tr>
-
 <td style="text-align:left;">
-
 2955
-
 </td>
-
 <td style="text-align:left;">
-
 NhanesLandingZone
-
 </td>
-
 <td style="text-align:left;">
-
 Metadata
-
 </td>
-
 <td style="text-align:left;">
-
 QuestionnaireVariables
-
 </td>
-
 <td style="text-align:left;">
-
 BASE TABLE
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 2956
-
 </td>
-
 <td style="text-align:left;">
-
 NhanesLandingZone
-
 </td>
-
 <td style="text-align:left;">
-
 Metadata
-
 </td>
-
 <td style="text-align:left;">
-
 DownloadErrors
-
 </td>
-
 <td style="text-align:left;">
-
 BASE TABLE
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 2957
-
 </td>
-
 <td style="text-align:left;">
-
 NhanesLandingZone
-
 </td>
-
 <td style="text-align:left;">
-
 Metadata
-
 </td>
-
 <td style="text-align:left;">
-
 VariableCodebook
-
 </td>
-
 <td style="text-align:left;">
-
 BASE TABLE
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 2958
-
 </td>
-
 <td style="text-align:left;">
-
 NhanesLandingZone
-
 </td>
-
 <td style="text-align:left;">
-
 Metadata
-
 </td>
-
 <td style="text-align:left;">
-
 ExcludedTables
-
 </td>
-
 <td style="text-align:left;">
-
 BASE TABLE
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 2959
-
 </td>
-
 <td style="text-align:left;">
-
 NhanesLandingZone
-
 </td>
-
 <td style="text-align:left;">
-
 Metadata
-
 </td>
-
 <td style="text-align:left;">
-
 QuestionnaireDescriptions
-
 </td>
-
 <td style="text-align:left;">
-
 BASE TABLE
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 2960
-
 </td>
-
 <td style="text-align:left;">
-
 NhanesLandingZone
-
 </td>
-
 <td style="text-align:left;">
-
 Ontology
-
 </td>
-
 <td style="text-align:left;">
-
 dbxrefs
-
 </td>
-
 <td style="text-align:left;">
-
 BASE TABLE
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 2961
-
 </td>
-
 <td style="text-align:left;">
-
 NhanesLandingZone
-
 </td>
-
 <td style="text-align:left;">
-
 Ontology
-
 </td>
-
 <td style="text-align:left;">
-
 edges
-
 </td>
-
 <td style="text-align:left;">
-
 BASE TABLE
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 2962
-
 </td>
-
 <td style="text-align:left;">
-
 NhanesLandingZone
-
 </td>
-
 <td style="text-align:left;">
-
 Ontology
-
 </td>
-
 <td style="text-align:left;">
-
-entailed\_edges
-
+entailed_edges
 </td>
-
 <td style="text-align:left;">
-
 BASE TABLE
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 2963
-
 </td>
-
 <td style="text-align:left;">
-
 NhanesLandingZone
-
 </td>
-
 <td style="text-align:left;">
-
 Ontology
-
 </td>
-
 <td style="text-align:left;">
-
 labels
-
 </td>
-
 <td style="text-align:left;">
-
 BASE TABLE
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 2964
-
 </td>
-
 <td style="text-align:left;">
-
 NhanesLandingZone
-
 </td>
-
 <td style="text-align:left;">
-
 Ontology
-
 </td>
-
 <td style="text-align:left;">
-
 synonyms
-
 </td>
-
 <td style="text-align:left;">
-
 BASE TABLE
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 2965
-
 </td>
-
 <td style="text-align:left;">
-
 NhanesLandingZone
-
 </td>
-
 <td style="text-align:left;">
-
 Ontology
-
 </td>
-
 <td style="text-align:left;">
-
-nhanes\_variables\_mappings
-
+nhanes_variables_mappings
 </td>
-
 <td style="text-align:left;">
-
 BASE TABLE
-
 </td>
-
 </tr>
-
 </tbody>
-
 </table>
 
 The translated table names can be extracted as follows.
@@ -769,729 +458,368 @@ head(tableSummary, 20) |> kable() # use datatable() for html_output
 ```
 
 <table>
-
 <thead>
-
 <tr>
-
 <th style="text-align:left;">
-
 </th>
-
 <th style="text-align:left;">
-
 TableBase
-
 </th>
-
 <th style="text-align:left;">
-
 Description
-
 </th>
-
 <th style="text-align:left;">
-
 DataGroup
-
 </th>
-
 <th style="text-align:right;">
-
 Freq
-
 </th>
-
 </tr>
-
 </thead>
-
 <tbody>
-
 <tr>
-
 <td style="text-align:left;">
-
 42234
-
 </td>
-
 <td style="text-align:left;">
-
 DEMO
-
 </td>
-
 <td style="text-align:left;">
-
 Demographic Variables & Sample Weights
-
 </td>
-
 <td style="text-align:left;">
-
 Demographics
-
 </td>
-
 <td style="text-align:right;">
-
 7
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 42660
-
 </td>
-
 <td style="text-align:left;">
-
 DEMO
-
 </td>
-
 <td style="text-align:left;">
-
 Demographic Variables and Sample Weights
-
 </td>
-
 <td style="text-align:left;">
-
 Demographics
-
 </td>
-
 <td style="text-align:right;">
-
 3
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 225000
-
 </td>
-
 <td style="text-align:left;">
-
 DRXIFF
-
 </td>
-
 <td style="text-align:left;">
-
 Dietary Interview - Individual Foods
-
 </td>
-
 <td style="text-align:left;">
-
 Dietary
-
 </td>
-
 <td style="text-align:right;">
-
 2
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 225421
-
 </td>
-
 <td style="text-align:left;">
-
 DR1IFF
-
 </td>
-
 <td style="text-align:left;">
-
 Dietary Interview - Individual Foods, First Day
-
 </td>
-
 <td style="text-align:left;">
-
 Dietary
-
 </td>
-
 <td style="text-align:right;">
-
 8
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 225849
-
 </td>
-
 <td style="text-align:left;">
-
 DR2IFF
-
 </td>
-
 <td style="text-align:left;">
-
 Dietary Interview - Individual Foods, Second Day
-
 </td>
-
 <td style="text-align:left;">
-
 Dietary
-
 </td>
-
 <td style="text-align:right;">
-
 8
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 226280
-
 </td>
-
 <td style="text-align:left;">
-
 DRXTOT
-
 </td>
-
 <td style="text-align:left;">
-
 Dietary Interview - Total Nutrient Intakes
-
 </td>
-
 <td style="text-align:left;">
-
 Dietary
-
 </td>
-
 <td style="text-align:right;">
-
 2
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 226700
-
 </td>
-
 <td style="text-align:left;">
-
 DR1TOT
-
 </td>
-
 <td style="text-align:left;">
-
 Dietary Interview - Total Nutrient Intakes, First Day
-
 </td>
-
 <td style="text-align:left;">
-
 Dietary
-
 </td>
-
 <td style="text-align:right;">
-
 8
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 227128
-
 </td>
-
 <td style="text-align:left;">
-
 DR2TOT
-
 </td>
-
 <td style="text-align:left;">
-
 Dietary Interview - Total Nutrient Intakes, Second Day
-
 </td>
-
 <td style="text-align:left;">
-
 Dietary
-
 </td>
-
 <td style="text-align:right;">
-
 8
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 227555
-
 </td>
-
 <td style="text-align:left;">
-
 DRXFCD
-
 </td>
-
 <td style="text-align:left;">
-
 Dietary Interview Technical Support File - Food Codes
-
 </td>
-
 <td style="text-align:left;">
-
 Dietary
-
 </td>
-
 <td style="text-align:right;">
-
 6
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 227983
-
 </td>
-
 <td style="text-align:left;">
-
 DRXMCD
-
 </td>
-
 <td style="text-align:left;">
-
 Dietary Interview Technical Support File - Modification Codes
-
 </td>
-
 <td style="text-align:left;">
-
 Dietary
-
 </td>
-
 <td style="text-align:right;">
-
 5
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 228421
-
 </td>
-
 <td style="text-align:left;">
-
 DTQ
-
 </td>
-
 <td style="text-align:left;">
-
 Dietary Screener Questionnaire
-
 </td>
-
 <td style="text-align:left;">
-
 Dietary
-
 </td>
-
 <td style="text-align:right;">
-
 1
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 228837
-
 </td>
-
 <td style="text-align:left;">
-
 DS1IDS
-
 </td>
-
 <td style="text-align:left;">
-
 Dietary Supplement Use 24-Hour - Individual Dietary Supplements, First
 Day
-
 </td>
-
 <td style="text-align:left;">
-
 Dietary
-
 </td>
-
 <td style="text-align:right;">
-
 6
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 229265
-
 </td>
-
 <td style="text-align:left;">
-
 DS2IDS
-
 </td>
-
 <td style="text-align:left;">
-
 Dietary Supplement Use 24-Hour - Individual Dietary Supplements, Second
 Day
-
 </td>
-
 <td style="text-align:left;">
-
 Dietary
-
 </td>
-
 <td style="text-align:right;">
-
 6
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 229690
-
 </td>
-
 <td style="text-align:left;">
-
 DS1TOT
-
 </td>
-
 <td style="text-align:left;">
-
 Dietary Supplement Use 24-Hour - Total Dietary Supplements, First Day
-
 </td>
-
 <td style="text-align:left;">
-
 Dietary
-
 </td>
-
 <td style="text-align:right;">
-
 6
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 230118
-
 </td>
-
 <td style="text-align:left;">
-
 DS2TOT
-
 </td>
-
 <td style="text-align:left;">
-
 Dietary Supplement Use 24-Hour - Total Dietary Supplements, Second Day
-
 </td>
-
 <td style="text-align:left;">
-
 Dietary
-
 </td>
-
 <td style="text-align:right;">
-
 6
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 230549
-
 </td>
-
 <td style="text-align:left;">
-
 DSQIDS
-
 </td>
-
 <td style="text-align:left;">
-
 Dietary Supplement Use 30 Day - Individual Dietary Supplements
-
 </td>
-
 <td style="text-align:left;">
-
 Dietary
-
 </td>
-
 <td style="text-align:right;">
-
 3
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 230971
-
 </td>
-
 <td style="text-align:left;">
-
 DSQ1
-
 </td>
-
 <td style="text-align:left;">
-
 Dietary Supplement Use 30-Day - File 1, Supplement Counts
-
 </td>
-
 <td style="text-align:left;">
-
 Dietary
-
 </td>
-
 <td style="text-align:right;">
-
 3
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 230973
-
 </td>
-
 <td style="text-align:left;">
-
 DSQFILE1
-
 </td>
-
 <td style="text-align:left;">
-
 Dietary Supplement Use 30-Day - File 1, Supplement Counts
-
 </td>
-
 <td style="text-align:left;">
-
 Dietary
-
 </td>
-
 <td style="text-align:right;">
-
 1
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 231398
-
 </td>
-
 <td style="text-align:left;">
-
 DSQ2
-
 </td>
-
 <td style="text-align:left;">
-
 Dietary Supplement Use 30-Day - File 2, Participant’s Use of Supplements
-
 </td>
-
 <td style="text-align:left;">
-
 Dietary
-
 </td>
-
 <td style="text-align:right;">
-
 3
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 231400
-
 </td>
-
 <td style="text-align:left;">
-
 DSQFILE2
-
 </td>
-
 <td style="text-align:left;">
-
 Dietary Supplement Use 30-Day - File 2, Participant’s Use of Supplements
-
 </td>
-
 <td style="text-align:left;">
-
 Dietary
-
 </td>
-
 <td style="text-align:right;">
-
 1
-
 </td>
-
 </tr>
-
 </tbody>
-
 </table>
 
 # Extracting table data
@@ -1564,1339 +892,672 @@ subset(tableSummary, Freq > 7) |> kable()
 ```
 
 <table>
-
 <thead>
-
 <tr>
-
 <th style="text-align:left;">
-
 </th>
-
 <th style="text-align:left;">
-
 TableBase
-
 </th>
-
 <th style="text-align:left;">
-
 Description
-
 </th>
-
 <th style="text-align:left;">
-
 DataGroup
-
 </th>
-
 <th style="text-align:right;">
-
 Freq
-
 </th>
-
 </tr>
-
 </thead>
-
 <tbody>
-
 <tr>
-
 <td style="text-align:left;">
-
 225421
-
 </td>
-
 <td style="text-align:left;">
-
 DR1IFF
-
 </td>
-
 <td style="text-align:left;">
-
 Dietary Interview - Individual Foods, First Day
-
 </td>
-
 <td style="text-align:left;">
-
 Dietary
-
 </td>
-
 <td style="text-align:right;">
-
 8
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 225849
-
 </td>
-
 <td style="text-align:left;">
-
 DR2IFF
-
 </td>
-
 <td style="text-align:left;">
-
 Dietary Interview - Individual Foods, Second Day
-
 </td>
-
 <td style="text-align:left;">
-
 Dietary
-
 </td>
-
 <td style="text-align:right;">
-
 8
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 226700
-
 </td>
-
 <td style="text-align:left;">
-
 DR1TOT
-
 </td>
-
 <td style="text-align:left;">
-
 Dietary Interview - Total Nutrient Intakes, First Day
-
 </td>
-
 <td style="text-align:left;">
-
 Dietary
-
 </td>
-
 <td style="text-align:right;">
-
 8
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 227128
-
 </td>
-
 <td style="text-align:left;">
-
 DR2TOT
-
 </td>
-
 <td style="text-align:left;">
-
 Dietary Interview - Total Nutrient Intakes, Second Day
-
 </td>
-
 <td style="text-align:left;">
-
 Dietary
-
 </td>
-
 <td style="text-align:right;">
-
 8
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 373621
-
 </td>
-
 <td style="text-align:left;">
-
 AUX
-
 </td>
-
 <td style="text-align:left;">
-
 Audiometry
-
 </td>
-
 <td style="text-align:left;">
-
 Examination
-
 </td>
-
 <td style="text-align:right;">
-
 8
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 374049
-
 </td>
-
 <td style="text-align:left;">
-
 AUXAR
-
 </td>
-
 <td style="text-align:left;">
-
 Audiometry - Acoustic Reflex
-
 </td>
-
 <td style="text-align:left;">
-
 Examination
-
 </td>
-
 <td style="text-align:right;">
-
 9
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 374476
-
 </td>
-
 <td style="text-align:left;">
-
 AUXTYM
-
 </td>
-
 <td style="text-align:left;">
-
 Audiometry - Tympanometry
-
 </td>
-
 <td style="text-align:left;">
-
 Examination
-
 </td>
-
 <td style="text-align:right;">
-
 9
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 377895
-
 </td>
-
 <td style="text-align:left;">
-
 BPX
-
 </td>
-
 <td style="text-align:left;">
-
 Blood Pressure
-
 </td>
-
 <td style="text-align:left;">
-
 Examination
-
 </td>
-
 <td style="text-align:right;">
-
 10
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 379171
-
 </td>
-
 <td style="text-align:left;">
-
 BMX
-
 </td>
-
 <td style="text-align:left;">
-
 Body Measures
-
 </td>
-
 <td style="text-align:left;">
-
 Examination
-
 </td>
-
 <td style="text-align:right;">
-
 10
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 483784
-
 </td>
-
 <td style="text-align:left;">
-
 OHXREF
-
 </td>
-
 <td style="text-align:left;">
-
 Oral Health - Recommendation of Care
-
 </td>
-
 <td style="text-align:left;">
-
 Examination
-
 </td>
-
 <td style="text-align:right;">
-
 8
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 722499
-
 </td>
-
 <td style="text-align:left;">
-
 ACQ
-
 </td>
-
 <td style="text-align:left;">
-
 Acculturation
-
 </td>
-
 <td style="text-align:left;">
-
 Questionnaire
-
 </td>
-
 <td style="text-align:right;">
-
 10
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 725062
-
 </td>
-
 <td style="text-align:left;">
-
 ALQ
-
 </td>
-
 <td style="text-align:left;">
-
 Alcohol Use
-
 </td>
-
 <td style="text-align:left;">
-
 Questionnaire
-
 </td>
-
 <td style="text-align:right;">
-
 10
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 734868
-
 </td>
-
 <td style="text-align:left;">
-
 AUQ
-
 </td>
-
 <td style="text-align:left;">
-
 Audiometry
-
 </td>
-
 <td style="text-align:left;">
-
 Questionnaire
-
 </td>
-
 <td style="text-align:right;">
-
 9
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 739994
-
 </td>
-
 <td style="text-align:left;">
-
 BPQ
-
 </td>
-
 <td style="text-align:left;">
-
 Blood Pressure & Cholesterol
-
 </td>
-
 <td style="text-align:left;">
-
 Questionnaire
-
 </td>
-
 <td style="text-align:right;">
-
 10
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 747671
-
 </td>
-
 <td style="text-align:left;">
-
 CDQ
-
 </td>
-
 <td style="text-align:left;">
-
 Cardiovascular Health
-
 </td>
-
 <td style="text-align:left;">
-
 Questionnaire
-
 </td>
-
 <td style="text-align:right;">
-
 10
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 761414
-
 </td>
-
 <td style="text-align:left;">
-
 HSQ
-
 </td>
-
 <td style="text-align:left;">
-
 Current Health Status
-
 </td>
-
 <td style="text-align:left;">
-
 Questionnaire
-
 </td>
-
 <td style="text-align:right;">
-
 10
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 765583
-
 </td>
-
 <td style="text-align:left;">
-
 DEQ
-
 </td>
-
 <td style="text-align:left;">
-
 Dermatology
-
 </td>
-
 <td style="text-align:left;">
-
 Questionnaire
-
 </td>
-
 <td style="text-align:right;">
-
 9
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 766011
-
 </td>
-
 <td style="text-align:left;">
-
 DIQ
-
 </td>
-
 <td style="text-align:left;">
-
 Diabetes
-
 </td>
-
 <td style="text-align:left;">
-
 Questionnaire
-
 </td>
-
 <td style="text-align:right;">
-
 10
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 766432
-
 </td>
-
 <td style="text-align:left;">
-
 DBQ
-
 </td>
-
 <td style="text-align:left;">
-
 Diet Behavior & Nutrition
-
 </td>
-
 <td style="text-align:left;">
-
 Questionnaire
-
 </td>
-
 <td style="text-align:right;">
-
 10
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 775406
-
 </td>
-
 <td style="text-align:left;">
-
 DUQ
-
 </td>
-
 <td style="text-align:left;">
-
 Drug Use
-
 </td>
-
 <td style="text-align:left;">
-
 Questionnaire
-
 </td>
-
 <td style="text-align:right;">
-
 10
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 786078
-
 </td>
-
 <td style="text-align:left;">
-
 ECQ
-
 </td>
-
 <td style="text-align:left;">
-
 Early Childhood
-
 </td>
-
 <td style="text-align:left;">
-
 Questionnaire
-
 </td>
-
 <td style="text-align:right;">
-
 10
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 798879
-
 </td>
-
 <td style="text-align:left;">
-
 FSQ
-
 </td>
-
 <td style="text-align:left;">
-
 Food Security
-
 </td>
-
 <td style="text-align:left;">
-
 Questionnaire
-
 </td>
-
 <td style="text-align:right;">
-
 10
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 801875
-
 </td>
-
 <td style="text-align:left;">
-
 HIQ
-
 </td>
-
 <td style="text-align:left;">
-
 Health Insurance
-
 </td>
-
 <td style="text-align:left;">
-
 Questionnaire
-
 </td>
-
 <td style="text-align:right;">
-
 10
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 813388
-
 </td>
-
 <td style="text-align:left;">
-
 HUQ
-
 </td>
-
 <td style="text-align:left;">
-
 Hospital Utilization & Access to Care
-
 </td>
-
 <td style="text-align:left;">
-
 Questionnaire
-
 </td>
-
 <td style="text-align:right;">
-
 10
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 813805
-
 </td>
-
 <td style="text-align:left;">
-
 HOQ
-
 </td>
-
 <td style="text-align:left;">
-
 Housing Characteristics
-
 </td>
-
 <td style="text-align:left;">
-
 Questionnaire
-
 </td>
-
 <td style="text-align:right;">
-
 10
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 820207
-
 </td>
-
 <td style="text-align:left;">
-
 IMQ
-
 </td>
-
 <td style="text-align:left;">
-
 Immunization
-
 </td>
-
 <td style="text-align:left;">
-
 Questionnaire
-
 </td>
-
 <td style="text-align:right;">
-
 10
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 823194
-
 </td>
-
 <td style="text-align:left;">
-
-KIQ\_U
-
+KIQ_U
 </td>
-
 <td style="text-align:left;">
-
 Kidney Conditions - Urology
-
 </td>
-
 <td style="text-align:left;">
-
 Questionnaire
-
 </td>
-
 <td style="text-align:right;">
-
 9
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 828827
-
 </td>
-
 <td style="text-align:left;">
-
 MCQ
-
 </td>
-
 <td style="text-align:left;">
-
 Medical Conditions
-
 </td>
-
 <td style="text-align:left;">
-
 Questionnaire
-
 </td>
-
 <td style="text-align:right;">
-
 10
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 840761
-
 </td>
-
 <td style="text-align:left;">
-
 OCQ
-
 </td>
-
 <td style="text-align:left;">
-
 Occupation
-
 </td>
-
 <td style="text-align:left;">
-
 Questionnaire
-
 </td>
-
 <td style="text-align:right;">
-
 10
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 842467
-
 </td>
-
 <td style="text-align:left;">
-
 OHQ
-
 </td>
-
 <td style="text-align:left;">
-
 Oral Health
-
 </td>
-
 <td style="text-align:left;">
-
 Questionnaire
-
 </td>
-
 <td style="text-align:right;">
-
 10
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 846741
-
 </td>
-
 <td style="text-align:left;">
-
 OSQ
-
 </td>
-
 <td style="text-align:left;">
-
 Osteoporosis
-
 </td>
-
 <td style="text-align:left;">
-
 Questionnaire
-
 </td>
-
 <td style="text-align:right;">
-
 8
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 859523
-
 </td>
-
 <td style="text-align:left;">
-
 PAQ
-
 </td>
-
 <td style="text-align:left;">
-
 Physical Activity
-
 </td>
-
 <td style="text-align:left;">
-
 Questionnaire
-
 </td>
-
 <td style="text-align:right;">
-
 10
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 862091
-
 </td>
-
 <td style="text-align:left;">
-
 PFQ
-
 </td>
-
 <td style="text-align:left;">
-
 Physical Functioning
-
 </td>
-
 <td style="text-align:left;">
-
 Questionnaire
-
 </td>
-
 <td style="text-align:right;">
-
 10
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 868071
-
 </td>
-
 <td style="text-align:left;">
-
-RXQ\_RX
-
+RXQ_RX
 </td>
-
 <td style="text-align:left;">
-
 Prescription Medications
-
 </td>
-
 <td style="text-align:left;">
-
 Questionnaire
-
 </td>
-
 <td style="text-align:right;">
-
 10
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 872329
-
 </td>
-
 <td style="text-align:left;">
-
 RHQ
-
 </td>
-
 <td style="text-align:left;">
-
 Reproductive Health
-
 </td>
-
 <td style="text-align:left;">
-
 Questionnaire
-
 </td>
-
 <td style="text-align:right;">
-
 10
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 874949
-
 </td>
-
 <td style="text-align:left;">
-
 SXQ
-
 </td>
-
 <td style="text-align:left;">
-
 Sexual Behavior
-
 </td>
-
 <td style="text-align:left;">
-
 Questionnaire
-
 </td>
-
 <td style="text-align:right;">
-
 9
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 877449
-
 </td>
-
 <td style="text-align:left;">
-
 SMQFAM
-
 </td>
-
 <td style="text-align:left;">
-
 Smoking - Household Smokers
-
 </td>
-
 <td style="text-align:left;">
-
 Questionnaire
-
 </td>
-
 <td style="text-align:right;">
-
 10
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 902692
-
 </td>
-
 <td style="text-align:left;">
-
 WHQ
-
 </td>
-
 <td style="text-align:left;">
-
 Weight History
-
 </td>
-
 <td style="text-align:left;">
-
 Questionnaire
-
 </td>
-
 <td style="text-align:right;">
-
 10
-
 </td>
-
 </tr>
-
 </tbody>
-
 </table>
 
 Let’s say we now want to combine the tables DEMO, WHQ (Weight history),
@@ -3085,629 +1746,317 @@ subset(uvarDesc, agrepl("weight", SasLabel, ignore.case = TRUE, fixed = TRUE)) |
 ```
 
 <table>
-
 <thead>
-
 <tr>
-
 <th style="text-align:left;">
-
 </th>
-
 <th style="text-align:left;">
-
 Variable
-
 </th>
-
 <th style="text-align:left;">
-
 SasLabel
-
 </th>
-
 </tr>
-
 </thead>
-
 <tbody>
-
 <tr>
-
 <td style="text-align:left;">
-
 8556
-
 </td>
-
 <td style="text-align:left;">
-
 BMXWT
-
 </td>
-
 <td style="text-align:left;">
-
 Weight (kg)
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 8557
-
 </td>
-
 <td style="text-align:left;">
-
 BMIWT
-
 </td>
-
 <td style="text-align:left;">
-
 Weight Comment
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 8562
-
 </td>
-
 <td style="text-align:left;">
-
 BMXHT
-
 </td>
-
 <td style="text-align:left;">
-
 Standing Height (cm)
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 8563
-
 </td>
-
 <td style="text-align:left;">
-
 BMIHT
-
 </td>
-
 <td style="text-align:left;">
-
 Standing Height Comment
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 12443
-
 </td>
-
 <td style="text-align:left;">
-
 WTINT2YR
-
 </td>
-
 <td style="text-align:left;">
-
 Full Sample 2 Year Interview Weight
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 12445
-
 </td>
-
 <td style="text-align:left;">
-
 WTMEC2YR
-
 </td>
-
 <td style="text-align:left;">
-
 Full Sample 2 Year MEC Exam Weight
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 12797
-
 </td>
-
 <td style="text-align:left;">
-
 WTINT2YR
-
 </td>
-
 <td style="text-align:left;">
-
 Full sample 2 year interview weight
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 12798
-
 </td>
-
 <td style="text-align:left;">
-
 WTMEC2YR
-
 </td>
-
 <td style="text-align:left;">
-
 Full sample 2 year MEC exam weight
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 50012
-
 </td>
-
 <td style="text-align:left;">
-
 WHD010
-
 </td>
-
 <td style="text-align:left;">
-
 Current self-reported height (inches)
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 50013
-
 </td>
-
 <td style="text-align:left;">
-
 WHD020
-
 </td>
-
 <td style="text-align:left;">
-
 Current self-reported weight (pounds)
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 50014
-
 </td>
-
 <td style="text-align:left;">
-
 WHQ030
-
 </td>
-
 <td style="text-align:left;">
-
 How do you consider your weight
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 50016
-
 </td>
-
 <td style="text-align:left;">
-
 WHD050
-
 </td>
-
 <td style="text-align:left;">
-
 Self-reported weight-1 yr ago (pounds)
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 50018
-
 </td>
-
 <td style="text-align:left;">
-
 WHQ070
-
 </td>
-
 <td style="text-align:left;">
-
 Tried to lose weight in past year
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 50019
-
 </td>
-
 <td style="text-align:left;">
-
 WHD080A
-
 </td>
-
 <td style="text-align:left;">
-
 Ate less food to lose weight
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 50020
-
 </td>
-
 <td style="text-align:left;">
-
 WHD080B
-
 </td>
-
 <td style="text-align:left;">
-
 Lowered calories to lose weight
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 50022
-
 </td>
-
 <td style="text-align:left;">
-
 WHD080D
-
 </td>
-
 <td style="text-align:left;">
-
 Exercised to lose weight
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 50024
-
 </td>
-
 <td style="text-align:left;">
-
 WHD080F
-
 </td>
-
 <td style="text-align:left;">
-
 Ate diet products to lose weight
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 50030
-
 </td>
-
 <td style="text-align:left;">
-
 WHD080L
-
 </td>
-
 <td style="text-align:left;">
-
 Other methods to lose weight
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 50031
-
 </td>
-
 <td style="text-align:left;">
-
 WHD080M
-
 </td>
-
 <td style="text-align:left;">
-
 Drank a lot of water to lose weight
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 50048
-
 </td>
-
 <td style="text-align:left;">
-
 WHD110
-
 </td>
-
 <td style="text-align:left;">
-
 Self-reported weight-10 yrs ago (pounds)
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 50049
-
 </td>
-
 <td style="text-align:left;">
-
 WHD120
-
 </td>
-
 <td style="text-align:left;">
-
 Self-reported weight - age 25 (pounds)
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 50050
-
 </td>
-
 <td style="text-align:left;">
-
 WHD130
-
 </td>
-
 <td style="text-align:left;">
-
 Self-reported height - age 25 (inches)
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 50051
-
 </td>
-
 <td style="text-align:left;">
-
 WHD140
-
 </td>
-
 <td style="text-align:left;">
-
 Self-reported greatest weight (pounds)
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 50095
-
 </td>
-
 <td style="text-align:left;">
-
 WHD140
-
 </td>
-
 <td style="text-align:left;">
-
 Self-reported greatest weight(pounds)
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 50144
-
 </td>
-
 <td style="text-align:left;">
-
 WHD050
-
 </td>
-
 <td style="text-align:left;">
-
 Self-reported weight - 1 yr ago (pounds)
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 50147
-
 </td>
-
 <td style="text-align:left;">
-
 WHD080A
-
 </td>
-
 <td style="text-align:left;">
-
 Ate less to lose weight
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 50195
-
 </td>
-
 <td style="text-align:left;">
-
 WHD120
-
 </td>
-
 <td style="text-align:left;">
-
 Self-reported weight-age 25 (pounds)
-
 </td>
-
 </tr>
-
 </tbody>
-
 </table>
 
 Now that we have a merged dataset, we can use it for standard data
@@ -3732,321 +2081,163 @@ subset(variableDesc, Variable == "WHD020", select = c(1, 2, 5)) |> kable()
 ```
 
 <table>
-
 <thead>
-
 <tr>
-
 <th style="text-align:left;">
-
 </th>
-
 <th style="text-align:left;">
-
 Variable
-
 </th>
-
 <th style="text-align:left;">
-
 TableName
-
 </th>
-
 <th style="text-align:left;">
-
 SasLabel
-
 </th>
-
 </tr>
-
 </thead>
-
 <tbody>
-
 <tr>
-
 <td style="text-align:left;">
-
 50013
-
 </td>
-
 <td style="text-align:left;">
-
 WHD020
-
 </td>
-
 <td style="text-align:left;">
-
 WHQ
-
 </td>
-
 <td style="text-align:left;">
-
 Current self-reported weight (pounds)
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 50057
-
 </td>
-
 <td style="text-align:left;">
-
 WHD020
-
 </td>
-
 <td style="text-align:left;">
-
-WHQ\_B
-
+WHQ_B
 </td>
-
 <td style="text-align:left;">
-
 Current self-reported weight (pounds)
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 50099
-
 </td>
-
 <td style="text-align:left;">
-
 WHD020
-
 </td>
-
 <td style="text-align:left;">
-
-WHQ\_C
-
+WHQ_C
 </td>
-
 <td style="text-align:left;">
-
 Current self-reported weight (pounds)
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 50141
-
 </td>
-
 <td style="text-align:left;">
-
 WHD020
-
 </td>
-
 <td style="text-align:left;">
-
-WHQ\_D
-
+WHQ_D
 </td>
-
 <td style="text-align:left;">
-
 Current self-reported weight (pounds)
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 50201
-
 </td>
-
 <td style="text-align:left;">
-
 WHD020
-
 </td>
-
 <td style="text-align:left;">
-
-WHQ\_E
-
+WHQ_E
 </td>
-
 <td style="text-align:left;">
-
 Current self-reported weight (pounds)
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 50259
-
 </td>
-
 <td style="text-align:left;">
-
 WHD020
-
 </td>
-
 <td style="text-align:left;">
-
-WHQ\_F
-
+WHQ_F
 </td>
-
 <td style="text-align:left;">
-
 Current self-reported weight (pounds)
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 50322
-
 </td>
-
 <td style="text-align:left;">
-
 WHD020
-
 </td>
-
 <td style="text-align:left;">
-
-WHQ\_G
-
+WHQ_G
 </td>
-
 <td style="text-align:left;">
-
 Current self-reported weight (pounds)
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 50385
-
 </td>
-
 <td style="text-align:left;">
-
 WHD020
-
 </td>
-
 <td style="text-align:left;">
-
-WHQ\_H
-
+WHQ_H
 </td>
-
 <td style="text-align:left;">
-
 Current self-reported weight (pounds)
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 50419
-
 </td>
-
 <td style="text-align:left;">
-
 WHD020
-
 </td>
-
 <td style="text-align:left;">
-
-WHQ\_I
-
+WHQ_I
 </td>
-
 <td style="text-align:left;">
-
 Current self-reported weight (pounds)
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 50456
-
 </td>
-
 <td style="text-align:left;">
-
 WHD020
-
 </td>
-
 <td style="text-align:left;">
-
-WHQ\_J
-
+WHQ_J
 </td>
-
 <td style="text-align:left;">
-
 Current self-reported weight (pounds)
-
 </td>
-
 </tr>
-
 </tbody>
-
 </table>
 
 ``` r
@@ -4101,523 +2292,264 @@ subset(tableSummary, grepl("cholesterol", Description, ignore.case = TRUE)) |> k
 ```
 
 <table>
-
 <thead>
-
 <tr>
-
 <th style="text-align:left;">
-
 </th>
-
 <th style="text-align:left;">
-
 TableBase
-
 </th>
-
 <th style="text-align:left;">
-
 Description
-
 </th>
-
 <th style="text-align:left;">
-
 DataGroup
-
 </th>
-
 <th style="text-align:right;">
-
 Freq
-
 </th>
-
 </tr>
-
 </thead>
-
 <tbody>
-
 <tr>
-
 <td style="text-align:left;">
-
 567994
-
 </td>
-
 <td style="text-align:left;">
-
 HDL
-
 </td>
-
 <td style="text-align:left;">
-
 Cholesterol - HDL
-
 </td>
-
 <td style="text-align:left;">
-
 Laboratory
-
 </td>
-
 <td style="text-align:right;">
-
 5
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 568420
-
 </td>
-
 <td style="text-align:left;">
-
 HDL
-
 </td>
-
 <td style="text-align:left;">
-
 Cholesterol - High - Density Lipoprotein (HDL)
-
 </td>
-
 <td style="text-align:left;">
-
 Laboratory
-
 </td>
-
 <td style="text-align:right;">
-
 1
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 568846
-
 </td>
-
 <td style="text-align:left;">
-
 HDL
-
 </td>
-
 <td style="text-align:left;">
-
 Cholesterol - High-Density Lipoprotein (HDL)
-
 </td>
-
 <td style="text-align:left;">
-
 Laboratory
-
 </td>
-
 <td style="text-align:right;">
-
 1
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 569329
-
 </td>
-
 <td style="text-align:left;">
-
 L13AM
-
 </td>
-
 <td style="text-align:left;">
-
 Cholesterol - LDL & Triglycerides
-
 </td>
-
 <td style="text-align:left;">
-
 Laboratory
-
 </td>
-
 <td style="text-align:right;">
-
 2
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 569377
-
 </td>
-
 <td style="text-align:left;">
-
 LAB13AM
-
 </td>
-
 <td style="text-align:left;">
-
 Cholesterol - LDL & Triglycerides
-
 </td>
-
 <td style="text-align:left;">
-
 Laboratory
-
 </td>
-
 <td style="text-align:right;">
-
 1
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 569518
-
 </td>
-
 <td style="text-align:left;">
-
 TRIGLY
-
 </td>
-
 <td style="text-align:left;">
-
 Cholesterol - LDL & Triglycerides
-
 </td>
-
 <td style="text-align:left;">
-
 Laboratory
-
 </td>
-
 <td style="text-align:right;">
-
 4
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 569944
-
 </td>
-
 <td style="text-align:left;">
-
 TRIGLY
-
 </td>
-
 <td style="text-align:left;">
-
 Cholesterol - LDL, Triglyceride & Apoliprotein (ApoB)
-
 </td>
-
 <td style="text-align:left;">
-
 Laboratory
-
 </td>
-
 <td style="text-align:right;">
-
 1
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 570370
-
 </td>
-
 <td style="text-align:left;">
-
 TRIGLY
-
 </td>
-
 <td style="text-align:left;">
-
 Cholesterol - Low - Density Lipoprotein (LDL) & Triglycerides
-
 </td>
-
 <td style="text-align:left;">
-
 Laboratory
-
 </td>
-
 <td style="text-align:right;">
-
 1
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 570796
-
 </td>
-
 <td style="text-align:left;">
-
 TRIGLY
-
 </td>
-
 <td style="text-align:left;">
-
 Cholesterol - Low-Density Lipoproteins (LDL) & Triglycerides
-
 </td>
-
 <td style="text-align:left;">
-
 Laboratory
-
 </td>
-
 <td style="text-align:right;">
-
 1
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 571215
-
 </td>
-
 <td style="text-align:left;">
-
 TCHOL
-
 </td>
-
 <td style="text-align:left;">
-
 Cholesterol - Total
-
 </td>
-
 <td style="text-align:left;">
-
 Laboratory
-
 </td>
-
 <td style="text-align:right;">
-
 7
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 571457
-
 </td>
-
 <td style="text-align:left;">
-
 L13
-
 </td>
-
 <td style="text-align:left;">
-
 Cholesterol - Total & HDL
-
 </td>
-
 <td style="text-align:left;">
-
 Laboratory
-
 </td>
-
 <td style="text-align:right;">
-
 2
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 571506
-
 </td>
-
 <td style="text-align:left;">
-
 LAB13
-
 </td>
-
 <td style="text-align:left;">
-
 Cholesterol - Total & HDL
-
 </td>
-
 <td style="text-align:left;">
-
 Laboratory
-
 </td>
-
 <td style="text-align:right;">
-
 1
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 571884
-
 </td>
-
 <td style="text-align:left;">
-
-L13\_2
-
+L13_2
 </td>
-
 <td style="text-align:left;">
-
 Cholesterol - Total, HDL, LDL & Triglycerides, Second Exam
-
 </td>
-
 <td style="text-align:left;">
-
 Laboratory
-
 </td>
-
 <td style="text-align:right;">
-
 1
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 739994
-
 </td>
-
 <td style="text-align:left;">
-
 BPQ
-
 </td>
-
 <td style="text-align:left;">
-
 Blood Pressure & Cholesterol
-
 </td>
-
 <td style="text-align:left;">
-
 Questionnaire
-
 </td>
-
 <td style="text-align:right;">
-
 10
-
 </td>
-
 </tr>
-
 </tbody>
-
 </table>
 
 Clearly, similar data is included in tables with different names. This
@@ -4630,285 +2562,145 @@ subset(tableDesc, TableBase == "TRIGLY")[1:4] |> kable()
 ```
 
 <table>
-
 <thead>
-
 <tr>
-
 <th style="text-align:left;">
-
 </th>
-
 <th style="text-align:left;">
-
 Description
-
 </th>
-
 <th style="text-align:left;">
-
 TableName
-
 </th>
-
 <th style="text-align:right;">
-
 BeginYear
-
 </th>
-
 <th style="text-align:right;">
-
 EndYear
-
 </th>
-
 </tr>
-
 </thead>
-
 <tbody>
-
 <tr>
-
 <td style="text-align:left;">
-
 104
-
 </td>
-
 <td style="text-align:left;">
-
 Cholesterol - LDL & Triglycerides
-
 </td>
-
 <td style="text-align:left;">
-
-TRIGLY\_E
-
+TRIGLY_E
 </td>
-
 <td style="text-align:right;">
-
 2007
-
 </td>
-
 <td style="text-align:right;">
-
 2008
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 105
-
 </td>
-
 <td style="text-align:left;">
-
 Cholesterol - LDL & Triglycerides
-
 </td>
-
 <td style="text-align:left;">
-
-TRIGLY\_G
-
+TRIGLY_G
 </td>
-
 <td style="text-align:right;">
-
 2011
-
 </td>
-
 <td style="text-align:right;">
-
 2012
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 106
-
 </td>
-
 <td style="text-align:left;">
-
 Cholesterol - Low - Density Lipoprotein (LDL) & Triglycerides
-
 </td>
-
 <td style="text-align:left;">
-
-TRIGLY\_I
-
+TRIGLY_I
 </td>
-
 <td style="text-align:right;">
-
 2015
-
 </td>
-
 <td style="text-align:right;">
-
 2016
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 803
-
 </td>
-
 <td style="text-align:left;">
-
 Cholesterol - LDL & Triglycerides
-
 </td>
-
 <td style="text-align:left;">
-
-TRIGLY\_F
-
+TRIGLY_F
 </td>
-
 <td style="text-align:right;">
-
 2009
-
 </td>
-
 <td style="text-align:right;">
-
 2010
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 804
-
 </td>
-
 <td style="text-align:left;">
-
 Cholesterol - LDL & Triglycerides
-
 </td>
-
 <td style="text-align:left;">
-
-TRIGLY\_H
-
+TRIGLY_H
 </td>
-
 <td style="text-align:right;">
-
 2013
-
 </td>
-
 <td style="text-align:right;">
-
 2014
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 805
-
 </td>
-
 <td style="text-align:left;">
-
 Cholesterol - LDL, Triglyceride & Apoliprotein (ApoB)
-
 </td>
-
 <td style="text-align:left;">
-
-TRIGLY\_D
-
+TRIGLY_D
 </td>
-
 <td style="text-align:right;">
-
 2005
-
 </td>
-
 <td style="text-align:right;">
-
 2006
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 806
-
 </td>
-
 <td style="text-align:left;">
-
 Cholesterol - Low-Density Lipoproteins (LDL) & Triglycerides
-
 </td>
-
 <td style="text-align:left;">
-
-TRIGLY\_J
-
+TRIGLY_J
 </td>
-
 <td style="text-align:right;">
-
 2017
-
 </td>
-
 <td style="text-align:right;">
-
 2018
-
 </td>
-
 </tr>
-
 </tbody>
-
 </table>
 
 ``` r
@@ -4929,324 +2721,166 @@ subset(variableDesc, Variable == "LBDLDL")[c(1, 2, 3)] |> kable()
 ```
 
 <table>
-
 <thead>
-
 <tr>
-
 <th style="text-align:left;">
-
 </th>
-
 <th style="text-align:left;">
-
 Variable
-
 </th>
-
 <th style="text-align:left;">
-
 TableName
-
 </th>
-
 <th style="text-align:left;">
-
 Description
-
 </th>
-
 </tr>
-
 </thead>
-
 <tbody>
-
 <tr>
-
 <td style="text-align:left;">
-
 27717
-
 </td>
-
 <td style="text-align:left;">
-
 LBDLDL
-
 </td>
-
 <td style="text-align:left;">
-
-L13AM\_B
-
+L13AM_B
 </td>
-
 <td style="text-align:left;">
-
 LDL-cholesterol (mg/dL)
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 27723
-
 </td>
-
 <td style="text-align:left;">
-
 LBDLDL
-
 </td>
-
 <td style="text-align:left;">
-
-L13AM\_C
-
+L13AM_C
 </td>
-
 <td style="text-align:left;">
-
 LDL-cholesterol (mg/dL)
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 29115
-
 </td>
-
 <td style="text-align:left;">
-
 LBDLDL
-
 </td>
-
 <td style="text-align:left;">
-
 LAB13AM
-
 </td>
-
 <td style="text-align:left;">
-
 LDL-cholesterol (mg/dL)
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 47135
-
 </td>
-
 <td style="text-align:left;">
-
 LBDLDL
-
 </td>
-
 <td style="text-align:left;">
-
-TRIGLY\_D
-
+TRIGLY_D
 </td>
-
 <td style="text-align:left;">
-
 LDL-cholesterol (mg/dL)
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 47143
-
 </td>
-
 <td style="text-align:left;">
-
 LBDLDL
-
 </td>
-
 <td style="text-align:left;">
-
-TRIGLY\_E
-
+TRIGLY_E
 </td>
-
 <td style="text-align:left;">
-
 LDL-cholesterol (mg/dL)
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 47149
-
 </td>
-
 <td style="text-align:left;">
-
 LBDLDL
-
 </td>
-
 <td style="text-align:left;">
-
-TRIGLY\_F
-
+TRIGLY_F
 </td>
-
 <td style="text-align:left;">
-
 LDL-cholesterol (mg/dL)
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 47155
-
 </td>
-
 <td style="text-align:left;">
-
 LBDLDL
-
 </td>
-
 <td style="text-align:left;">
-
-TRIGLY\_G
-
+TRIGLY_G
 </td>
-
 <td style="text-align:left;">
-
 LDL-cholesterol (mg/dL)
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 47161
-
 </td>
-
 <td style="text-align:left;">
-
 LBDLDL
-
 </td>
-
 <td style="text-align:left;">
-
-TRIGLY\_H
-
+TRIGLY_H
 </td>
-
 <td style="text-align:left;">
-
 LDL-cholesterol (mg/dL)
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 47167
-
 </td>
-
 <td style="text-align:left;">
-
 LBDLDL
-
 </td>
-
 <td style="text-align:left;">
-
-TRIGLY\_I
-
+TRIGLY_I
 </td>
-
 <td style="text-align:left;">
-
 LDL-cholesterol (mg/dL)
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 47173
-
 </td>
-
 <td style="text-align:left;">
-
 LBDLDL
-
 </td>
-
 <td style="text-align:left;">
-
-TRIGLY\_J
-
+TRIGLY_J
 </td>
-
 <td style="text-align:left;">
-
 LDL-Cholesterol Friedewald equation (mg/dL). LBDLDL = (LBXTC-(LBDHDD +
 LBXTR/5) round to 0 decimal places) for LBXTR less than 400 mg/dL and
 missing for LBXTR greater than 400 mg/dL. LBDHDD from public release
-file HDL\_J
-
+file HDL_J
 </td>
-
 </tr>
-
 </tbody>
-
 </table>
 
 Upshot: To combine different variables of interest in preparation for
@@ -5276,11 +2910,11 @@ The `SSDFS_A` table does exist:
 ``` r
 str(nhanes('SSDFS_A', translated = TRUE))
 #> 'data.frame':    148 obs. of  5 variables:
-#>  $ SEQN    : int  255 341 1227 1693 1825 2473 2484 3018 3098 3715 ...
-#>  $ WTANA6YR: num  7706 55179 102257 36033 8923 ...
-#>  $ SSDFSS  : num  1 1 1 1 1 1 1 1 1 1 ...
-#>  $ SSDFSE  : num  3.82 35.31 53.08 47.19 121.8 ...
-#>  $ SSDFSR  : num  0 1 1 1 1 0 1 1 1 0 ...
+#>  $ SEQN    : int  2 74 255 341 898 1160 1227 1488 1693 1825 ...
+#>  $ WTANA6YR: num  44586 6523 7706 55179 11218 ...
+#>  $ SSDFSS  : num  2 2 1 1 2 2 1 3 1 1 ...
+#>  $ SSDFSE  : num  1.07 93.35 3.82 35.31 83 ...
+#>  $ SSDFSR  : num  0 1 0 1 1 1 1 0 1 1 ...
 ```
 
 However, even though `SSDFS_G` is a legitimate table, there is no
@@ -5330,16 +2964,16 @@ sapply(gsub("_A$", "", tables_with_A),
 So all these seem legitimate. In fact, they do have websites, but with
 some unexpected twists, e.g.
 
-  - <https://wwwn.cdc.gov/Nchs/Nhanes/1999-2000/L02HPA_A.htm>
-    (Hepatitis-A, which may or may not be where the A suffix comes from)
+- <https://wwwn.cdc.gov/Nchs/Nhanes/1999-2000/L02HPA_A.htm>
+  (Hepatitis-A, which may or may not be where the A suffix comes from)
 
-  - <https://wwwn.cdc.gov/Nchs/Nhanes/1999-2000/SSAFB_A.htm> (originally
-    published 2012, but revised 2022 to correct for some procedural
-    errors. This seems to be a common theme in most of these examples)
+- <https://wwwn.cdc.gov/Nchs/Nhanes/1999-2000/SSAFB_A.htm> (originally
+  published 2012, but revised 2022 to correct for some procedural
+  errors. This seems to be a common theme in most of these examples)
 
-  - <https://wwwn.cdc.gov/Nchs/Nhanes/1999-2000/SSDFS_A.htm> (this one
-    uses lefotver sera from participants in the first cycle, but was
-    actually published later in 2022)
+- <https://wwwn.cdc.gov/Nchs/Nhanes/1999-2000/SSDFS_A.htm> (this one
+  uses lefotver sera from participants in the first cycle, but was
+  actually published later in 2022)
 
 Someone should look at these systematically, but apart from the first
 one (L02HPA), these seem legitimate.
@@ -5390,6 +3024,7 @@ nhanes('DEMO_G', includelabels = FALSE) |> attributes() |> str()
 #>  $ class    : chr "data.frame"
 #>  $ row.names: int [1:9756] 1 2 3 4 5 6 7 8 9 10 ...
 nhanes('DEMO_G', includelabels = TRUE) |> attributes() |> str()
+#> Column names and labels are not consistent for table Translated.DEMO_G. No labels added
 #> List of 3
 #>  $ names    : chr [1:48] "SEQN" "SDDSRVYR" "RIDSTATR" "RIAGENDR" ...
 #>  $ class    : chr "data.frame"

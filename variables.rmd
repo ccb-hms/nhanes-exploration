@@ -20,11 +20,19 @@ options(width = 100)
 library(kableExtra) # for kable()
 ## library(DT)
 source("R/utilities.R")
-sort.data.frame <- function(x, by, decreasing = FALSE, ...) {
-  f <- eval(attr(stats::terms(by), "variables"), x, environment(by))
-  o <- do.call(order, c(f, list(decreasing = decreasing, ...)))
-  x[o, , drop = FALSE]
+sort.data.frame <- function(x, decreasing = FALSE, by = NULL, ...)
+{
+    if (!inherits(by, "formula")) stop("'by' must be a formula")
+    f <- .formula2varlist(f, x)
+    o <- do.call(order, c(f, list(decreasing = decreasing, ...)))
+    x[o, , drop = FALSE]
 }
+
+## sort.data.frame <- function(x, by, decreasing = FALSE, ...) {
+##   f <- eval(attr(stats::terms(by), "variables"), x, environment(by))
+##   o <- do.call(order, c(f, list(decreasing = decreasing, ...)))
+##   x[o, , drop = FALSE]
+## }
 ```
 
 
