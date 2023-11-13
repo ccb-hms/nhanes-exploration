@@ -47,7 +47,7 @@
 
 getTableInfo <- function(nh_table)
 {
-    nhanesSummary(nh_table, use = "both")
+    nhanesTableSummary(nh_table, use = "both")
 }
 
 ## We now want to cycle through all tables and collect this
