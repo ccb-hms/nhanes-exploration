@@ -87,7 +87,7 @@ subset(table_metadata, !startsWith(DocFile, "https"))[-1]
 
 # Action points
 
-* Discuss how to get initial list of tables to put in DB
+* Discuss how to get initial list of tables to put in DB (also see discussion below)
 
 * Incorporate relevant parts of these checks in DB build pipeline
 
@@ -115,8 +115,44 @@ subset(table_metadata, !startsWith(DocFile, "https"))[-1]
   (no need to fix)
 
 
+---
+
+# Discrepancies between manifest and group-wise tables
+
+* Several sources:
+
+	1. <https://wwwn.cdc.gov/nchs/nhanes/search/datapage.aspx?Component=Laboratory> etc.
+
+	2. <https://wwwn.cdc.gov/nchs/nhanes/search/datapage.aspx>
+
+	3. <https://wwwn.cdc.gov/nchs/nhanes/search/variablelist.aspx?Component=Laboratory> etc
 
 
+* We have `nhanesManifest("public")` for ` and `nhanesManifest("variables")` for 3
+
+* The following should be run outside docker:
+
+```r
+tm <- nhanesManifest("public")
+tl <- nhanesManifest("limited")
+vm <- nhanesManifest("variables")
+```
+
+Differences:
+
+```
+> sort(setdiff(c(tm$Table, tl$Table), unique(vm$Table)))
+ [1] "All Years"  "APOB_E"     "APOB_F"     "APOB_G"     "APOB_H"     "DOC_2000"   "DRXFCD_I"   "DRXFCD_J"   "DRXFMT"     "DRXFMT_B"   "FOODLK_C"   "FOODLK_D"   "IHG_D"      "IHG_E"     
+[15] "IHG_F"      "IHGEM_G"    "L02HPA_A"   "L09_B"      "L09_C"      "L09RDC_A"   "L09RDC_B"   "L09RDC_C"   "L10_2_00"   "L11_2_B"    "L11P_2_B"   "L13_2_B"    "L13_2_R"    "L13_B"     
+[29] "L13_C"      "L18_2_00"   "L25_2_B"    "L25_2_R"    "L26PP_B"    "L34_B"      "L34_B_R"    "L34_C"      "L34_C_R"    "L39_2_B"    "LAB02"      "LAB09"      "LAB13"      "P_DRXFCD"  
+[43] "PAX80_G"    "PAX80_G_R"  "PAX80_H"    "PAXLUX_G"   "PAXLUX_G_R" "PAXLUX_H"   "PBCD_D"     "PBCD_E"     "PBCD_F"     "PBCD_G"     "PFC_POOL"   "POOLTF_D"   "POOLTF_E"   "VARLK_C"   
+[57] "VARLK_D"    "YDQ"       
+> sort(setdiff(unique(vm$Table), c(tm$Table, tl$Table)))
+ [1] "ApoB_E"   "ApoB_F"   "ApoB_G"   "ApoB_H"   "CMV"      "GROWTHCH" "HGUHS"    "HGUHSSE"  "IHg_D"    "IHg_E"    "IHg_F"    "IHgEM_G"  "L02HPA_a" "L06VID_B" "L06VID_C" "l09_b"   
+[17] "l09_c"    "l09rdc_a" "l09rdc_b" "l09rdc_c" "l10_2_00" "L11_2_b"  "l11p_2_b" "l13_2_b"  "l13_2_r"  "l13_b"    "l13_c"    "l18_2_00" "l25_2_b"  "l25_2_r"  "l26PP_B"  "l34_b"   
+[33] "l34_b_r"  "l34_c"    "l34_c_r"  "l39_2_b"  "Lab02"    "lab09"    "Lab13"    "N3GE2000" "N3GE2010" "PbCd_D"   "PbCd_E"   "PbCd_F"   "PbCd_G"   "PFC_Pool" "SSN3UE_R" "SSNH3ANA"
+[49] "SSNH3BTP" "SSNH3CYS" "SSNH3DFS" "SSNH3HEG" "SSNH3HEW" "SSNH3IGE" "SSNH3OL"  "SSNH3UOL" "SSTESTOS" "VID_2_00" "VID_2_B"  "VID_NH3" 
+```
 
 
 
