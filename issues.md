@@ -58,6 +58,9 @@ Running with
 
 doesn't seem to work
 
+* TODO: Check whether it works (only?) for `/hostData`
+
+
 ---
 
 # Database content 1
@@ -80,14 +83,36 @@ subset(table_metadata, !startsWith(DocFile, "https"))[-1]
 * Also explores [unusual value descriptions](https://github.com/ccb-hms/NHANES/issues/112) for
   supposedly numeric variables (but not a DB issue)
 
+---
+
+# Action points
+
+* Discuss how to get initial list of tables to put in DB
+
+* Incorporate relevant parts of these checks in DB build pipeline
+
+* Discuss how to deal with missing documentation. 
+
+	* This needs a closer look, because they are probably probably
+      caused by errors in parsing the NHANES web pages.
+  
+	* Could be systematic structural differences that appear in multiple pages 
+	
+	* Could be one-off errors that are not worth pursuing
 
 ---
 
 # Database content 2
 
-* Missing codebook details [due to case mismatch](https://github.com/ccb-hms/NHANES/issues/115)
+* Missing codebook details [due to case mismatch](https://github.com/ccb-hms/NHANES/issues/115). 
+  This may turn out to be an R code issue --- will check and update.
 
-* Difference in how [columns are ordered](https://github.com/ccb-hms/NHANES/issues/114) (no need to fix)
+* [Repeated rows](https://github.com/ccb-hms/NHANES/issues/118) in
+  codebook tables. Relatively minor as it only affects one table, but
+  would be good to figure out the root cause.
+
+* Difference in how [columns are ordered](https://github.com/ccb-hms/NHANES/issues/114) 
+  (no need to fix)
 
 
 
