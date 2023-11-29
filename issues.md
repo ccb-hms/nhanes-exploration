@@ -84,7 +84,8 @@ doesn't seem to work
 
 See [here](https://github.com/ccb-hms/nhanes-exploration/blob/main/build-time-checks.md) for
 
-* Tables that are in the database but not in the metadata stored in the DB
+* Tables that are in the database but not in the metadata stored in the DB. Many of these are excluded
+  because of size and should be listed in the database under `Metadata.ExcludedTables`.
 
 * Tables that are in the NHANES
   [manifest](https://wwwn.cdc.gov/Nchs/Nhanes/search/DataPage.aspx)
