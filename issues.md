@@ -172,6 +172,15 @@ Differences:
 ```
 
 
+---
+
+# Other non-DB issues
+
+- Translation of special 'numeric' codes
+
+- Should we 'standardize' response codes that differ in case across years (`2nd Grade` vs `2nd grade`)?
+
+
 
 
 
