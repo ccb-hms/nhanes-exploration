@@ -1,6 +1,5 @@
 ---
-layout: remark
-title: NHANES: Summary of outstanding issues
+title: 'NHANES: Summary of outstanding issues'
 author: Deepayan Sarkar
 ---
 
@@ -40,11 +39,29 @@ RUN Rscript -e "remove.packages('rvest')"
 RUN Rscript -e "remotes::install_cran('rvest', repos='https://packagemanager.posit.co/cran/__linux__/focal/2021-01-29')"
 ```
 
-* TODO: Check whether `R CMD check` works inside docker
-
 * Question: Does installing the docker install the current github
   version of `nhanesA` or the one that was current when the docker
   image was released?
+
+
+---
+
+# Software checks
+
+* Check whether `R CMD INSTALL / check` works inside docker
+
+    * `R CMD INSTALL nhanes` - works
+    * `R CMD build nhanes` - works
+    * `R CMD INSTALL nhanesA_0.8.9.tar.gz` - works
+    * `R CMD check nhanesA_0.8.9.tar.gz` - works other than expected `.onLoad` warnings
+
+* `Rscript -e "remotes::install_cran('lme4', force = TRUE)"`
+
+    * works (binary install from <https://p3m.dev/cran/__linux__/jammy/latest/src/contrib/lme4_1.1-35.1.tar.gz>)
+
+* `Rscript -e "remotes::install_cran('lme4', force = TRUE, repos = 'https://cloud.r-project.org')"`
+
+    * works (source install from <https://cloud.r-project.org/src/contrib/lme4_1.1-35.1.tar.gz>)
 
 ---
 
