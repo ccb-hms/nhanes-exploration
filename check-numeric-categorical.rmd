@@ -1,0 +1,177 @@
+---
+title: "Variables that are both numeric and categorical"
+output: github_document
+always_allow_html: true
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(comment = "",
+                      fig.path = "figures/",
+                      out.width = "100%",
+                      fig.width = 12, fig.height = 8,
+                      dev = "svglite", dev.args = list(pointsize = 12),
+                      cache = TRUE,
+                      cache.path = "./knitr-cache/numcat/")
+options(width = 100)
+library(lattice)
+library(kableExtra) # for kable()
+## library(DT)
+```
+
+
+Some variables are currently interpreted as both numeric and
+categorical in different cycles. This happens because numeric
+variables are identified by the presence of the phrase `"Range of
+Values"` in the variables possible values. An example is available in
+
+<https://github.com/cjendres1/nhanes/issues/21>
+
+
+This is an initial attempt to find all such variables, and explore
+possible ways forward.
+
+
+# Demonstrate the problem
+
+Known example:
+
+```{r}
+library(nhanesA)
+```
+
+Vanilla nhanes:
+
+```{r}
+nhanesOptions(use.db = FALSE)
+str(nhanes("DEMO_G")$DMDHHSIZ)
+str(nhanes("DEMO_H")$DMDHHSIZ)
+```
+
+Database version:
+
+```{r}
+nhanesOptions(use.db = TRUE)
+str(nhanes("DEMO_G")$DMDHHSIZ)
+str(nhanes("DEMO_H")$DMDHHSIZ)
+```
+
+FromURL version:
+
+```{r}
+str(nhanesFromURL("/Nchs/Nhanes/2011-2012/DEMO_G.XPT")$DMDHHSIZ)
+str(nhanesFromURL("/Nchs/Nhanes/2013-2014/DEMO_H.XPT")$DMDHHSIZ)
+```
+
+# How often does this happen?
+
+Possible options to find out are: 
+
+* Do a variable summary of everything and find variables which are
+  categorical in some but not all cycles.
+
+* Use the codebooks stored in the database. Let's try the second one
+  first because it will be faster.
+
+
+```{r}
+sql <- nhanesA:::.nhanesQuery
+all_cb <- sql("select * from Metadata.VariableCodebook")
+subset(all_cb, Variable == "DMDHHSIZ", select = 1:5)
+```
+
+So this 'finds' our known culprit.
+
+Let's first restrict our attention to variables that are 'numeric' in
+at least one table. There may be others, but we have very little hope
+of finding them unless we inspect each manually (but see last section below).
+
+```{r, warning = FALSE}
+numeric_vars <- with(all_cb, unique(Variable[ValueDescription == "Range of Values"]))
+numeric_cb <- subset(all_cb, Variable %in% numeric_vars, select = 1:5)
+## quick check: which 'ValueDescription'-s look like numeric? Should be very few
+maybe_numeric <- is.finite(as.numeric(numeric_cb$ValueDescription))
+table(maybe_numeric)
+```
+
+We will focus on these variables.
+
+```{r}
+problem_vars <- unique(numeric_cb[maybe_numeric, ]$Variable)
+str(problem_vars)
+num_cb_byVar <- numeric_cb |> subset(Variable %in% problem_vars) |> split(~ Variable)
+length(num_cb_byVar)
+```
+
+Let's start by summarizing these to keep only the unique (CodeOrValue,
+ValueDescription) combinations, and then prioritize them by the number
+of numeric-like values that remain.
+
+```{r}
+summary_byVar <-
+    lapply(num_cb_byVar,
+           function(d) unique(d[c("Variable", "CodeOrValue", "ValueDescription")]))
+numNumeric <- function(d) suppressWarnings(sum(is.finite(as.numeric(d$ValueDescription))))
+(nnum <- sapply(summary_byVar, numNumeric) |> sort())
+```
+
+The number of variables with 2 or more numeric variables seem like a
+manageable number, so let's look at all of them.
+
+```{r}
+num_cb_byVar[ names(which(nnum > 2)) ]
+num_cb_byVar[ names(which(nnum == 2)) ]
+```
+
+# What to do about these?
+
+These all look like legitimate issues. Possible work-arounds are:
+
+* Maintain an explicit list of such variables and handle them while
+  creating the codebook. The least intrusive way would be to just
+  insert a row with value description `"Range of
+  Values"`. Additionally, we could drop the value descriptions which
+  can be coerced to numeric.
+
+* Maintain an explicit list of such variables and handle them in
+  `nhanesTranslate()`
+
+The advantage of doing this at the codebook level is that the database
+will have the 'fixed' values.
+
+
+# More aggressive conversion
+
+A more aggressive strategy would be to do this whenever there is a
+value description that can be coerced to a numeric value. This will
+not require retaining a list of variables to fix, but will mean that
+we may end up converting some variables to numeric even though it
+didn't have `"Range of Values"` in any cycle.
+
+To see the effect of this:
+
+```{r}
+categorical_cb <- subset(all_cb, !(Variable %in% numeric_vars), select = 1:5)
+cat_num_combinations <- 
+    unique(subset(categorical_cb, is.finite(as.numeric(ValueDescription)), select = 1:2))
+
+for (i in 1:nrow(cat_num_combinations)) {
+    v <- cat_num_combinations$Variable[[i]]
+    t <- cat_num_combinations$TableName[[i]]
+    try(cat(sprintf("---------\n%s > %s (%s)\n", t, v, nhanesCodebook(t)[[v]]$`SAS Label:` )))
+    print(subset(categorical_cb, TableName == t & Variable == v))
+}
+```
+
+The list, while fascinating in variety, does include definite false
+positives, such as:
+
+* `CDQ > CDQ070 (Sleep on 2+ pillows to help breathe)`
+* `HUQ > HUQ050 (#Times received healthcare over past yr)`
+* `OHXPRU_B > OHX14BPM (BOP: midfacial #14)`
+
+Some of these could be added to our list, but detecting them
+automatically seems problematic.
+
+
