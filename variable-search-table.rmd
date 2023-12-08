@@ -182,10 +182,10 @@ The result is available [here](nhanes-variables-demographic.html).
 Though useful, the information available in the variable manifest is
 limited. More useful information is available in the per-table
 codebooks (which can be accessed using the `nhanesCodebook()`
-function), including a usually shorter description of each variable
-referred to as the "SAS Label", along with information about possible
-response values and their counts, including the number of missing
-values. 
+function and summarized using the `nhanesTableSummary()` function),
+including a usually shorter description of each variable referred to
+as the "SAS Label", along with information about possible response
+values and their counts, including the number of missing values.
 
 Such information can be easily incorporated into the aggregate table
 created above, but requires processing the codebooks for all available
@@ -199,6 +199,6 @@ datasets are available through a local database.
 
 
 
-
+See <scripts/generate-variable-table.R>
 
 

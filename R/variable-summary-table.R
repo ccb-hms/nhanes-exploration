@@ -1,7 +1,7 @@
 
 
 ## This assumes that "nhanesVarSummary.rda" has already been created
-## and available in the working directory.
+## and available in the working directory. See variable-metadata.R
 
 library(nhanesA)
 library(lattice)

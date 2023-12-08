@@ -55,7 +55,7 @@ getTableInfo <- function(nh_table)
 ## as this exercise is fairly pointless without a local database, we
 ## will just use the list of tables available there.
 
-dbTableDesc <- nhanesA:::.nhanesQuery("select * from Metadata.QuestionnaireDescriptions")
+dbTableDesc <- nhanesQuery("select * from Metadata.QuestionnaireDescriptions")
 
 all_table_info <- vector(mode = "list", length = nrow(dbTableDesc))
 names(all_table_info) <- dbTableDesc$TableName
