@@ -1,0 +1,138 @@
+---
+title: "Examples of workflows enabled by docker"
+output: github_document
+always_allow_html: true
+---
+
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(comment = "",
+                      fig.path = "figures/",
+                      out.width = "100%",
+                      fig.width = 12, fig.height = 8,
+                      dev = "svglite", dev.args = list(pointsize = 12),
+                      cache = TRUE,
+                      cache.path = "./knitr-cache/dockereg/")
+options(width = 100)
+library(lattice)
+library(kableExtra) # for kable()
+## library(DT)
+```
+
+
+## Potential topics to include:
+
+- Reproducibility - [Cobalt paper](https://ccb-hms.github.io/phonto/vignettes/cobalt_paper.html)
+
+- Better [search facilities](https://ccb-hms.github.io/phonto/vignettes/search-tables.html): e.g., tables, variables
+
+- Combining data across cycles
+
+- Special codes in numeric variables
+
+- Variables that are potentially skipped
+
+- Consistency checks:
+
+	- Variables appearing in multiple tables
+
+	- Change in units
+
+
+## Combining data across cycles
+
+
+To illustrate the process of combining data across cycles, we
+combine the demographic data table from all cycles. NHANES table names
+typically have a suffix; the suffixes `_A`, `_B`, `_C`,and so on
+generally correspond to NHANES cycle years from 1999-2000, 2001-2002,
+2003-2004, etc. However, it is important to highlight that not every
+table strictly adheres to this naming convention. For instance, while
+`DEMO_B` and `DEMO_C` are associated with the 2001-2002 and 2003-2004
+cycles, respectively, the corresponding table for the 1999-2000 cycle
+is named 'DEMO', without the `_A` suffix. While this pattern holds for
+most tables, certain tables such as `SSAFB_A` and `SSANA_A` from the
+1999-2000 cycle do include the `_A` suffix. To assist users in
+navigating these variations, the `nhanesA` package includes the
+`nhanesSearchTableNames()` function, which allows users to easily
+locate all table names containing a specific string, thus simplifying
+the process of identifying relevant table names.
+
+```{r alldemo, error = TRUE}
+demo_all = nhanesSearchTableNames("DEMO")
+demo_all
+```
+
+The last table in this list merits special mention. During the
+2019-2020 cycle, data collection was disrupted by the COVID-19
+pandemic. Therefore, the partial 2019-2020 data (herein 2019-March
+2020 data) were combined with data from the previous cycle (2017-2018)
+to create a nationally representative sample covering 2017-March 2020.
+These data files have the same basic file name, e.g., `DEMO`, but add
+the prefix `P_`. These 'pre-pandemic' files require special handling
+and the CDC has provided substantial guidance as well as updated
+survey weights.
+
+We can now download all these datasets from the CDC website using the
+`nhanes()` function. Note, however, that this process is likely to be
+somewhat slow as several files will need to be downloaded.
+
+```{r getalldemo, error = TRUE}
+all_demo_data = sapply(demo_all, nhanes, simplify = FALSE)
+sapply(all_demo_data, dim)
+```
+
+The first row in the output above give the number of participants in
+each cycle, and the second row denotes the number of variables in the
+corresponding `DEMO` table. We can see that each cycle has around
+10,000 participants, who are unique across cycles. Note, however, that
+the larger number of participants in the `P_DEMO` dataset is
+misleading, because many of these participants are actually from the
+previous cycle as described above. We will drop this table before
+combining the remaining datasets.
+
+The differing number of variables across cycles indicate that
+variables are not measured consistently across cycles. In fact, many
+variables included in the `DEMO` table in the first cycle were
+subsequently included in other tables, and others have been dropped
+altogether or added. We can make a list of the variables that are
+common to all `DEMO` tables, and combine the corresponding data
+subsets together, as follows.
+
+```{r combinedemo}
+all_demo_data = head(all_demo_data, -1)
+common_vars = lapply(all_demo_data, names) |> Reduce(f = intersect)
+common_vars
+demo_combined = lapply(all_demo_data, `[`, common_vars) |> do.call(what = rbind)
+dim(demo_combined)
+```
+
+The combined dataset can be analysed further using standard tools. For
+example, Figure 2 uses the `ggplot2` package [@Wickham2016ggplot2] to
+summarize the number of participants by recorded ethnicity and gender
+by cycle.
+
+```{r demoplot,fig.width=12, fig.height=7, fig.path = 'images/'}
+demo_combined |> 
+    xtabs(~ cycle + RIAGENDR + RIDRETH1, data = _) |>
+    array2DF() |>
+    dotplot(Value ~ cycle | RIAGENDR, #data = _,
+            groups = RIDRETH1,
+            layout = c(1, 2), type = "b",
+            par.settings = simpleTheme(pch = 16),
+            auto.key = list(columns = 3))
+```
+
+
+One must be cautious when combining data across
+cycles, because the NHANES data are sometimes inconsistent in
+unexpected ways. As a simple example, consider the `DMDEDUC3`
+variable, which records education level of children and youth. The
+following code illustrates that the values of this variable have
+inconsistent capitalization in different cycles.
+
+```{r changes}
+xtabs(~ cycle + DMDEDUC3, demo_combined)[, 1:4]
+```
+
+
