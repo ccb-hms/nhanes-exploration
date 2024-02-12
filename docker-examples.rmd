@@ -12,11 +12,9 @@ knitr::opts_chunk$set(comment = "",
                       fig.width = 12, fig.height = 8,
                       dev = "svglite", dev.args = list(pointsize = 12),
                       cache = TRUE,
+                      warning = TRUE, error = FALSE,
                       cache.path = "./knitr-cache/dockereg/")
 options(width = 100)
-library(lattice)
-library(kableExtra) # for kable()
-## library(DT)
 ```
 
 
@@ -58,8 +56,9 @@ navigating these variations, the `nhanesA` package includes the
 locate all table names containing a specific string, thus simplifying
 the process of identifying relevant table names.
 
-```{r alldemo, error = TRUE}
-demo_all = nhanesSearchTableNames("DEMO")
+```{r alldemo}
+library(nhanesA)
+demo_all <- nhanesSearchTableNames("DEMO")
 demo_all
 ```
 
@@ -78,11 +77,12 @@ We can now download all these datasets from the CDC website using the
 somewhat slow as several files will need to be downloaded.
 
 ```{r getalldemo, error = TRUE}
-all_demo_data = sapply(demo_all, nhanes, simplify = FALSE)
+all_demo_data <- sapply(demo_all, nhanes, simplify = FALSE)
+object.size(all_demo_data) # ~45 MB
 sapply(all_demo_data, dim)
 ```
 
-The first row in the output above give the number of participants in
+The first row in the output above gives the number of participants in
 each cycle, and the second row denotes the number of variables in the
 corresponding `DEMO` table. We can see that each cycle has around
 10,000 participants, who are unique across cycles. Note, however, that
@@ -100,23 +100,27 @@ common to all `DEMO` tables, and combine the corresponding data
 subsets together, as follows.
 
 ```{r combinedemo}
-all_demo_data = head(all_demo_data, -1)
-common_vars = lapply(all_demo_data, names) |> Reduce(f = intersect)
+all_demo_data <- head(all_demo_data, -1)
+common_vars <- lapply(all_demo_data, names) |> Reduce(f = intersect)
 common_vars
-demo_combined = lapply(all_demo_data, `[`, common_vars) |> do.call(what = rbind)
+demo_combined <-
+    lapply(all_demo_data, `[`, common_vars) |>
+    do.call(what = rbind) |>
+    transform(cycle = substring(SDDSRVYR, 8, 17))
 dim(demo_combined)
 ```
 
 The combined dataset can be analysed further using standard tools. For
-example, Figure 2 uses the `ggplot2` package [@Wickham2016ggplot2] to
+example, Figure 2 uses the `lattice` package [cite] to
 summarize the number of participants by recorded ethnicity and gender
 by cycle.
 
 ```{r demoplot,fig.width=12, fig.height=7, fig.path = 'images/'}
-demo_combined |> 
+library("lattice")
+demo_combined |>
     xtabs(~ cycle + RIAGENDR + RIDRETH1, data = _) |>
     array2DF() |>
-    dotplot(Value ~ cycle | RIAGENDR, #data = _,
+    dotplot(Value ~ cycle | RIAGENDR,
             groups = RIDRETH1,
             layout = c(1, 2), type = "b",
             par.settings = simpleTheme(pch = 16),
@@ -136,3 +140,168 @@ xtabs(~ cycle + DMDEDUC3, demo_combined)[, 1:4]
 ```
 
 
+## Cross-cycle Consistency checks using variable codebooks
+
+In our experience, inconsistencies such as the change in
+capitalization described above occur quite often, and in a variety of
+different ways, requiring attention to detail when combining data from
+across cycles. These inconsistencies are not necessarily mistakes, as
+NHANES questionnaires and variables are often modified from cycle to
+cycle. The primary source that must be consulted to identify such
+inconsistencies are the per-table documentation, and in particular the
+variable codebooks giving details of how each variable is recorded.
+
+The NHANES database contains the variable codebooks for all tables
+across all cycles in a single database table called
+`Metadata.VariableCodebook`. Once imported into R, this information
+can be manipulated in various ways to glean information of interest.
+
+[See <https://ccb-hms.github.io/phonto/vignettes/diagnostics-codebook.html> for more examples.]
+
+```{r}
+library("phonto")
+dim(all_cb <- nhanesQuery("select * from Metadata.VariableCodebook"))
+## dim(all_cb <- metaData("Codebook")) # alt interface
+all_cb <- dplyr::filter(all_cb, !startsWith(TableName, "P_")) # skip pre-pandemic tables
+```
+
+An analyst would typically be interested in some specific variables
+that are relevant to their study. The first step is to identify how
+many cycles these variables were recorded in.  To this end, we may
+start by examining the number of _tables_ each variable appears in
+across all cycles of continuous NHANES.
+
+```{r}
+var_freq <- 
+    all_cb[c("Variable", "TableName")] |> unique() |>
+        xtabs(~ Variable, data = _) |>
+        sort(decreasing = TRUE)
+table(var_freq)
+```
+
+Not surprisingly, many variables appear only once or twice across all
+cycles, and for such variables combining data across cycles would not
+be interesting. Somewhat more surprisingly, several variables appear
+in more tables than there are cycles, which means that they must
+appear in multiple tables within the same cycle. The following
+variables appear in more than 20 tables.
+
+```{r}
+var_freq[ var_freq > 20]
+```
+
+For such variables, selecting the corresponding subset of `all_cb`
+shows all entries in the codebook tables for that variable, across all
+tables and cycles. For example,
+
+```{r}
+subset(all_cb, Variable == "PHAFSTMN")[1:5]
+```
+
+Inspection of this table shows that the `PHAFSTMN` variable was
+initially recorded in the `PH` table for the first three cycles, after
+which it was recorded in three different tables (`FASTQX`, `GLU`, and
+`OGTT`) for several cycles, before being dropped again from the latter
+two tables. It is natural to wonder whether all these tables contain
+the same data. This can only be verified by comparing the actual data,
+but some hints are provided by the data counts included in the
+codebook. For example, for the 2005--2006 cycle, we have
+
+```{r}
+subset(all_cb, Variable == "PHAFSTMN" & endsWith(TableName, "_D"))[1:5]
+```
+
+More information about the variables may be obtained from the
+`Metadata.QuestionnaireVariables` table in the database, which
+contains one row for each variable in each table containing its
+description, target group, etc., obtained from the HTML documentation
+of NHANES tables.
+
+```{r}
+dim(all_var <- phonto::nhanesQuery("select * from Metadata.QuestionnaireVariables"))
+## dim(all_var <- metaData("Variables"))
+subset(all_var, Variable == "PHAFSTMN" & endsWith(TableName, "_D"))[c(1, 2, 4, 5)]
+```
+
+While not definitive, this suggests that the `PHAFSTMN` variable
+measures the same quantity in all three tables, and the difference in
+number of observations may be due to the difference in target age
+group.
+
+This may not be true for all variables. [Find Example]
+
+
+
+## Different units
+
+[Example: LBCBHC]
+
+```{r}
+subset(all_cb, Variable == "LBCBHC")[1:5]
+```
+
+
+```{r, eval=FALSE}
+
+object.size(all_cb) / 1024^2
+
+
+
+## First find variables that are considered 'numeric' because they
+## have a "range of values" description
+
+numeric_vars <- with(all_cb, unique(Variable[ValueDescription == "Range of Values"]))
+dim(numeric_cb <- subset(all_cb, Variable %in% numeric_vars, select = 1:5))
+
+## What are the most common descriptions that appear in the codebooks for these variables?
+
+xtabs(~ ValueDescription, data = numeric_cb) |> sort(decreasing = TRUE) |> head(10)
+
+### Numeric codes for Refused and Don't know
+
+xtabs(~ CodeOrValue, 
+      subset(numeric_cb, ValueDescription == "Refused"))
+
+xtabs(~ CodeOrValue, 
+      subset(numeric_cb, ValueDescription == "Don't know"))
+
+## So inconsistent, sometimes even for same variable across cycles
+
+subset(numeric_cb, ValueDescription == "Refused" & Variable == "WHD020")
+
+subset(numeric_cb, ValueDescription == "Don't know" & Variable == "ALQ130")
+
+
+### coarsening
+
+
+
+
+
+## Selected examples of numeric / categorical ambiguity
+
+
+
+
+
+## Tables where some items are skipped
+
+tables_with_skipping <- unique(subset(all_cb, !is.na(SkipToItem))$TableName)
+
+## around 30% of tables
+
+length(tables_with_skipping) / length(unique(all_cb$TableName))
+
+## what we really want is to flag variables that might have been
+## skipped based on a previous answer
+
+subset(all_cb, TableName == tables_with_skipping[[1]], select = -c(Count, Cumulative))
+
+## question: for a given question, can different answers lead to
+## skipping to different places? In any case, given a table, we want
+## to first flag all questions that can lead to skipping, and if so, where.
+
+
+
+
+```
