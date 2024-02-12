@@ -364,20 +364,9 @@ subset(all_cb, Variable == "PHAFSTMN" & endsWith(TableName, "_D"))[1:5]
     110377 PHAFSTMN    OGTT_D     0 to 59  Range of Values  3251
     110378 PHAFSTMN    OGTT_D           .          Missing   101
 
-More information about the variables may be obtained from the
-`Metadata.QuestionnaireVariables` table in the database, which contains
-one row for each variable in each table containing its description,
-target group, etc., obtained from the HTML documentation of NHANES
-tables.
+From the variable metadata table, we see that
 
 ``` r
-dim(all_var <- phonto::nhanesQuery("select * from Metadata.QuestionnaireVariables"))
-```
-
-    [1] 49828    11
-
-``` r
-## dim(all_var <- metaData("Variables"))
 subset(all_var, Variable == "PHAFSTMN" & endsWith(TableName, "_D"))[c(1, 2, 4, 5)]
 ```
 

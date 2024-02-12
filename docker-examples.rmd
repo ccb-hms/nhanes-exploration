@@ -250,15 +250,9 @@ cycle, we have
 subset(all_cb, Variable == "PHAFSTMN" & endsWith(TableName, "_D"))[1:5]
 ```
 
-More information about the variables may be obtained from the
-`Metadata.QuestionnaireVariables` table in the database, which
-contains one row for each variable in each table containing its
-description, target group, etc., obtained from the HTML documentation
-of NHANES tables.
+From the variable metadata table, we see that 
 
 ```{r}
-dim(all_var <- phonto::nhanesQuery("select * from Metadata.QuestionnaireVariables"))
-## dim(all_var <- metaData("Variables"))
 subset(all_var, Variable == "PHAFSTMN" & endsWith(TableName, "_D"))[c(1, 2, 4, 5)]
 ```
 
