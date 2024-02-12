@@ -181,13 +181,51 @@ table(var_freq)
 
 Not surprisingly, many variables appear only once or twice across all
 cycles, and for such variables combining data across cycles would not
-be interesting. Somewhat more surprisingly, several variables appear
+be interesting. Variables that appear in multiple cycles, but only
+once per cycle, may usually be merged as in the `DEMO` example above,
+but note that they may appear in different tables. One must be careful
+about ensuring that the variable is measuring the same quantity in all
+cycles. This is usually true, but not always. For example, the range
+of values for the `LBCBHC` variable in different cycles seem to
+exhibit some discrepancy.
+
+```{r}
+subset(all_cb, Variable == "LBCBHC")[1:5]
+```
+
+More useful information about the variables may be obtained from the
+`Metadata.QuestionnaireVariables` table in the database, which
+contains one row for each variable in each table containing its
+description, target group, etc., obtained from the HTML documentation
+of NHANES tables.
+
+```{r}
+dim(all_var <- phonto::nhanesQuery("select * from Metadata.QuestionnaireVariables"))
+## dim(all_var <- metaData("Variables"))
+subset(all_var, Variable == "LBCBHC")[1:5]
+```
+
+This shows that the unit of measurement was changed from the
+2009--2010 cycle, explaining the discrepancy. Without a careful check,
+such changes may be overlooked, leading to errors in interpretation.
+
+It is not easy to systematically detect such changes without manual
+inspection of variables of interest. One way to shortlist possible
+candidate variables are to identify those for whom the `Description`
+or `SasLabel` field has changed. Unfortunately, such changes happen
+frequently for completely benign reasons, leading to many false
+positives.
+
+
+## Within-cycle consistency
+
+Somewhat more surprisingly, several variables appear
 in more tables than there are cycles, which means that they must
 appear in multiple tables within the same cycle. The following
 variables appear in more than 20 tables.
 
 ```{r}
-var_freq[ var_freq > 20]
+var_freq[ var_freq > 20 ]
 ```
 
 For such variables, selecting the corresponding subset of `all_cb`
@@ -204,8 +242,9 @@ which it was recorded in three different tables (`FASTQX`, `GLU`, and
 `OGTT`) for several cycles, before being dropped again from the latter
 two tables. It is natural to wonder whether all these tables contain
 the same data. This can only be verified by comparing the actual data,
-but some hints are provided by the data counts included in the
-codebook. For example, for the 2005--2006 cycle, we have
+which we will not do here, but some hints are provided by the data
+counts included in the codebook. For example, for the 2005--2006
+cycle, we have
 
 ```{r}
 subset(all_cb, Variable == "PHAFSTMN" & endsWith(TableName, "_D"))[1:5]
@@ -228,20 +267,71 @@ measures the same quantity in all three tables, and the difference in
 number of observations may be due to the difference in target age
 group.
 
-This may not be true for all variables. [Find Example]
+Even if a preliminary inspection suggests no obvious problems, it is
+useful to verify by comparing the actual recorded data. For example,
+consider
 
-
-
-## Different units
-
-[Example: LBCBHC]
 
 ```{r}
-subset(all_cb, Variable == "LBCBHC")[1:5]
+subset(all_var, Variable == "ENQ100" & endsWith(TableName, "_E"))[c(1, 2, 4, 5)]
+merge(nhanes("ENX_E")[c("SEQN", "ENQ100")],
+      nhanes("SPX_E")[c("SEQN", "ENQ100")],
+      by = "SEQN") |>
+    xtabs(~ ENQ100.x + ENQ100.y, data =_, addNA = TRUE)
+```
+
+Even though most records are consistent, several records with `Yes` or
+`No` answers in the `SPX` tables are recorded as `NA` (missing) in the
+`ENX` tables.
+
+
+A more egregious example where the same variable is clearly measuring two different things:
+
+```{r}
+subset(all_cb, Variable == "LBXHCT" & endsWith(TableName, "_H"))[1:5]
+subset(all_var, Variable == "LBXHCT" & endsWith(TableName, "_H"))[c(1, 2, 3, 4, 5)]
+merge(nhanes("CBC_H")[c("SEQN", "LBXHCT")],
+      nhanes("COT_H")[c("SEQN", "LBXHCT")],
+      by = "SEQN") |> head()
 ```
 
 
-```{r, eval=FALSE}
+
+
+
+```{r, eval=FALSE, echo=FALSE}
+
+## fix cycle, try to find variables that appear in multiple tables, but with different descriptions
+
+cvars <- subset(all_var, endsWith(TableName, "_H"))
+dupvars <- with(cvars, Variable[ duplicated(Variable) ]) |> unique()
+
+sapply(dupvars,
+       function(v) subset(cvars, Variable == v, select = c(TableName, SasLabel)),
+       simplify = FALSE) |> Filter(f = function(d) length(unique(d$SasLabel)) > 1)
+
+# DRDINT
+subset(all_cb, Variable == "LBXHCT" & endsWith(TableName, "_H"))[1:5]
+
+subset(all_var, Variable == "LBXHCT")[c(1, 2, 3, 4, 5)]
+
+merge(nhanes("CBC_H")[c("SEQN", "LBXHCT")],
+      nhanes("COT_H")[c("SEQN", "LBXHCT")],
+      by = "SEQN") |> head()
+
+    ## xtabs(~ ENQ100.x + ENQ100.y, data =_, addNA = TRUE)
+    
+    ## subset(is.na(ENQ100.x) != is.na(ENQ100.y) | ENQ100.x != ENQ100.y)
+
+    ## with(table(ENQ100.x == ENQ100.y, useNA = "always"))
+
+```
+
+
+
+
+
+```{r, eval=FALSE, echo=FALSE}
 
 object.size(all_cb) / 1024^2
 
