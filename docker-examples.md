@@ -6,21 +6,21 @@ Examples of workflows enabled by docker
 - Reproducibility - [Cobalt
   paper](https://ccb-hms.github.io/phonto/vignettes/cobalt_paper.html)
 
+- Combining data across cycles
+
+- Consistency checks:
+
+  - Across cycles: change in units
+
+  - Within cycles: Variables appearing in multiple tables
+
 - Better [search
   facilities](https://ccb-hms.github.io/phonto/vignettes/search-tables.html):
   e.g., tables, variables
 
-- Combining data across cycles
-
 - Special codes in numeric variables
 
 - Variables that are potentially skipped
-
-- Consistency checks:
-
-  - Variables appearing in multiple tables
-
-  - Change in units
 
 ## Combining data across cycles
 
@@ -244,20 +244,27 @@ tables.
 dim(all_var <- phonto::nhanesQuery("select * from Metadata.QuestionnaireVariables"))
 ```
 
-    [1] 49828    11
+    [1] 50714    11
 
 ``` r
 ## dim(all_var <- metaData("Variables"))
 subset(all_var, Variable == "LBCBHC")[1:5]
 ```
 
-          Variable TableName                       Description Target                          SasLabel
-    42428   LBCBHC  PSTPOL_D Beta-hexachlorocyclohexane (ng/g)        Beta-hexachlorocyclohexane (ng/g)
-    42461   LBCBHC  PSTPOL_E Beta-hexachlorocyclohexane (ng/g)        Beta-hexachlorocyclohexane (ng/g)
-    42494   LBCBHC  PSTPOL_F Beta-hexachlorocyclohexane (pg/g)        Beta-hexachlorocyclohexane (pg/g)
-    42524   LBCBHC  PSTPOL_G Beta-hexachlorocyclohexane (pg/g)        Beta-hexachlorocyclohexane (pg/g)
-    42554   LBCBHC  PSTPOL_H Beta-hexachlorocyclohexane (pg/g)        Beta-hexachlorocyclohexane (pg/g)
-    42581   LBCBHC  PSTPOL_I Beta-hexachlorocyclohexane (pg/g)        Beta-hexachlorocyclohexane (pg/g)
+          Variable TableName                       Description
+    43244   LBCBHC  PSTPOL_D Beta-hexachlorocyclohexane (ng/g)
+    43277   LBCBHC  PSTPOL_E Beta-hexachlorocyclohexane (ng/g)
+    43310   LBCBHC  PSTPOL_F Beta-hexachlorocyclohexane (pg/g)
+    43340   LBCBHC  PSTPOL_G Beta-hexachlorocyclohexane (pg/g)
+    43370   LBCBHC  PSTPOL_H Beta-hexachlorocyclohexane (pg/g)
+    43397   LBCBHC  PSTPOL_I Beta-hexachlorocyclohexane (pg/g)
+                                               Target                          SasLabel
+    43244 Both males and females 12 YEARS - 150 YEARS Beta-hexachlorocyclohexane (ng/g)
+    43277 Both males and females 12 YEARS - 150 YEARS Beta-hexachlorocyclohexane (ng/g)
+    43310 Both males and females 12 YEARS - 150 YEARS Beta-hexachlorocyclohexane (pg/g)
+    43340 Both males and females 12 YEARS - 150 YEARS Beta-hexachlorocyclohexane (pg/g)
+    43370 Both males and females 12 YEARS - 150 YEARS Beta-hexachlorocyclohexane (pg/g)
+    43397 Both males and females 12 YEARS - 150 YEARS Beta-hexachlorocyclohexane (pg/g)
 
 This shows that the unit of measurement was changed from the 2009–2010
 cycle, explaining the discrepancy. Without a careful check, such changes
@@ -349,8 +356,9 @@ which it was recorded in three different tables (`FASTQX`, `GLU`, and
 `OGTT`) for several cycles, before being dropped again from the latter
 two tables. It is natural to wonder whether all these tables contain the
 same data. This can only be verified by comparing the actual data, which
-we will not do here, but some hints are provided by the data counts
-included in the codebook. For example, for the 2005–2006 cycle, we have
+we will not do for this example, but some hints are provided by the data
+counts included in the codebook. For example, for the 2005–2006 cycle,
+we have
 
 ``` r
 subset(all_cb, Variable == "PHAFSTMN" & endsWith(TableName, "_D"))[1:5]
@@ -370,31 +378,35 @@ From the variable metadata table, we see that
 subset(all_var, Variable == "PHAFSTMN" & endsWith(TableName, "_D"))[c(1, 2, 4, 5)]
 ```
 
-          Variable TableName Target                            SasLabel
-    23831 PHAFSTMN  FASTQX_D          Total length of food fast minutes
-    25086 PHAFSTMN     GLU_D        Total length of 'food fast' minutes
-    30945 PHAFSTMN    OGTT_D        Total length of 'food fast' minutes
+          Variable TableName                                      Target
+    24274 PHAFSTMN  FASTQX_D  Both males and females 1 YEARS - 150 YEARS
+    25529 PHAFSTMN     GLU_D Both males and females 12 YEARS - 150 YEARS
+    31383 PHAFSTMN    OGTT_D Both males and females 12 YEARS - 150 YEARS
+                                     SasLabel
+    24274   Total length of food fast minutes
+    25529 Total length of 'food fast' minutes
+    31383 Total length of 'food fast' minutes
 
 While not definitive, this suggests that the `PHAFSTMN` variable
 measures the same quantity in all three tables, and the difference in
 number of observations may be due to the difference in target age group.
 
-Even if a preliminary inspection suggests no obvious problems, it is
-useful to verify by comparing the actual recorded data. For example,
-consider
+Even if a preliminary inspection suggests no obvious problems, one
+should verify by comparing the actual recorded data. For example,
+consider the `ENQ100` variable, which appears in both `ENX` and `SPX`
+tables.
 
 ``` r
 subset(all_var, Variable == "ENQ100" & endsWith(TableName, "_E"))[c(1, 2, 4, 5)]
 ```
 
-          Variable TableName Target                        SasLabel
-    23489   ENQ100     ENX_E        Cough cold resp illness 7 days?
-    44585   ENQ100     SPX_E               Had respiratory illness?
+          Variable TableName                                    Target                        SasLabel
+    23932   ENQ100     ENX_E Both males and females 6 YEARS - 79 YEARS Cough cold resp illness 7 days?
+    45401   ENQ100     SPX_E Both males and females 6 YEARS - 79 YEARS        Had respiratory illness?
 
 ``` r
 merge(nhanes("ENX_E")[c("SEQN", "ENQ100")],
-      nhanes("SPX_E")[c("SEQN", "ENQ100")],
-      by = "SEQN") |>
+      nhanes("SPX_E")[c("SEQN", "ENQ100")], by = "SEQN") |>
     xtabs(~ ENQ100.x + ENQ100.y, data =_, addNA = TRUE)
 ```
 
@@ -405,12 +417,13 @@ merge(nhanes("ENX_E")[c("SEQN", "ENQ100")],
       Yes                 0    0 1354    0
       <NA>                0  217   63 1093
 
-Even though most records are consistent, several records with `Yes` or
-`No` answers in the `SPX` tables are recorded as `NA` (missing) in the
-`ENX` tables.
+Comparing the records in the two tables after matching by `SEQN`, the
+participant identifier, we see that even though most records are
+consistent, several records with `Yes` or `No` answers in the `SPX`
+tables are recorded as `NA` (missing) in the `ENX` tables.
 
-A more egregious example where the same variable is clearly measuring
-two different things:
+A more egregious example, where the same variable is clearly measuring
+two different things, is provided by the `LBXHCT` variable.
 
 ``` r
 subset(all_cb, Variable == "LBXHCT" & endsWith(TableName, "_H"))[1:5]
@@ -426,14 +439,16 @@ subset(all_cb, Variable == "LBXHCT" & endsWith(TableName, "_H"))[1:5]
 subset(all_var, Variable == "LBXHCT" & endsWith(TableName, "_H"))[c(1, 2, 3, 4, 5)]
 ```
 
-          Variable TableName                   Description Target                      SasLabel
-    9194    LBXHCT     CBC_H                Hematocrit (%)                       Hematocrit (%)
-    11173   LBXHCT     COT_H Hydroxycotinine Serum (ng/mL)        Hydroxycotinine Serum (ng/mL)
+          Variable TableName                   Description                                     Target
+    9538    LBXHCT     CBC_H                Hematocrit (%) Both males and females 1 YEARS - 150 YEARS
+    11531   LBXHCT     COT_H Hydroxycotinine Serum (ng/mL) Both males and females 3 YEARS - 150 YEARS
+                               SasLabel
+    9538                 Hematocrit (%)
+    11531 Hydroxycotinine Serum (ng/mL)
 
 ``` r
 merge(nhanes("CBC_H")[c("SEQN", "LBXHCT")],
-      nhanes("COT_H")[c("SEQN", "LBXHCT")],
-      by = "SEQN") |> head()
+      nhanes("COT_H")[c("SEQN", "LBXHCT")], by = "SEQN") |> head()
 ```
 
        SEQN LBXHCT.x LBXHCT.y
@@ -443,3 +458,205 @@ merge(nhanes("CBC_H")[c("SEQN", "LBXHCT")],
     4 73560     37.8    0.025
     5 73561     43.8    0.011
     6 73562     41.5    0.011
+
+## Searching variables
+
+Having access to all variable descriptions in a single dataset makes
+search operations convenient. For example,
+
+``` r
+all_var |> within({ Description <- tolower(Description) }) |>
+    subset(endsWith(TableName, "_C") &
+           (grepl("hypertension", Description) |
+            grepl("blood pressure", Description)),
+           select = c(1, 2, 5))
+```
+
+          Variable TableName                                 SasLabel
+    8894    BPQ010     BPQ_C    Last blood pressure reading by doctor
+    8895    BPQ020     BPQ_C    Ever told you had high blood pressure
+    8896    BPQ030     BPQ_C  Told had high blood pressure - 2+ times
+    8897   BPQ040A     BPQ_C     Taking prescription for hypertension
+    8898   BPQ040B     BPQ_C  Told to control weight for hypertension
+    8899   BPQ040C     BPQ_C   Told to reduce sodium for hypertension
+    8900   BPQ040D     BPQ_C   Told to exercise more for hypertension
+    8901   BPQ040E     BPQ_C  Told to reduce alcohol for hypertension
+    8902   BPQ040F     BPQ_C Told to do other things for hypertension
+    9097  PEASCST1     BPX_C                    Blood Pressure Status
+    9098  PEASCTM1     BPX_C           Blood Pressure Time in Seconds
+    9099  PEASCCT1     BPX_C                   Blood Pressure Comment
+    9112    BPXSY1     BPX_C     Systolic: Blood pres (1st rdg) mm Hg
+    9113    BPXDI1     BPX_C    Diastolic: Blood pres (1st rdg) mm Hg
+    9115    BPXSY2     BPX_C     Systolic: Blood pres (2nd rdg) mm Hg
+    9116    BPXDI2     BPX_C    Diastolic: Blood pres (2nd rdg) mm Hg
+    9118    BPXSY3     BPX_C     Systolic: Blood pres (3rd rdg) mm Hg
+    9119    BPXDI3     BPX_C    Diastolic: Blood pres (3rd rdg) mm Hg
+    9121    BPXSY4     BPX_C     Systolic: Blood pres (4th rdg) mm Hg
+    9122    BPXDI4     BPX_C    Diastolic: Blood pres (4th rdg) mm Hg
+    11863  CVQ220C     CVX_C             Priority 2 Stop excessive BP
+    11864  CVQ220E     CVX_C  Priority 2 Stop significant drop in SBP
+    11880   CVAARM     CVX_C  Arm selected for blood pressure monitor
+    11881  CVACUFF     CVX_C     Cuff size for blood pressure monitor
+    11888   CVDWSY     CVX_C              Warm-up systolic BP (mm Hg)
+    11889   CVDWDI     CVX_C             Warm-up diastolic BP (mm Hg)
+    11895  CVDS1SY     CVX_C              Stage 1 systolic BP (mm Hg)
+    11896  CVDS1DI     CVX_C             Stage 1 diastolic BP (mm Hg)
+    11902  CVDS2SY     CVX_C              Stage 2 systolic BP (mm Hg)
+    11903  CVDS2DI     CVX_C             Stage 2 diastolic BP (mm Hg)
+    11906  CVDR1SY     CVX_C           Recovery 1 systolic BP (mm Hg)
+    11907  CVDR1DI     CVX_C          Recovery 1 diastolic BP (mm Hg)
+    11910  CVDR2SY     CVX_C           Recovery 2 systolic BP (mm Hg)
+    11911  CVDR2DI     CVX_C          Recovery 2 diastolic BP (mm Hg)
+    11914  CVDR3SY     CVX_C           Recovery 3 systolic BP (mm Hg)
+    11915  CVDR3DI     CVX_C          Recovery 3 diastolic BP (mm Hg)
+    29638  LEXBRP1   LEXAB_C                   Brachial SBP 1 (mm Hg)
+    29639  LEXBRP2   LEXAB_C                   Brachial SBP 2 (mm Hg)
+    29640  LEXBRPM   LEXAB_C                Mean Brachial SBP (mm Hg)
+    29641 LEXLPTS1   LEXAB_C      Left Posterior Tibial SBP 1 (mm Hg)
+    29642 LEXLPTS2   LEXAB_C      Left Posterior Tibial SBP 2 (mm Hg)
+    29643 LEXLPTSM   LEXAB_C   Left Mean Posterior Tibial SBP (mm Hg)
+    29645 LEXRPTS1   LEXAB_C     Right Posterior Tibial SBP 1 (mm Hg)
+    29646 LEXRPTS2   LEXAB_C     Right Posterior Tibial SBP 2 (mm Hg)
+    29647 LEXRPTSM   LEXAB_C  Right Mean Posterior Tibial SBP (mm Hg)
+    29651 LEALAPNC   LEXAB_C              Left ankle SBP > 255 mm Hg?
+    29652 LEARAPNC   LEXAB_C             Right ankle SBP > 255 mm Hg?
+    30223  MCQ250F     MCQ_C    Blood relatives w/hypertension/stroke
+    42272  PFD069J     PFQ_C  Hypertension or high blood pressuredays
+
+Information in this table can be supplemented using the
+`nhanesTableSummary()` function, which computes further information such
+as the variable type and number of non-missing observations. More
+details are given in \[cite
+<https://ccb-hms.github.io/phonto/vignettes/search-tables.html>\], which
+also provides links to publicly accessible online search interfaces.
+
+## Special codes in numeric variables
+
+## Data coarsening
+
+## Variables that are potentially skipped
+
+``` r
+## Tables where some items are skipped
+
+tables_with_skipping <- unique(subset(all_cb, !is.na(SkipToItem))$TableName)
+
+## around 30% of tables
+
+length(tables_with_skipping) / length(unique(all_cb$TableName))
+```
+
+    [1] 0.2893401
+
+``` r
+## what we really want is to flag variables that might have been
+## skipped based on a previous answer
+
+subset(all_cb, TableName == tables_with_skipping[[1]], select = -c(Count, Cumulative))
+```
+
+        Variable TableName CodeOrValue   ValueDescription SkipToItem
+    415   AGQ010     AGQ_D           1                Yes       <NA>
+    416   AGQ010     AGQ_D           2                 No     AGQ040
+    417   AGQ010     AGQ_D           7            Refused     AGQ040
+    418   AGQ010     AGQ_D           9         Don't know     AGQ040
+    419   AGQ010     AGQ_D           .            Missing       <NA>
+    420   AGD020     AGQ_D     1 to 81    Range of Values       <NA>
+    421   AGD020     AGQ_D          85  85 years or older       <NA>
+    422   AGD020     AGQ_D         777            Refused       <NA>
+    423   AGD020     AGQ_D         999         Don't know       <NA>
+    424   AGD020     AGQ_D           .            Missing       <NA>
+    425   AGQ030     AGQ_D           1                Yes       <NA>
+    426   AGQ030     AGQ_D           2                 No       <NA>
+    427   AGQ030     AGQ_D           7            Refused       <NA>
+    428   AGQ030     AGQ_D           9         Don't know       <NA>
+    429   AGQ030     AGQ_D           .            Missing       <NA>
+    430   AGQ040     AGQ_D           1                Yes       <NA>
+    431   AGQ040     AGQ_D           2                 No     AGQ070
+    432   AGQ040     AGQ_D           7            Refused     AGQ070
+    433   AGQ040     AGQ_D           9         Don't know     AGQ070
+    434   AGQ040     AGQ_D           .            Missing       <NA>
+    435   AGD050     AGQ_D     1 to 82    Range of Values       <NA>
+    436   AGD050     AGQ_D          85  85 years or older       <NA>
+    437   AGD050     AGQ_D         777            Refused       <NA>
+    438   AGD050     AGQ_D         999         Don't know       <NA>
+    439   AGD050     AGQ_D           .            Missing       <NA>
+    440   AGQ060     AGQ_D           1                Yes       <NA>
+    441   AGQ060     AGQ_D           2                 No       <NA>
+    442   AGQ060     AGQ_D           7            Refused       <NA>
+    443   AGQ060     AGQ_D           9         Don't know       <NA>
+    444   AGQ060     AGQ_D           .            Missing       <NA>
+    445   AGQ070     AGQ_D           1                Yes       <NA>
+    446   AGQ070     AGQ_D           2                 No     AGQ090
+    447   AGQ070     AGQ_D           7            Refused     AGQ090
+    448   AGQ070     AGQ_D           9         Don't know     AGQ090
+    449   AGQ070     AGQ_D           .            Missing       <NA>
+    450  AGQ080A     AGQ_D           1                Dog       <NA>
+    451  AGQ080A     AGQ_D           7            Refused       <NA>
+    452  AGQ080A     AGQ_D           9         Don't know       <NA>
+    453  AGQ080A     AGQ_D           .            Missing       <NA>
+    454  AGQ080B     AGQ_D           2                Cat       <NA>
+    455  AGQ080B     AGQ_D           .            Missing       <NA>
+    456  AGQ080C     AGQ_D           3 Small furry animal       <NA>
+    457  AGQ080C     AGQ_D           .            Missing       <NA>
+    458   AGQ090     AGQ_D           1                Yes       <NA>
+    459   AGQ090     AGQ_D           2                 No       <NA>
+    460   AGQ090     AGQ_D           7            Refused       <NA>
+    461   AGQ090     AGQ_D           9         Don't know       <NA>
+    462   AGQ090     AGQ_D           .            Missing       <NA>
+    463   AGQ100     AGQ_D           1                Yes       <NA>
+    464   AGQ100     AGQ_D           2                 No     AGQ120
+    465   AGQ100     AGQ_D           7            Refused     AGQ120
+    466   AGQ100     AGQ_D           9         Don't know     AGQ120
+    467   AGQ100     AGQ_D           .            Missing       <NA>
+    468  AGQ110A     AGQ_D           1             Spring       <NA>
+    469  AGQ110A     AGQ_D           7            Refused       <NA>
+    470  AGQ110A     AGQ_D           9         Don't know       <NA>
+    471  AGQ110A     AGQ_D           .            Missing       <NA>
+    472  AGQ110B     AGQ_D           2             Summer       <NA>
+    473  AGQ110B     AGQ_D           .            Missing       <NA>
+    474  AGQ110C     AGQ_D           3               Fall       <NA>
+    475  AGQ110C     AGQ_D           .            Missing       <NA>
+    476  AGQ110D     AGQ_D           4             Winter       <NA>
+    477  AGQ110D     AGQ_D           .            Missing       <NA>
+    478   AGQ120     AGQ_D           1                Yes       <NA>
+    479   AGQ120     AGQ_D           2                 No       <NA>
+    480   AGQ120     AGQ_D           7            Refused       <NA>
+    481   AGQ120     AGQ_D           9         Don't know       <NA>
+    482   AGQ120     AGQ_D           .            Missing       <NA>
+    483   AGQ130     AGQ_D           1                Yes       <NA>
+    484   AGQ130     AGQ_D           2                 No     AGQ180
+    485   AGQ130     AGQ_D           7            Refused     AGQ180
+    486   AGQ130     AGQ_D           9         Don't know     AGQ180
+    487   AGQ130     AGQ_D           .            Missing       <NA>
+    488   AGQ140     AGQ_D           1                Yes       <NA>
+    489   AGQ140     AGQ_D           2                 No     AGQ160
+    490   AGQ140     AGQ_D           7            Refused     AGQ160
+    491   AGQ140     AGQ_D           9         Don't know     AGQ160
+    492   AGQ140     AGQ_D           .            Missing       <NA>
+    493   AGQ150     AGQ_D           1                Yes       <NA>
+    494   AGQ150     AGQ_D           2                 No       <NA>
+    495   AGQ150     AGQ_D           7            Refused       <NA>
+    496   AGQ150     AGQ_D           9         Don't know       <NA>
+    497   AGQ150     AGQ_D           .            Missing       <NA>
+    498   AGQ160     AGQ_D           1                Yes       <NA>
+    499   AGQ160     AGQ_D           2                 No       <NA>
+    500   AGQ160     AGQ_D           7            Refused       <NA>
+    501   AGQ160     AGQ_D           9         Don't know       <NA>
+    502   AGQ160     AGQ_D           .            Missing       <NA>
+    503   AGD170     AGQ_D     1 to 84    Range of Values       <NA>
+    504   AGD170     AGQ_D          85  85 years or older       <NA>
+    505   AGD170     AGQ_D         777            Refused       <NA>
+    506   AGD170     AGQ_D         999         Don't know       <NA>
+    507   AGD170     AGQ_D           .            Missing       <NA>
+    508   AGQ180     AGQ_D           1                Yes       <NA>
+    509   AGQ180     AGQ_D           2                 No       <NA>
+    510   AGQ180     AGQ_D           7            Refused       <NA>
+    511   AGQ180     AGQ_D           9         Don't know       <NA>
+    512   AGQ180     AGQ_D           .            Missing       <NA>
+
+``` r
+## question: for a given question, can different answers lead to
+## skipping to different places? In any case, given a table, we want
+## to first flag all questions that can lead to skipping, and if so, where.
+```

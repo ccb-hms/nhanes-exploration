@@ -22,19 +22,20 @@ options(width = 100)
 
 - Reproducibility - [Cobalt paper](https://ccb-hms.github.io/phonto/vignettes/cobalt_paper.html)
 
-- Better [search facilities](https://ccb-hms.github.io/phonto/vignettes/search-tables.html): e.g., tables, variables
-
 - Combining data across cycles
+
+- Consistency checks:
+
+	- Across cycles: change in units
+
+	- Within cycles: Variables appearing in multiple tables
+
+- Better [search facilities](https://ccb-hms.github.io/phonto/vignettes/search-tables.html): e.g., tables, variables
 
 - Special codes in numeric variables
 
 - Variables that are potentially skipped
 
-- Consistency checks:
-
-	- Variables appearing in multiple tables
-
-	- Change in units
 
 
 ## Combining data across cycles
@@ -236,15 +237,16 @@ tables and cycles. For example,
 subset(all_cb, Variable == "PHAFSTMN")[1:5]
 ```
 
+
 Inspection of this table shows that the `PHAFSTMN` variable was
 initially recorded in the `PH` table for the first three cycles, after
 which it was recorded in three different tables (`FASTQX`, `GLU`, and
 `OGTT`) for several cycles, before being dropped again from the latter
 two tables. It is natural to wonder whether all these tables contain
 the same data. This can only be verified by comparing the actual data,
-which we will not do here, but some hints are provided by the data
-counts included in the codebook. For example, for the 2005--2006
-cycle, we have
+which we will not do for this example, but some hints are provided by
+the data counts included in the codebook. For example, for the
+2005--2006 cycle, we have
 
 ```{r}
 subset(all_cb, Variable == "PHAFSTMN" & endsWith(TableName, "_D"))[1:5]
@@ -261,35 +263,92 @@ measures the same quantity in all three tables, and the difference in
 number of observations may be due to the difference in target age
 group.
 
-Even if a preliminary inspection suggests no obvious problems, it is
-useful to verify by comparing the actual recorded data. For example,
-consider
+Even if a preliminary inspection suggests no obvious problems, one
+should verify by comparing the actual recorded data. For example,
+consider the `ENQ100` variable, which appears in both `ENX` and `SPX`
+tables.
 
 
 ```{r}
 subset(all_var, Variable == "ENQ100" & endsWith(TableName, "_E"))[c(1, 2, 4, 5)]
 merge(nhanes("ENX_E")[c("SEQN", "ENQ100")],
-      nhanes("SPX_E")[c("SEQN", "ENQ100")],
-      by = "SEQN") |>
+      nhanes("SPX_E")[c("SEQN", "ENQ100")], by = "SEQN") |>
     xtabs(~ ENQ100.x + ENQ100.y, data =_, addNA = TRUE)
 ```
 
-Even though most records are consistent, several records with `Yes` or
-`No` answers in the `SPX` tables are recorded as `NA` (missing) in the
-`ENX` tables.
+Comparing the records in the two tables after matching by `SEQN`, the
+participant identifier, we see that even though most records are
+consistent, several records with `Yes` or `No` answers in the `SPX`
+tables are recorded as `NA` (missing) in the `ENX` tables.
 
 
-A more egregious example where the same variable is clearly measuring two different things:
+A more egregious example, where the same variable is clearly measuring
+two different things, is provided by the `LBXHCT` variable.
 
 ```{r}
 subset(all_cb, Variable == "LBXHCT" & endsWith(TableName, "_H"))[1:5]
 subset(all_var, Variable == "LBXHCT" & endsWith(TableName, "_H"))[c(1, 2, 3, 4, 5)]
 merge(nhanes("CBC_H")[c("SEQN", "LBXHCT")],
-      nhanes("COT_H")[c("SEQN", "LBXHCT")],
-      by = "SEQN") |> head()
+      nhanes("COT_H")[c("SEQN", "LBXHCT")], by = "SEQN") |> head()
 ```
 
 
+## Searching variables
+
+Having access to all variable descriptions in a single dataset makes
+search operations convenient. For example, 
+
+
+```{r}
+all_var |> within({ Description <- tolower(Description) }) |>
+    subset(endsWith(TableName, "_C") &
+           (grepl("hypertension", Description) |
+            grepl("blood pressure", Description)),
+           select = c(1, 2, 5))
+```
+
+Information in this table can be supplemented using the
+`nhanesTableSummary()` function, which computes further information
+such as the variable type and number of non-missing observations. More
+details are given in [cite
+<https://ccb-hms.github.io/phonto/vignettes/search-tables.html>],
+which also provides links to publicly accessible online search
+interfaces.
+
+
+## Special codes in numeric variables
+
+
+
+
+## Data coarsening
+
+
+
+
+
+## Variables that are potentially skipped
+
+
+```{r}
+## Tables where some items are skipped
+
+tables_with_skipping <- unique(subset(all_cb, !is.na(SkipToItem))$TableName)
+
+## around 30% of tables
+
+length(tables_with_skipping) / length(unique(all_cb$TableName))
+
+## what we really want is to flag variables that might have been
+## skipped based on a previous answer
+
+subset(all_cb, TableName == tables_with_skipping[[1]], select = -c(Count, Cumulative))
+
+## question: for a given question, can different answers lead to
+## skipping to different places? In any case, given a table, we want
+## to first flag all questions that can lead to skipping, and if so, where.
+
+```
 
 
 
@@ -361,29 +420,11 @@ subset(numeric_cb, ValueDescription == "Don't know" & Variable == "ALQ130")
 
 
 
-
 ## Selected examples of numeric / categorical ambiguity
 
 
 
 
-
-## Tables where some items are skipped
-
-tables_with_skipping <- unique(subset(all_cb, !is.na(SkipToItem))$TableName)
-
-## around 30% of tables
-
-length(tables_with_skipping) / length(unique(all_cb$TableName))
-
-## what we really want is to flag variables that might have been
-## skipped based on a previous answer
-
-subset(all_cb, TableName == tables_with_skipping[[1]], select = -c(Count, Cumulative))
-
-## question: for a given question, can different answers lead to
-## skipping to different places? In any case, given a table, we want
-## to first flag all questions that can lead to skipping, and if so, where.
 
 
 
