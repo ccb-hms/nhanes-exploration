@@ -33,7 +33,7 @@ check_table <- function(x, verbose = getOption("verbose"))
     if (verbose) cat("\r", x)
     t1 <- system.time(
         d1 <- nhanesA:::raw2translated(nhanes(x, translated = FALSE),
-                                       nhanesCodebook(x),
+                                       nhCodebook(x),
                                        cleanse_numeric = FALSE)
     )
     t2 <- system.time(
@@ -68,7 +68,7 @@ subset(resdf, table == "P_DEMO")
 
 x <- "P_DEMO"; var <- "DMDBORN4"
 d1 <- nhanesA:::raw2translated(nhanes(x, translated = FALSE),
-                               nhanesCodebook(x),
+                               nhCodebook(x),
                                cleanse_numeric = FALSE)
 nm <- names(d1)
 d2 <- nhanes(x, translated = TRUE)[nm]
