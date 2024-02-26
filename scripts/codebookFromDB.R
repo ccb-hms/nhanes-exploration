@@ -68,3 +68,22 @@ nhCodebook <- function(nh_table, colname = NULL)
 }
 
 
+## Test problematic case
+
+nhanesOptions(log.access = TRUE)
+
+table  <-  "DSQ2_B"
+v <- "DSDSUPID"
+
+rawdf <- nhanes(table, translated = FALSE)
+codebook <- nhanesCodebook(table)
+
+ans <- nhanesA:::translateVariable(rawdf[[v]], codebook[[v]][[v]],
+                                   cleanse_numeric = FALSE)
+    
+str(ans)
+str(rawdf[[v]])
+str(codebook[[v]][[v]])
+
+## should be (to match with nhanesA)
+str(as.character(nhanes(table)[[v]]))
