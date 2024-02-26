@@ -64,11 +64,11 @@ resdf <- within(resdf, {
 
 write.csv(resdf, "translation-test.csv")
 
-subset(resdf, DUP_SEQN)
+subset(resdf, dup_SEQN)
 
-subset(resdf, !DUP_SEQN & status != "OK")
+subset(resdf, !dup_SEQN & status != "OK")
 
-plot(t2 ~ t1, resdf, col = DUP_SEQN + 1, log = "xy"); abline(0, 1)
+plot(t2 ~ t1, resdf, col = dup_SEQN + 1, log = "xy"); abline(0, 1)
 
 ## Summary: most tables with duplicate SEQN have mismatches. A few
 ## others also have mismatches. The rest of the code is very ad hoc,
@@ -79,7 +79,7 @@ plot(t2 ~ t1, resdf, col = DUP_SEQN + 1, log = "xy"); abline(0, 1)
 ## https://github.com/ccb-hms/NHANES/issues/172
 
 
-nodup_mismatch_tables <- subset(resdf, !DUP_SEQN & status != "OK")$table
+nodup_mismatch_tables <- subset(resdf, !dup_SEQN & status != "OK")$table
 
 ## Variables missing from codebook: BPX_C HPVSWR_F OHXPRL_B OHXPRU_B ...
 

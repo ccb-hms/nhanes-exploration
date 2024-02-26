@@ -1,4 +1,6 @@
 
+library(nhanesA)
+
 ## Construct codebook from information in database
 
 .dbqTableVars <- paste0(
@@ -68,6 +70,9 @@ nhCodebook <- function(nh_table, colname = NULL)
 }
 
 
+if (FALSE)
+{
+
 ## Test problematic case
 
 nhanesOptions(log.access = TRUE)
@@ -87,3 +92,9 @@ str(codebook[[v]][[v]])
 
 ## should be (to match with nhanesA)
 str(as.character(nhanes(table)[[v]]))
+
+
+phonto::nhanesQuery("select Variable, TableName, CodeOrValue from Metadata.VariableCodebook where ValueDescription = 'Value was recorded'")
+
+
+}
