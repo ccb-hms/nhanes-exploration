@@ -72,10 +72,29 @@ nhCodebook <- function(nh_table, colname = NULL)
 
 if (FALSE)
 {
+    ## check that old and new results match
+    tables <- phonto::nhanesQuery("select TableName from Metadata.QuestionnaireDescriptions")$TableName |> sort() |> unique()
 
-## Test problematic case
+    for (x in tables) {
+        cat(x, "\r")
+        cb1 <- nhanesCodebook(x)
+        cb2 <- nhCodebook(x)[names(cb1)]
+        if (!isTRUE(all.equal(cb1, cb2, check.attributes = FALSE)))
+            cat("\nMismatch in ", x, "\n")
+    }
 
-nhanesOptions(log.access = TRUE)
+
+}
+
+
+
+
+if (FALSE)
+{
+
+## Test problematic case (fixed by 
+
+nhanesOptions(log.access = TRUE, use.db = FALSE)
 
 table  <-  "DSQ2_B"
 v <- "DSDSUPID"
@@ -86,13 +105,23 @@ codebook <- nhanesCodebook(table)
 ans <- nhanesA:::translateVariable(rawdf[[v]], codebook[[v]][[v]],
                                    cleanse_numeric = FALSE)
     
-str(ans)
+str(ans) # NA before bugfix
 str(rawdf[[v]])
+
+## This bug happens for character variables
 str(codebook[[v]][[v]])
 
+## check whether nhanes() results match
+transdf <- nhanes(table)
+str(transdf[[v]])
+table(as.character(transdf[[v]]) == ans)
+
+    
+cbind(as.character(transdf[[v]]), ans) |> head()
+    
+    
 ## should be (to match with nhanesA)
 str(as.character(nhanes(table)[[v]]))
-
 
 phonto::nhanesQuery("select Variable, TableName, CodeOrValue from Metadata.VariableCodebook where ValueDescription = 'Value was recorded'")
 
