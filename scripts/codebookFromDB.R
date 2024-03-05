@@ -75,14 +75,19 @@ if (FALSE)
     ## check that old and new results match
     tables <- phonto::nhanesQuery("select TableName from Metadata.QuestionnaireDescriptions")$TableName |> sort() |> unique()
 
-    for (x in tables) {
+    checkTable <- function(x) {
         cat(x, "\r")
         cb1 <- nhanesCodebook(x)
         cb2 <- nhCodebook(x)[names(cb1)]
         if (!isTRUE(all.equal(cb1, cb2, check.attributes = FALSE)))
             cat("\nMismatch in ", x, "\n")
     }
-
+    
+    for (x in tables) {
+        e <- try(checkTable(x), silent = TRUE)
+        if (inherits(e, "try-error"))
+            cat("\nError processing table ", x, "\n")
+    }
 
 }
 
