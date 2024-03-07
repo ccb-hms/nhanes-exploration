@@ -6,7 +6,7 @@ stopifnot(require(nhanesA))
 stopifnot(isTRUE(nhanesOptions("use.db")))
 stopifnot(require(phonto))
 
-source("codebookFromDB.R")
+## source("codebookFromDB.R")
 
 if (file.exists("dups.rda"))
     load("dups.rda") else source("test-seqn-uniqueness.R", echo = TRUE)
