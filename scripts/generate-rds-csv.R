@@ -60,21 +60,29 @@ for (x in sort(mf$Table)) {
 
 ## 3. create translated CSV files (from RDS and codebooks)
 
-## these give error such as 'Error in firstDash - 1 : non-numeric argument'.
-## Postpone for now, come back later
+## these give error such as 'Error in firstDash - 1 : non-numeric
+## argument' if we use nhanesCodebook() instead of
+## nhanesCodebookFromURL().
 
-mf <- subset(mf, !startsWith(Table, "DRX")) 
-mf <- subset(mf, !startsWith(Table, "DXX"))
-mf <- subset(mf, !startsWith(Table, "FOOD"))
+## mf <- subset(mf, !startsWith(Table, "DRX") & !startsWith(Table, "P_DRX")) 
+## mf <- subset(mf, !startsWith(Table, "FOOD") & !startsWith(Table, "P_FOOD"))
+## mf <- subset(mf, !startsWith(Table, "POOL") & !startsWith(Table, "P_POOL"))
 
 
-for (x in sort(mf$Table)) {
+## file access problem --- postpone diagnosis
+mf <- subset(mf, !startsWith(Table, "DXX") & !startsWith(Table, "P_DXX"))
+
+
+mf <- mf[order(mf$Table), ]
+
+for (i in seq_len(nrow(mf))) {
+    x <- mf$Table[i]
     rawrds <- sprintf("%s/raw/%s.rds", FILEROOT, x)
     tracsv <- sprintf("%s/translated/%s.csv", FILEROOT, x)
     if (!file.exists(tracsv)) {
         cat(rawrds, " -> ", tracsv, fill = TRUE)
         d <- readRDS(rawrds)
-        cb <- nhanesCodebook(x)
+        cb <- nhanesCodebookFromURL(mf$DocURL[i])
         t <- nhanesA:::raw2translated(d, cb, cleanse_numeric = TRUE)
         if (is.data.frame(t))
             write.csv(t, file = tracsv, row.names = FALSE)
