@@ -1,6 +1,6 @@
 
 
-## Main function: translate_table(name, con, x, cb, cleanse_numeric), where
+## Main function: translate_table(name, con, x, qv, vc, cleanse_numeric), where
 ##
 ## - name is the name of a NHANES table (needed to match raw data and codebook)
 ## - con is a DBI-compatible connection
@@ -9,7 +9,7 @@
 ## - vc is the name of the DB table 'Metadata.VariableCodebook'
 ## - cleanse_numeric is logical, whether to turn some special numeric codes to NA
 ##
-## This is done independently of nhanesA
+## This is done without using the nhanesA package
 
 translate_table <-
     function(name, con, x,
