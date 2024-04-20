@@ -3,7 +3,7 @@ library(nhanesA)
 
 (con <- nhanesA:::cn())
 
-if (!is(cn(), "DBIConnection")) stop("Not connected to DB")
+if (!is(con, "DBIConnection")) stop("Not connected to DB")
 
 
 (tdemo <- setdiff(nhanesSearchTableNames("DEMO"), "P_DEMO"))
